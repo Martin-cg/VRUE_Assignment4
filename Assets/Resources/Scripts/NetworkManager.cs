@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class NetworkManager : MonoBehaviourPunCallbacks {
     public GameObject PlayerPrefab;
-    public LaneManager LaneManager;
+    public Transform Spawn;
 
     private void Start() {
         if (!PhotonNetwork.ConnectUsingSettings()) {
@@ -22,18 +22,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
 
-        var playerObject = PhotonNetwork.Instantiate($"Prefabs/{PlayerPrefab.name}", default, default);
+        var playerObject = PhotonNetwork.Instantiate($"Prefabs/{PlayerPrefab.name}", Spawn.position, Spawn.rotation, default, new object[] {
+            new Character.InstantiationData() { ActorNumber = PhotonNetwork.LocalPlayer.ActorNumber }
+        });
         playerObject.name = "Local Player";
-        var character = playerObject.GetComponent<Character>();
-        character.ActorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-        character.XRRig = GameObject.FindGameObjectWithTag(Tags.XROrigin).GetComponent<XRRig>();
-        PhotonNetwork.LocalPlayer.TagObject = character;
-
-        if (PhotonNetwork.IsMasterClient) {
-            LaneManager.Setup();
-            var lane = LaneManager.AssignLane(PhotonNetwork.LocalPlayer);
-            character.SpawnAtLane(lane);
-        }
+        var player = playerObject.AddComponent<LocalCharacter>();
+        player.Rig = GameObject.FindGameObjectWithTag(Tags.XROrigin).GetComponent<XRRig>();
+        PhotonNetwork.LocalPlayer.TagObject = player;
     }
 
     public override void OnLeftRoom() {
@@ -46,11 +41,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
         base.OnPlayerEnteredRoom(newPlayer);
-
-        if (PhotonNetwork.IsMasterClient) {
-            var lane = LaneManager.AssignLane(newPlayer);
-            photonView.RPC(nameof(SetSpawn), newPlayer, lane.LaneNumber);
-        }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) {
@@ -61,14 +51,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         }
 
         if (PhotonNetwork.IsMasterClient) {
-            LaneManager.UnassignLane(otherPlayer);
             PhotonNetwork.DestroyPlayerObjects(otherPlayer);
         }
-    }
-
-    [PunRPC] public void SetSpawn(int laneNumber) {
-        var character = PhotonNetwork.LocalPlayer.TagObject as Character;
-        var lane = LaneManager.Lanes[laneNumber];
-        character.SpawnAtLane(lane);
     }
 }

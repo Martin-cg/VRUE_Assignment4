@@ -1,67 +1,30 @@
 using Photon.Pun;
-using Unity.VisualScripting;
+using Photon.Realtime;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+using System.Linq;
+using System.Collections.Generic;
 
-public class Character : MonoBehaviourPun, IPunObservable {
-    public static Character Local => PhotonNetwork.LocalPlayer.TagObject as Character;
-    public bool IsLocal => XRRig != null;
+public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
+    public static Character Local => ForPlayer(PhotonNetwork.LocalPlayer);
+    public static Character ForPlayer(Player player) => player.TagObject as Character;
+    public static IEnumerable<Character> All => PhotonNetwork.PlayerList.Select(ForPlayer);
+    public static IEnumerable<Character> Others => PhotonNetwork.PlayerListOthers.Select(ForPlayer);
 
-    public XRRig XRRig;
+    public Player Player { get; private set; }
+    public bool IsLocal => Player.IsLocal;
+
     public GameObject Root;
     public GameObject Head;
     public GameObject LeftHand;
     public GameObject RightHand;
 
-    public int ActorNumber;
-    public Lane AssignedLane;
-
-    private void Start() {
-        if (IsLocal) {
-            foreach (var renderer in Head.GetComponentsInChildren<Renderer>()) {
-                renderer.enabled = false;
-            }
-
-            SyncTransforms(XRRig.transform, transform);
-            SyncTransforms(XRRig.Head.gameObject, Head);
-            SyncTransforms(XRRig.LeftHand.gameObject, LeftHand);
-            SyncTransforms(XRRig.RightHand.gameObject, RightHand);
-
-            SyncAnimations(XRRig.LeftHand, LeftHand);
-            SyncAnimations(XRRig.RightHand, RightHand);
-        }
-    }
-    public void SpawnAtLane(Lane lane) { 
-        AssignedLane = lane;
-        Root.transform.SetPositionAndRotation(lane.Spawn.transform.position, lane.Spawn.transform.rotation);
-        if (XRRig != null) {
-            CharacterController CC = XRRig.GetComponent<CharacterController>();
-            CC.enabled = false;
-            XRRig.transform.SetPositionAndRotation(lane.Spawn.transform.position, lane.Spawn.transform.rotation);
-            Physics.SyncTransforms();
-            CC.enabled = true;
-        }
+    public void OnPhotonInstantiate(PhotonMessageInfo info) {
+        var instantiationData = (InstantiationData) info.photonView.InstantiationData[0];
+        Player = Player.Get(instantiationData.ActorNumber);
+        Player.TagObject = this;
     }
 
-    private void SyncTransforms(GameObject source, GameObject target) {
-        SyncTransforms(source.transform, target.transform);
-    }
-    private void SyncTransforms(Transform source, Transform target) {
-        var transformSync = source.AddComponent<TransformSync>();
-        transformSync.Target = target;
-    }
-
-    private void SyncAnimations(ActionBasedController controller, GameObject animatedObject) {
-        var animationSync = controller.AddComponent<ControllerAnimationSync>();
-        animationSync.Controller = controller;
-        animationSync.Animator = animatedObject.GetComponentInChildren<Animator>();
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        if (stream.IsWriting) {
-            stream.SendNext(ActorNumber);
-        } else {
-            ActorNumber = (int) stream.ReceiveNext();
-        }
+    public struct InstantiationData {
+        public int ActorNumber;
     }
 }

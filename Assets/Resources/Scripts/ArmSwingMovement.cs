@@ -77,16 +77,6 @@ public class ArmSwingMovement : MonoBehaviour {
         return 1 - (1 - x) * (1 - x);
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit) {
-        if (!hit.collider.CompareTag(Tags.Obstacle)) {
-            return;
-        }
-        Debug.Log(hit.collider);
-
-        CurrentMaxVelocity = MaxVelocity / 2;
-        LastPenaltyTime = Time.time;
-    }
-
     private Vector3 Abs(Vector3 v) {
         return new Vector3(
             Math.Abs(v.x),
