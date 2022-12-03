@@ -59,12 +59,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6976191867195764814}
+  - component: {fileID: 5462426031799675452}
   - component: {fileID: 818943612}
   - component: {fileID: 7486242979622092042}
-  - component: {fileID: 7716812620341764642}
   m_Layer: 6
-  m_Name: Player
-  m_TagString: Player
+  m_Name: Character
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,6 +87,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5462426031799675452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6976191867195764803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38208ec934c84044d80c30f412cfc0ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Root: {fileID: 6976191867195764803}
+  Head: {fileID: 6976191868409921643}
+  LeftHand: {fileID: 6976191866685765206}
+  RightHand: {fileID: 6976191868216172523}
 --- !u!114 &818943612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,7 +139,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 818943612}
-  - {fileID: 7716812620341764642}
   - {fileID: 2021058146}
   - {fileID: 322572389}
   - {fileID: 1812101602}
@@ -132,25 +147,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &7716812620341764642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6976191867195764803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f2b4352e63a3da45a3bf02c8f92c36f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  XRRig: {fileID: 0}
-  Root: {fileID: 6976191867195764803}
-  Head: {fileID: 6976191868409921643}
-  LeftHand: {fileID: 6976191866685765206}
-  RightHand: {fileID: 6976191868216172523}
-  ActorNumber: 0
-  AssignedLane: {fileID: 0}
 --- !u!1 &6976191868216172523
 GameObject:
   m_ObjectHideFlags: 0

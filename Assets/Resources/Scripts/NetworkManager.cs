@@ -2,7 +2,7 @@ using Photon.Pun;
 using UnityEngine;
 
 public class NetworkManager : MonoBehaviourPunCallbacks {
-    public GameObject PlayerPrefab;
+    public GameObject CharacterPrefab;
     public Transform Spawn;
 
     private void Start() {
@@ -22,11 +22,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
 
-        var playerObject = PhotonNetwork.Instantiate($"Prefabs/{PlayerPrefab.name}", Spawn.position, Spawn.rotation, default, new object[] {
+        var characterObject = PhotonNetwork.Instantiate($"Prefabs/{CharacterPrefab.name}", Spawn.position, Spawn.rotation, default, new object[] {
             new Character.InstantiationData() { ActorNumber = PhotonNetwork.LocalPlayer.ActorNumber }
         });
-        playerObject.name = "Local Player";
-        var player = playerObject.AddComponent<LocalCharacter>();
+        characterObject.name = "Local Player";
+        var player = characterObject.AddComponent<LocalCharacter>();
         player.Rig = GameObject.FindGameObjectWithTag(Tags.XROrigin).GetComponent<XRRig>();
         PhotonNetwork.LocalPlayer.TagObject = player;
     }

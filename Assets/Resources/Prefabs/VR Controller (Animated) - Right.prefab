@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 232833292273347310, guid: 8c10481430870fa428f6ad98142da914,
         type: 3}
       propertyPath: m_Name
-      value: VR Controller (Animated)
+      value: VR Controller (Animated) - Right
       objectReference: {fileID: 0}
     - target: {fileID: 3846190070088374525, guid: 8c10481430870fa428f6ad98142da914,
         type: 3}
@@ -67,5 +67,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3753492024798359001, guid: 8c10481430870fa428f6ad98142da914, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8c10481430870fa428f6ad98142da914, type: 3}

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3846190070088374525}
   - component: {fileID: 1459400259893860828}
-  - component: {fileID: 3753492024798359001}
   m_Layer: 0
   m_Name: VR Controller (Animated)
   m_TagString: Untagged
@@ -48,20 +47,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.05
   m_Center: {x: 0, y: -0.03, z: -0.02}
---- !u!114 &3753492024798359001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 232833292273347310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7987a4f9b79e754c951908fed65bc14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultController: {fileID: 4533395163354921941}
-  OculusController: {fileID: 3105436556212044566}
 --- !u!1 &3105436556212044566
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,12 +166,6 @@ Transform:
 --- !u!95 &4042493601653518429 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3724296088431467175, guid: 20ec40c74297b344698c7835978d05a1,
-    type: 3}
-  m_PrefabInstance: {fileID: 844012666154216186}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4533395163354921941 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3845884886354432303, guid: 20ec40c74297b344698c7835978d05a1,
     type: 3}
   m_PrefabInstance: {fileID: 844012666154216186}
   m_PrefabAsset: {fileID: 0}
