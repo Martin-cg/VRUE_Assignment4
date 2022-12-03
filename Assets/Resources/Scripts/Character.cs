@@ -3,6 +3,8 @@ using Photon.Realtime;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
+using System.Runtime.InteropServices;
 
 public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
     public static Character Local => ForPlayer(PhotonNetwork.LocalPlayer);
@@ -20,11 +22,21 @@ public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
 
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
         var instantiationData = (InstantiationData) info.photonView.InstantiationData[0];
-        Player = Player.Get(instantiationData.ActorNumber);
+        Player = PhotonNetwork.LocalPlayer.Get(instantiationData.ActorNumber);
         Player.TagObject = this;
     }
 
-    public struct InstantiationData {
+    [StructLayout(LayoutKind.Sequential)]
+    public struct InstantiationData  {
         public int ActorNumber;
+
+        public static short Serialize(StreamBuffer outStream, object customObject) {
+            return (short) Serde.Serialize(outStream, (InstantiationData) customObject);
+        }
+
+        public static object Deserialize(StreamBuffer inStream, short length) {
+            Debug.Assert(length == Marshal.SizeOf(typeof(InstantiationData)));
+            return Serde.Deserialize<InstantiationData>(inStream);
+        }
     }
 }

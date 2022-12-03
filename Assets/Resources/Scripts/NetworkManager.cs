@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public Transform Spawn;
 
     private void Start() {
+        PhotonPeer.RegisterType(typeof(Character.InstantiationData), 0, Character.InstantiationData.Serialize, Character.InstantiationData.Deserialize);
+
         if (!PhotonNetwork.ConnectUsingSettings()) {
             Debug.LogError("Failed to connect using settings.");
         }

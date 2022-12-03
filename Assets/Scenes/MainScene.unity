@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a6a962d8d7e4df4db872034afb8c862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 6976191867195764803, guid: f414b18057abbe14cb7ce4d8e9035c23,
+  CharacterPrefab: {fileID: 6976191867195764803, guid: f414b18057abbe14cb7ce4d8e9035c23,
     type: 3}
   Spawn: {fileID: 450553249}
 --- !u!4 &379142916
@@ -526,6 +526,7 @@ GameObject:
   - component: {fileID: 1145825328}
   - component: {fileID: 1145825327}
   - component: {fileID: 1145825326}
+  - component: {fileID: 1145825333}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: XROrigin
@@ -545,9 +546,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bcb7d574f11469468ffea3de125e0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XROrigin: {fileID: 0}
-  CharacterController: {fileID: 0}
-  CharacterControllerDriver: {fileID: 0}
+  XROrigin: {fileID: 1145825331}
+  CharacterController: {fileID: 1145825329}
+  CharacterControllerDriver: {fileID: 1145825328}
 --- !u!114 &1145825327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,7 +571,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145825325}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af6bf904e410ee8479f9093d8830d1f8, type: 3}
   m_Name: 
@@ -643,6 +644,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1145825333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145825325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d6b5b19a7aeae447aa2b41ec4d75136, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Head: {fileID: 83992140}
+  RightHand: {fileID: 1499219750}
+  LeftHand: {fileID: 1664604272}
 --- !u!1 &1163329969
 GameObject:
   m_ObjectHideFlags: 0
