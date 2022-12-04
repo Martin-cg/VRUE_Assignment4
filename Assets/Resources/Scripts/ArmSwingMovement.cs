@@ -42,8 +42,6 @@ public class ArmSwingMovement : ContinuousMoveProviderBase {
         float swingStrength = combined * velMag;
         if (swingStrength >= 0.02F) {
             Velocity += AccelerationPerSwing * Mathf.Clamp(swingStrength / 0.075f, 0, 2);
-            // Debug.Log($"{dotProductLeft} * {dotProductRight} = {combined}");
-            // Debug.Log($"{velMag} * {combined} = {swingStrength}");
         }
 
         CurrentMaxVelocity = Mathf.Lerp(MaxPenaltyVelocity, MaxVelocity, EaseOutExpo((Time.time - LastPenaltyTime) / PenaltyTime));
