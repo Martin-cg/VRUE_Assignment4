@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -34,7 +35,20 @@ public static class Extensions {
     public static double NextDouble(this System.Random random, double min, double max) {
         return random.NextDouble() * (max - min) + min;
     }
+    public static float NextFloat(this System.Random random) {
+        return (float)random.NextDouble();
+    }
     public static float NextFloat(this System.Random random, float min, float max) {
-        return (float)random.NextDouble() * (max - min) + min;
+        return (float)random.NextDouble(min, max);
+    }
+
+    public static TValue GetOrAddNew<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key) where TValue : new() => GetOrAddWith(dict, key, _ => new TValue());
+    public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue value) => GetOrAddWith(dict, key, _ => value);
+    public static TValue GetOrAddWith<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> valueSupplier) {
+        if (!dict.TryGetValue(key, out TValue val)) {
+            val = valueSupplier(key);
+            dict.Add(key, val);
+        }
+        return val;
     }
 }
