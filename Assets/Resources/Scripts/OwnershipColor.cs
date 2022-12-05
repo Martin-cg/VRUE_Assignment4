@@ -2,7 +2,8 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OwnershipTest : MonoBehaviourPun {
+[RequireComponent(typeof(Grabbable))]
+public class OwnershipColor : MonoBehaviourPun {
     private static Dictionary<int, Color> Colors = new();
 
     private void Start() {

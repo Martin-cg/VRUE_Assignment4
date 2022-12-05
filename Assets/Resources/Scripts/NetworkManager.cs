@@ -8,6 +8,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
 
     private void Start() {
         PhotonPeer.RegisterType(typeof(Character.InstantiationData), 0, Character.InstantiationData.Serialize, Character.InstantiationData.Deserialize);
+        PhotonNetwork.AutomaticallySyncScene = true;
 
         if (!PhotonNetwork.ConnectUsingSettings()) {
             Debug.LogError("Failed to connect using settings.");
@@ -29,9 +30,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
             new Character.InstantiationData() { ActorNumber = PhotonNetwork.LocalPlayer.ActorNumber }
         });
         characterObject.name = "Local Player";
-        var player = characterObject.AddComponent<LocalCharacter>();
-        player.Rig = GameObject.FindGameObjectWithTag(Tags.XROrigin).GetComponent<XRRig>();
-        PhotonNetwork.LocalPlayer.TagObject = player;
+        var character = characterObject.AddComponent<LocalCharacter>();
+        character.Rig = GameObject.FindGameObjectWithTag(Tags.XROrigin).GetComponent<XRRig>();
     }
 
     public override void OnLeftRoom() {
