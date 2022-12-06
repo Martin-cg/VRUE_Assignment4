@@ -22,7 +22,13 @@ public static class Extensions {
         return parent.transform.GetAllChildren().Select(e => e.gameObject);
     }
 
-    public static IEnumerable<string> GetScenePath(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true) {
+    public static IEnumerable<string> GetScenePath(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true) =>
+        GetScenePath(target.transform, parent == null ? null : parent.transform, includeTarget, includeParent);
+
+    public static string GetScenePathString(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true, string delimiter = "/") =>
+        GetScenePathString(target.transform, parent == null ? null : parent.transform, includeTarget, includeParent, delimiter);
+
+    public static IEnumerable<string> GetScenePath(this Transform target, Transform parent = null, bool includeTarget = true, bool includeParent = true) {
         if (ReferenceEquals(target, parent)) {
             return Enumerable.Empty<string>();
         }
@@ -33,10 +39,10 @@ public static class Extensions {
             path.Add(target.name);
         }
 
-        var current = target.transform;
-        while (current.parent != null && ReferenceEquals(current, parent)) {
-            path.Add(current.name);
+        var current = target;
+        while (current.parent != null && !ReferenceEquals(current, parent)) {
             current = current.transform.parent;
+            path.Add(current.name);
         }
 
         if (parent && includeParent) {
@@ -46,9 +52,25 @@ public static class Extensions {
         return Enumerable.Reverse(path);
     }
 
-    public static string GetScenePathString(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true, string delimiter = "/") {
+    public static string GetScenePathString(this Transform target, Transform parent = null, bool includeTarget = true, bool includeParent = true, string delimiter = "/") {
         return string.Join(delimiter, GetScenePath(target, parent, includeTarget, includeParent));
     }
+
+    public static bool IsChildOf(this GameObject target, GameObject parent) => IsChildOf(target.transform, parent.transform);
+    public static bool IsChildOf(this Transform target, Transform parent) {
+        var current = target;
+
+        while (current.parent != null) {
+            current = current.parent;
+            if (current == parent) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public static bool IsParentOf(this GameObject target, GameObject child) => IsParentOf(target.transform, child.transform);
+    public static bool IsParentOf(this Transform target, Transform child) => IsChildOf(child, target);
 
     public static Vector3 WithX(this Vector3 vector, float x) {
         return new Vector3(x, vector.y, vector.z);

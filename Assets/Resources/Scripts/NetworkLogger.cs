@@ -58,7 +58,7 @@ public class NetworkLogger : MonoBehaviourPunCallbacks {
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) {
-        Debug.Log("[Network] Room properties updated");
+        // Debug.Log("[Network] Room properties updated");
     }
 
     public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps) {

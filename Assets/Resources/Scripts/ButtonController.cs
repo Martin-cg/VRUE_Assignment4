@@ -22,9 +22,10 @@ public class ButtonController : CustomSyncRoomObject {
     public float DebounceTime = 0.2f;
     private float LastPressedTime;
 
-    private void Start() {
-        Init();
+    protected override void Start() {
+        base.Start();
 
+        Init();
         RegisterProperty<bool>(nameof(IsPressed), newValue => IsPressed = newValue);
     }
 
