@@ -33,7 +33,7 @@ public class Undroppable : MonoBehaviour {
             LastSocket = socketInteractor;
         }
 
-        if (isActiveAndEnabled) {
+        if (isActiveAndEnabled && gameObject.activeInHierarchy) {
             StartCoroutine(AntiDrop());
         }
     }
