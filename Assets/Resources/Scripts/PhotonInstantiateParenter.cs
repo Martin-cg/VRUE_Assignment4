@@ -1,6 +1,4 @@
 using Photon.Pun;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PhotonInstantiateParenter : MonoBehaviourPun, IPunInstantiateMagicCallback {
@@ -16,31 +14,7 @@ public class PhotonInstantiateParenter : MonoBehaviourPun, IPunInstantiateMagicC
 
     public static object[] GetInstantiateParameters(Transform parent) {
         var photonView = PhotonView.Get(parent);
-        var path = GetGameObjectPath(parent.gameObject, photonView.gameObject, false, false);
+        var path = parent.gameObject.GetScenePathString(photonView.gameObject, false, false, "/");
         return new object[] { photonView.ViewID, path };
-    }
-
-    private static string GetGameObjectPath(GameObject target, GameObject parent = null, bool includeTarget=true, bool includeParent=true) {
-        if (ReferenceEquals(target, parent)) {
-            return "";
-        }
-
-        var path = new List<string>();
-
-        if (includeTarget) {
-            path.Add(target.name);
-        }
-
-        var current = target.transform;
-        while (current.parent != null && ReferenceEquals(current, parent)) {
-            path.Add(current.name);
-            current = current.transform.parent;
-        }
-
-        if (parent && includeParent) {
-            path.Add(parent.name);
-        }
-
-        return string.Join("/", Enumerable.Reverse(path));
     }
 }

@@ -1,12 +1,12 @@
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-[RequireComponent(typeof(XRSimpleInteractable))]
-[RequireComponent(typeof(PhotonView))]
-public class ButtonController : MonoBehaviourPun, IPunObservable {
+public class ButtonController : CustomSyncRoomObject {
+    public XRBaseInteractable Interactable;
     public UnityEvent<bool> StateChanged = new();
+
+    [SerializeField]
     private bool isPressed = false;
     public bool IsPressed {
         get => isPressed;
@@ -14,21 +14,40 @@ public class ButtonController : MonoBehaviourPun, IPunObservable {
             var changed = isPressed != value;
             isPressed = value;
             if (changed) {
-                if (!PhotonNetwork.IsMasterClient) {
-                    photonView.RPC(nameof(SetState), RpcTarget.Others, isPressed);
-                }
-                StateChanged?.Invoke(isPressed);
+                OnStateChanged();
             }
         }
     }
     public bool IsSwitch = true;
-    private float LastPressed;
+    public float DebounceTime = 0.2f;
+    private float LastPressedTime;
 
-    public void OnPressed() {
-        if (Time.time - LastPressed <= 0.2) {
+    private void Start() {
+        Init();
+
+        RegisterProperty<bool>(nameof(IsPressed), newValue => IsPressed = newValue);
+    }
+
+    private void Reset() {
+        Init();
+    }
+
+    private void Init() {
+        Interactable = Interactable == null ? GetComponent<XRBaseInteractable>() : Interactable;
+        Interactable = Interactable == null ? GetComponentInChildren<XRBaseInteractable>() : Interactable;
+    }
+
+    protected virtual void OnStateChanged() {
+        StateChanged?.Invoke(isPressed);
+
+        SetProperty(nameof(IsPressed), IsPressed);
+    }
+
+    protected virtual void OnPressed() {
+        if (Time.time - LastPressedTime <= DebounceTime) {
             return;
         }
-        LastPressed = Time.time;
+        LastPressedTime = Time.time;
 
         if (IsSwitch) {
             IsPressed = !IsPressed;
@@ -37,23 +56,10 @@ public class ButtonController : MonoBehaviourPun, IPunObservable {
         }
     }
 
-    public void OnReleased() {
+    protected virtual void OnReleased() {
         if (IsSwitch) {
         } else {
             IsPressed = false;
-        }
-    }
-
-    [PunRPC]
-    public void SetState(bool state) {
-        IsPressed = state;
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        if (stream.IsReading) {
-            IsPressed = ((int) stream.ReceiveNext()) == 1;
-        } else {
-            stream.SendNext(IsPressed ? 1 : 0);
         }
     }
 }

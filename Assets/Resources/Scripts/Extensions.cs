@@ -22,6 +22,34 @@ public static class Extensions {
         return parent.transform.GetAllChildren().Select(e => e.gameObject);
     }
 
+    public static IEnumerable<string> GetScenePath(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true) {
+        if (ReferenceEquals(target, parent)) {
+            return Enumerable.Empty<string>();
+        }
+
+        var path = new List<string>();
+
+        if (includeTarget) {
+            path.Add(target.name);
+        }
+
+        var current = target.transform;
+        while (current.parent != null && ReferenceEquals(current, parent)) {
+            path.Add(current.name);
+            current = current.transform.parent;
+        }
+
+        if (parent && includeParent) {
+            path.Add(parent.name);
+        }
+
+        return Enumerable.Reverse(path);
+    }
+
+    public static string GetScenePathString(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true, string delimiter = "/") {
+        return string.Join(delimiter, GetScenePath(target, parent, includeTarget, includeParent));
+    }
+
     public static Vector3 WithX(this Vector3 vector, float x) {
         return new Vector3(x, vector.y, vector.z);
     }
