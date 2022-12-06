@@ -5,6 +5,7 @@ using UnityEngine;
 public class NetworkManager : MonoBehaviourPunCallbacks {
     public GameObject CharacterPrefab;
     public Transform Spawn;
+    private GameObject LocalOfflineCharacter;
 
     private void Start() {
         PhotonPeer.RegisterType(typeof(Character.InstantiationData), 0, Character.InstantiationData.Serialize, Character.InstantiationData.Deserialize);
@@ -13,6 +14,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         if (!PhotonNetwork.ConnectUsingSettings()) {
             Debug.LogError("Failed to connect using settings.");
         }
+
+        // Create a new Character instance so that the user can see his hands and stuff until we connect.
+        LocalOfflineCharacter = Instantiate(CharacterPrefab, Spawn.position, Spawn.rotation);
+        LocalOfflineCharacter.name = "Local Offline Player";
+        var character = LocalOfflineCharacter.AddComponent<LocalCharacter>();
+        character.Rig = GameObject.FindGameObjectWithTag(Tags.XROrigin).GetComponent<XRRig>();
     }
 
     public override void OnConnectedToMaster() {
@@ -26,6 +33,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
 
+        DestroyImmediate(LocalOfflineCharacter);
         var characterObject = PhotonNetwork.Instantiate($"Prefabs/{CharacterPrefab.name}", Spawn.position, Spawn.rotation, default, new object[] {
             new Character.InstantiationData() { ActorNumber = PhotonNetwork.LocalPlayer.ActorNumber }
         });

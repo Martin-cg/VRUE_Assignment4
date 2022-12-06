@@ -24,18 +24,16 @@ public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
     public GameObject LeftHand;
     public GameObject RightHand;
 
-    protected virtual void Start() {
-        this.name = string.IsNullOrWhiteSpace(Player.NickName) ? $"Player {Player.ActorNumber + 1}" : Player.NickName;
-        if (IsLocal) {
-            this.name += " (Local)";
-        }
-    }
-
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
         var instantiationData = (InstantiationData) info.photonView.InstantiationData[0];
         Player = PhotonNetwork.LocalPlayer.Get(instantiationData.ActorNumber);
         Player.TagObject = this;
         SetRole(CharacterRole.Spectator);
+
+        name = string.IsNullOrWhiteSpace(Player.NickName) ? $"Player {Player.ActorNumber + 1}" : Player.NickName;
+        if (IsLocal) {
+            name += " (Local)";
+        }
     }
 
     public void SetRole(CharacterRole newRole) {

@@ -3,11 +3,18 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Character))]
-public class LocalCharacter : Singleton<LocalCharacter> {
+public class LocalCharacter : MonoBehaviour {
+    public static LocalCharacter Instance { get; private set; }
     public Character Character;
     public XRRig Rig;
 
-    public void Start() {
+    protected virtual void Start() {
+        if (Instance != null && Instance != this && !Instance.IsDestroyed()) {
+            Destroy(gameObject);
+        } else {
+            Instance = this;
+        }
+
         Character = GetComponent<Character>();
 
         foreach (var renderer in Character.Head.GetComponentsInChildren<Renderer>()) {
