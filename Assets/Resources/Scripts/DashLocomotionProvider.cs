@@ -64,7 +64,6 @@ public class DashLocomotionProvider : ContinuousMoveProviderBase {
         // }
 
         var swingStrength = combined * (leftMagnitude + rightMagnitude);
-        Debug.Log(swingStrength);
         if (swingStrength >= 0.1 * PreviousPositionCount) {
             Velocity = 1;
             Debug.LogWarning("DASH!");
