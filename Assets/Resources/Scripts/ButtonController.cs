@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class ButtonController : CustomSyncRoomObject {
+public class ButtonController : SynchronizedRoomObject {
     public XRBaseInteractable Interactable;
     public UnityEvent<bool> StateChanged = new();
 
@@ -41,7 +41,7 @@ public class ButtonController : CustomSyncRoomObject {
     protected virtual void OnStateChanged() {
         StateChanged?.Invoke(isPressed);
 
-        SetProperty(nameof(IsPressed), IsPressed);
+        SetProperty(nameof(IsPressed), IsPressed, false);
     }
 
     protected virtual void OnPressed() {

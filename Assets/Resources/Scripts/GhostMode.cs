@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpectatorGhost : RoleSpecific {
+public class GhostMode : RoleSpecific {
     public Renderer[] Meshes = new Renderer[0];
     public float Opacity = 0.4f;
     private Material[] OriginalMaterials;

@@ -1,59 +1,40 @@
-﻿using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Filtering;
+﻿using UnityEngine.XR.Interaction.Toolkit;
 
-[RequireComponent(typeof(XRSocketInteractor))]
-public class ChefHatSocket : MonoBehaviour {
-    private XRSocketInteractor SocketInteractor;
-    private ChefHatSocketSelectFilter SelectFilter;
+public class ChefHatSocket : XRSocketInteractor {
     private Character Character;
 
-    protected virtual void Reset() {
-        Init();
+    protected override void Reset() {
+        base.Reset();
+
+        FindReferences();
     }
 
-    protected virtual void Awake() {
-        Init();
+    protected override void Awake() {
+        base.Awake();
 
-        SelectFilter = new ChefHatSocketSelectFilter(this);
+        FindReferences();
     }
 
-    private void Init() {
-        SocketInteractor = SocketInteractor == null ? GetComponent<XRSocketInteractor>() : SocketInteractor;
+    private void FindReferences() {
         Character = Character == null ? GetComponentInParent<Character>() : Character;
     }
 
-    protected virtual void OnEnable() {
-        SocketInteractor.selectEntered.AddListener(OnSelectEntered);
-        SocketInteractor.selectExited.AddListener(OnSelectExited);
-        SocketInteractor.selectFilters.Add(SelectFilter);
-    }
-    private void OnDestroy() {
-        SocketInteractor.selectEntered.RemoveListener(OnSelectEntered);
-        SocketInteractor.selectExited.RemoveListener(OnSelectExited);
-        SocketInteractor.selectFilters.Remove(SelectFilter);
+    public override bool CanHover(IXRHoverInteractable interactable) {
+        return base.CanHover(interactable)
+            && interactable.transform.HasComponent<ChefHat>()
+            && interactable is IXRSelectInteractable selectInteractable
+            && Character.transform.IsParentOf(selectInteractable.GetOldestInteractorSelecting().transform);
     }
 
-    private void OnSelectEntered(SelectEnterEventArgs args) {
+    protected override void OnSelectEntered(SelectEnterEventArgs args) {
+        base.OnSelectEntered(args);
+
         Character.SetRole(CharacterRole.Player);
     }
 
-    private void OnSelectExited(SelectExitEventArgs args) {
+    protected override void OnSelectExited(SelectExitEventArgs args) {
+        base.OnSelectExited(args);
+
         Character.SetRole(CharacterRole.Spectator);
-    }
-
-    private class ChefHatSocketSelectFilter : IXRSelectFilter {
-        public ChefHatSocket ChefHatSocket { get; }
-        public bool canProcess => true;
-
-        public ChefHatSocketSelectFilter(ChefHatSocket chefHatSocket) {
-            ChefHatSocket = chefHatSocket;
-        }
-
-        public bool Process(IXRSelectInteractor interactor, IXRSelectInteractable interactable) {
-            return ChefHatSocket.SocketInteractor.interactablesSelected.Count == 0
-                && ChefHatSocket.Character.transform.IsParentOf(interactor.transform)
-                && interactable.transform.GetComponent<ChefHat>();
-        }
     }
 }

@@ -207,19 +207,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3979710707837760068, guid: c1e3f3543475aa048a0c225ad60acec8,
         type: 3}
-      propertyPath: m_ThrowOnDetach
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3979710707837760068, guid: c1e3f3543475aa048a0c225ad60acec8,
-        type: 3}
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 1483335289}
-    - target: {fileID: 3979710707837760068, guid: c1e3f3543475aa048a0c225ad60acec8,
-        type: 3}
-      propertyPath: m_InteractionLayers.m_Bits
-      value: 192
-      objectReference: {fileID: 0}
     - target: {fileID: 6241091874267012268, guid: c1e3f3543475aa048a0c225ad60acec8,
         type: 3}
       propertyPath: m_Name
@@ -485,9 +475,11 @@ GameObject:
   m_Component:
   - component: {fileID: 164040818}
   - component: {fileID: 164040820}
+  - component: {fileID: 164040822}
+  - component: {fileID: 164040821}
   - component: {fileID: 164040819}
   m_Layer: 0
-  m_Name: Attach Left
+  m_Name: Socket Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,6 +568,32 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &164040821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164040817}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11e18e326f0bcb4b8de3993da696c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &164040822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164040817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d03e04a94cb10fa4ab33a4743e61bb81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetBehaviours:
+  - {fileID: 164040821}
 --- !u!1 &379142912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,9 +1045,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1108510006}
   - component: {fileID: 1108510008}
+  - component: {fileID: 1108510010}
+  - component: {fileID: 1108510009}
   - component: {fileID: 1108510007}
   m_Layer: 0
-  m_Name: Attach Right
+  m_Name: Socket Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1118,6 +1138,32 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!114 &1108510009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108510005}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11e18e326f0bcb4b8de3993da696c09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1108510010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108510005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d03e04a94cb10fa4ab33a4743e61bb81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetBehaviours:
+  - {fileID: 1108510009}
 --- !u!1 &1128685087
 GameObject:
   m_ObjectHideFlags: 0
@@ -1662,6 +1708,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3442441952411077781, guid: ab2bd166a2936834dbbf06c1cc80bf2c,
+        type: 3}
+      propertyPath: m_ThrowOnDetach
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4158958179395514667, guid: ab2bd166a2936834dbbf06c1cc80bf2c,
         type: 3}
@@ -3245,8 +3296,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1864674388}
-  - component: {fileID: 1864674392}
   - component: {fileID: 1864674390}
+  - component: {fileID: 1864674392}
   - component: {fileID: 1864674391}
   - component: {fileID: 1864674389}
   m_Layer: 0

@@ -3,8 +3,7 @@ using Photon.Pun;
 using System;
 using System.Collections.Generic;
 
-// TODO: find a better name for this
-public class CustomSyncRoomObject : MonoBehaviourPunCallbacks {
+public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     private readonly Dictionary<string, CustomProperty> CustomProperties = new();
     private string ScenePath;
 
@@ -12,11 +11,13 @@ public class CustomSyncRoomObject : MonoBehaviourPunCallbacks {
         ScenePath = gameObject.GetScenePathString();
     }
 
-    protected void SetProperty<T>(string key, T value) {
+    protected void SetProperty<T>(string key, T value, bool triggerLocalCallback=false) {
         var property = GetProperty(key);
         property.PropertyTableCache[key] = value;
         PhotonNetwork.CurrentRoom.SetCustomProperties(property.PropertyTableCache);
-        property.PropertyChange.Invoke(value);
+        if (triggerLocalCallback) {
+            property.PropertyChange.Invoke(value);
+        }
     }
     protected void RegisterProperty<T>(string key, Action<T> propertyChangeCallback) {
         var realKey = $"{ScenePath}/{key}";
@@ -35,7 +36,7 @@ public class CustomSyncRoomObject : MonoBehaviourPunCallbacks {
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) {
         foreach (var (name, property) in CustomProperties) {
             if (propertiesThatChanged.TryGetValue(name, out var newValue)) {
-                property.PropertyChange(newValue);
+                property.PropertyChange.Invoke(newValue);
             }
         }
     }

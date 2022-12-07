@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(XRSocketInteractor))]
-public class SynchronizedSocketInteractor : CustomSyncRoomObject {
+public class SynchronizedSocketInteractor : SynchronizedRoomObject {
     private XRSocketInteractor Socket;
     private const string PropertyKey = "CurrentInteractableSceneViewId";
 
@@ -12,8 +12,10 @@ public class SynchronizedSocketInteractor : CustomSyncRoomObject {
     }
 
     public virtual void OnDestroy() {
-        Socket.selectEntered.RemoveListener(OnSelectEnter);
-        Socket.selectExited.RemoveListener(OnSelectExit);
+        if (Socket) {
+            Socket.selectEntered.RemoveListener(OnSelectEnter);
+            Socket.selectExited.RemoveListener(OnSelectExit);
+        }
     }
 
     protected override void Start() {
@@ -67,6 +69,8 @@ public class SynchronizedSocketInteractor : CustomSyncRoomObject {
         var interactable = Socket.firstInteractableSelected;
         // TODO: what of this madness is actually required
         Socket.socketActive = false;
+        Socket.allowHover = false;
+        Socket.allowSelect = false;
         var layers = Socket.interactionLayers;
         Socket.interactionLayers = 0;
         Socket.interactionManager.CancelInteractorSelection((IXRSelectInteractor) Socket);
@@ -74,16 +78,18 @@ public class SynchronizedSocketInteractor : CustomSyncRoomObject {
         Socket.interactionManager.CancelInteractorHover((IXRHoverInteractor) Socket);
         Socket.interactionManager.CancelInteractableHover((IXRHoverInteractable) interactable);
         Socket.socketActive = true;
+        Socket.allowHover = true;
+        Socket.allowSelect = true;
         Socket.interactionLayers = layers;
         interactable.transform.parent = null;
     }
 
     private void OnLocalInteractableEntered(IXRSelectInteractable interactable) {
         var photonView = PhotonView.Get(interactable.transform);
-        SetProperty<int?>(PropertyKey, photonView.ViewID);
+        SetProperty<int?>(PropertyKey, photonView.ViewID, false);
     }
 
     private void OnLocalInteractableExited() {
-        SetProperty<int?>(PropertyKey, null);
+        SetProperty<int?>(PropertyKey, null, false);
     }
 }

@@ -1,11 +1,9 @@
 ﻿using Photon.Pun;
-using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MasterClientOnly : MonoBehaviourPunCallbacks {
+public class InOnlineRoomOnly : MonoBehaviourPunCallbacks {
     public List<Behaviour> TargetBehaviours = new();
-    private bool AreTargetsEnabled;
 
     protected virtual void Awake() {
         SetTargetsState(false);
@@ -15,8 +13,12 @@ public class MasterClientOnly : MonoBehaviourPunCallbacks {
         SetTargetsState(false);
     }
 
+    protected virtual void OnValidate() {
+        SetTargetsState(false);
+    }
+
     private void SetTargetsState(bool enabled) {
-        for (int i = 0; i < TargetBehaviours.Count; i++) {
+        for (int i=0; i<TargetBehaviours.Count; i++) {
             var behaviour = TargetBehaviours[i];
             if (behaviour != null && behaviour.gameObject) {
                 behaviour.enabled = enabled;
@@ -25,32 +27,17 @@ public class MasterClientOnly : MonoBehaviourPunCallbacks {
                 i -= 1;
             }
         }
-
-        AreTargetsEnabled = enabled;
-    }
-    private void UpdateTargetsState() {
-        if (AreTargetsEnabled == PhotonNetwork.IsMasterClient) {
-            return;
-        }
-
-        SetTargetsState(PhotonNetwork.IsMasterClient);
     }
 
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
 
-        UpdateTargetsState();
-    }
-
-    public override void OnMasterClientSwitched(Player newMasterClient) {
-        base.OnMasterClientSwitched(newMasterClient);
-
-        UpdateTargetsState();
+        SetTargetsState(true);
     }
 
     public override void OnLeftRoom() {
         base.OnLeftRoom();
 
-        UpdateTargetsState();
+        SetTargetsState(false);
     }
 }
