@@ -11,41 +11,53 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
         ScenePath = gameObject.GetScenePathString();
     }
 
-    protected void SetProperty<T>(string key, T value, bool triggerLocalCallback=false) {
-        var property = GetProperty(key);
-        property.PropertyTableCache[key] = value;
+    protected void SetProperty<T>(string name, T value) {
+        var property = GetProperty(name);
+        if (property.Value == (object) value) {
+            return;
+        }
+        property.Value = value;
+        property.PropertyTableCache[property.Key] = value;
         if (PhotonNetwork.CurrentRoom != null) {
             PhotonNetwork.CurrentRoom.SetCustomProperties(property.PropertyTableCache);
         }
-        if (triggerLocalCallback) {
-            property.PropertyChange.Invoke(value);
-        }
     }
-    protected void RegisterProperty<T>(string key, Action<T> propertyChangeCallback) {
-        var realKey = $"{ScenePath}/{key}";
-        CustomProperties.Add(realKey, new CustomProperty() {
-            Name = key,
-            PropertyChange = v => propertyChangeCallback((T)v),
+    protected void RegisterProperty<T>(string name, T value, Action<T> propertyChangeCallback) {
+        var key = GetKeyForName(name);
+        CustomProperties.Add(key, new CustomProperty() {
+            Name = name,
+            Key = key,
+            Value = value,
+            ChangeCallback = v => propertyChangeCallback((T)v),
             PropertyTableCache = new Hashtable()
         });
     }
-    private CustomProperty GetProperty(string key) {
-        var realKey = $"{ScenePath}/{key}";
-        if (CustomProperties.TryGetValue(realKey, out var property)) { return property; }
+    private CustomProperty GetProperty(string name) {
+        var key = GetKeyForName(name);
+        if (CustomProperties.TryGetValue(key, out var property)) { return property; }
         throw new Exception("Custom property not defined.");
+    }
+    private string GetKeyForName(string name) {
+        return $"{ScenePath}/{name}";
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) {
+        base.OnRoomPropertiesUpdate(propertiesThatChanged);
+
         foreach (var (name, property) in CustomProperties) {
             if (propertiesThatChanged.TryGetValue(name, out var newValue)) {
-                property.PropertyChange.Invoke(newValue);
+                if (newValue != property.Value) {
+                    property.ChangeCallback.Invoke(newValue);
+                }
             }
         }
     }
 
-    private struct CustomProperty {
+    private class CustomProperty {
         public string Name;
-        public Action<object> PropertyChange;
+        public string Key;
+        public object Value;
+        public Action<object> ChangeCallback;
         public Hashtable PropertyTableCache;
     }
 }

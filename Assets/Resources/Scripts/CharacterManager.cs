@@ -20,9 +20,14 @@ public sealed class CharacterManager : MonoBehaviourPunCallbacks {
     public UnityEvent<Character> LocalCharacterSpawned = new();
 
     private bool IsOfflineCharacter;
+    private bool IsShuttingDown = false;
 
     private void Start() {
         SpawnLocalOfflineCharacter();
+    }
+
+    private void OnApplicationQuit() {
+        IsShuttingDown = true;
     }
 
     public override void OnJoinedRoom() {
@@ -38,6 +43,10 @@ public sealed class CharacterManager : MonoBehaviourPunCallbacks {
     }
 
     public void SpawnLocalCharacter() {
+        if (IsShuttingDown) {
+            return;
+        }
+
         if (LocalCharacter.Instance && IsOfflineCharacter) {
             DestroyImmediate(LocalCharacter.Instance.gameObject);
         }
@@ -57,6 +66,10 @@ public sealed class CharacterManager : MonoBehaviourPunCallbacks {
     }
 
     public void SpawnLocalOfflineCharacter() {
+        if (IsShuttingDown) {
+            return;
+        }
+
         if (LocalCharacter.Instance && IsOfflineCharacter) {
             DestroyImmediate(LocalCharacter.Instance.gameObject);
         }

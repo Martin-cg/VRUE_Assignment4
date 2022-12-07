@@ -2949,7 +2949,7 @@ PrefabInstance:
     - target: {fileID: 5647523296227533437, guid: ab2bd166a2936834dbbf06c1cc80bf2c,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab2bd166a2936834dbbf06c1cc80bf2c, type: 3}
@@ -2959,18 +2959,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1307842643}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1307842645 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3442441952411077781, guid: ab2bd166a2936834dbbf06c1cc80bf2c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1307842643}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1368641777
 GameObject:
   m_ObjectHideFlags: 0
@@ -3331,6 +3319,7 @@ GameObject:
   - component: {fileID: 1636534280}
   - component: {fileID: 1636534282}
   - component: {fileID: 1636534281}
+  - component: {fileID: 1636534283}
   m_Layer: 0
   m_Name: Direct Interactor
   m_TagString: Untagged
@@ -3450,6 +3439,21 @@ MonoBehaviour:
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
   m_AllowHoverHapticsWhileSelecting: 1
+--- !u!114 &1636534283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636534279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359d6340f8ea47149b4c0c72f7c21b13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RequiredRole: 0
+  Interactor: {fileID: 0}
+  Interactable: {fileID: 0}
 --- !u!1 &1664604267
 GameObject:
   m_ObjectHideFlags: 0
@@ -4657,7 +4661,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 0
-  m_StartingSelectedInteractable: {fileID: 1307842645}
+  m_StartingSelectedInteractable: {fileID: 0}
   m_StartingTargetFilter: {fileID: 0}
   m_HoverEntered:
     m_PersistentCalls:

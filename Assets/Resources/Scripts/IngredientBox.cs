@@ -19,9 +19,9 @@ public class IngredientBox : MonoBehaviourPun {
         FindSocket();
 
         // Do we filter the items here?
-        CurrentItem = Socket.interactablesSelected.Select(interactable => interactable.transform.gameObject).FirstOrDefault();
+        CurrentItem = Socket.interactablesSelected.Select(interactable => interactable.transform.gameObject).SingleOrDefault();
         if (CurrentItem == null) {
-            GenerateItem();
+            StartCoroutine(GenerateItem());
         }
     }
 

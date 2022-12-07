@@ -58,7 +58,7 @@ public class NetworkLogger : MonoBehaviourPunCallbacks {
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) {
-        // Debug.Log("[Network] Room properties updated");
+        Debug.Log($"[Network] Room properties updated ({propertiesThatChanged})");
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {

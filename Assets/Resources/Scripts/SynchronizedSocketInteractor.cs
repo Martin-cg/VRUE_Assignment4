@@ -19,9 +19,11 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
     }
 
     protected override void Start() {
+        base.Start();
+
         FindSocket();
 
-        RegisterProperty<int?>(PropertyKey, sceneViewId => {
+        RegisterProperty<int?>(PropertyKey, null, sceneViewId => {
             if (sceneViewId.HasValue) {
                 var photonView = PhotonView.Find(sceneViewId.Value);
                 var interactable = photonView.GetComponent<XRGrabInteractable>();
@@ -86,10 +88,10 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
 
     private void OnLocalInteractableEntered(IXRSelectInteractable interactable) {
         var photonView = PhotonView.Get(interactable.transform);
-        SetProperty<int?>(PropertyKey, photonView.ViewID, false);
+        SetProperty<int?>(PropertyKey, photonView.ViewID);
     }
 
     private void OnLocalInteractableExited() {
-        SetProperty<int?>(PropertyKey, null, false);
+        SetProperty<int?>(PropertyKey, null);
     }
 }
