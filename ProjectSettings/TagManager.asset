@@ -7,6 +7,7 @@ TagManager:
   - XROrigin
   - Character
   - ItemBoxItem
+  - KnifeBlade
   layers:
   - Default
   - TransparentFX
