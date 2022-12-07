@@ -1,6 +1,5 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
 public sealed class NetworkManager : MonoBehaviourPunCallbacks {
@@ -9,6 +8,9 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks {
     private void Start() {
         PhotonPeer.RegisterType(typeof(Character.InstantiationData), 0, Character.InstantiationData.Serialize, Character.InstantiationData.Deserialize);
         PhotonNetwork.AutomaticallySyncScene = true;
+        if (Application.isEditor) {
+            PhotonNetwork.KeepAliveInBackground = float.MaxValue / 2000;
+        }
 
         if (AutoConnect) {
             Connect();

@@ -1,11 +1,14 @@
 ﻿using Photon.Pun;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Filtering;
 
 [RequireComponent(typeof(XRSocketInteractor))]
-public class SynchronizedSocketInteractor : SynchronizedRoomObject {
+public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRHoverFilter, IXRSelectFilter {
     private XRSocketInteractor Socket;
     private const string PropertyKey = "CurrentInteractableSceneViewId";
+
+    public bool canProcess => true;
 
     protected virtual void Reset() {
         FindSocket();
@@ -34,7 +37,10 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
         });
 
         Socket.selectEntered.AddListener(OnSelectEnter);
-        Socket.selectExited.AddListener(OnSelectExit); 
+        Socket.selectExited.AddListener(OnSelectExit);
+
+        Socket.hoverFilters.Add(this);
+        Socket.selectFilters.Add(this);
 
         if (Socket.firstInteractableSelected != null) {
             OnLocalInteractableEntered(Socket.firstInteractableSelected);
@@ -59,7 +65,7 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
             return;
         }
 
-        Socket.interactionManager.SelectEnter(Socket, interactable);    
+        Socket.interactionManager.SelectEnter(Socket, interactable);
         // interactable.transform.parent = Socket.attachTransform;
     }
 
@@ -94,5 +100,13 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
 
     private void OnLocalInteractableExited() {
         SetProperty<int?>(PropertyKey, null);
+    }
+
+    public bool Process(IXRHoverInteractor interactor, IXRHoverInteractable interactable) {
+        return this.photonView.IsMine;
+    }
+
+    public bool Process(IXRSelectInteractor interactor, IXRSelectInteractable interactable) {
+        return this.photonView.IsMine;
     }
 }

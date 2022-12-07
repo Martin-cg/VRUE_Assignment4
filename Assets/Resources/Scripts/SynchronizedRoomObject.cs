@@ -11,10 +11,10 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
         ScenePath = gameObject.GetScenePathString();
     }
 
-    protected void SetProperty<T>(string name, T value) {
+    public void SetProperty<T>(string name, T value) {
         var property = GetProperty(name);
-        if (property.Value == (object) value) {
-            return;
+        if (Equals(property.Value, value)) {
+        //    return;
         }
         property.Value = value;
         property.PropertyTableCache[property.Key] = value;
@@ -46,10 +46,10 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
 
         foreach (var (name, property) in CustomProperties) {
             if (propertiesThatChanged.TryGetValue(name, out var newValue)) {
-                if (newValue != property.Value) {
+                // if (!Equals(newValue, property.Value)) {
                     property.Value = newValue;
                     property.ChangeCallback.Invoke(newValue);
-                }
+                // }
             }
         }
     }
