@@ -22,7 +22,11 @@ public class ExitButton : PredefinedActionButton, IConnectionCallbacks {
             QuitOnNextDisconnect = true;
             NetworkManager.Disconnect();
         } else {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
             Application.Quit();
+#endif
         }
     }
 
@@ -41,11 +45,11 @@ public class ExitButton : PredefinedActionButton, IConnectionCallbacks {
     public void OnDisconnected(DisconnectCause cause) {
         if (QuitOnNextDisconnect) {
             QuitOnNextDisconnect = false;
-            if (Application.isPlaying) {
-                Application.Quit();
-            } else {
+#if UNITY_EDITOR
                 EditorApplication.isPlaying = false;
-            }
+#else
+                Application.Quit();
+#endif
         }
     }
 
