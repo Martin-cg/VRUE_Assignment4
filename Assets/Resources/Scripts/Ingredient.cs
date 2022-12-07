@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(XRGrabInteractable))]
-public class Ingredient : MonoBehaviour {
+public class Ingredient : MonoBehaviour, IPunObservable {
 
     public enum IngredientState {
         Initial,
@@ -44,4 +45,10 @@ public class Ingredient : MonoBehaviour {
         }
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        if (stream.IsWriting)
+            stream.SendNext(CurrentState);
+        else
+            CurrentState = (IngredientState)stream.ReceiveNext();
+    }
 }
