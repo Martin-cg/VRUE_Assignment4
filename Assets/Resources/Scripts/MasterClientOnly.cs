@@ -29,11 +29,13 @@ public class MasterClientOnly : MonoBehaviourPunCallbacks {
         AreTargetsEnabled = enabled;
     }
     private void UpdateTargetsState() {
-        if (AreTargetsEnabled == PhotonNetwork.IsMasterClient) {
+        var targetState = PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient;
+
+        if (AreTargetsEnabled == targetState) {
             return;
         }
 
-        SetTargetsState(PhotonNetwork.IsMasterClient);
+        SetTargetsState(targetState);
     }
 
     public override void OnJoinedRoom() {

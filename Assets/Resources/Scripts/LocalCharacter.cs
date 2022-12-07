@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -7,6 +8,7 @@ public class LocalCharacter : MonoBehaviour {
     public static LocalCharacter Instance { get; private set; }
     public Character Character;
     public XRRig Rig;
+    private List<Component> SyncComponents = new();
 
     protected virtual void Start() {
         if (Instance != null && Instance != this && !Instance.IsDestroyed()) {
@@ -30,6 +32,13 @@ public class LocalCharacter : MonoBehaviour {
         SyncAnimations(Rig.RightHand, Character.RightHand);
     }
 
+    protected virtual void OnDestroy() {
+        foreach (var component in SyncComponents) {
+            Destroy(component);
+        }
+        SyncComponents.Clear();
+    }
+
     private void SyncTransforms(GameObject source, GameObject target) {
         SyncTransforms(source.transform, target.transform);
     }
@@ -37,11 +46,13 @@ public class LocalCharacter : MonoBehaviour {
     private void SyncTransforms(Transform source, Transform target) {
         var transformSync = source.AddComponent<TransformSync>();
         transformSync.Target = target;
+        SyncComponents.Add(transformSync);
     }
 
     private void SyncAnimations(ActionBasedController controller, GameObject animatedObject) {
         var animationSync = controller.AddComponent<ControllerAnimationSync>();
         animationSync.Controller = controller;
         animationSync.Animator = animatedObject.GetComponentInChildren<Animator>();
+        SyncComponents.Add(animationSync);
     }
 }
