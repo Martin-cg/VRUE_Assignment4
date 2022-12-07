@@ -6,6 +6,7 @@ TagManager:
   tags:
   - XROrigin
   - Character
+  - ItemBoxItem
   layers:
   - Default
   - TransparentFX
