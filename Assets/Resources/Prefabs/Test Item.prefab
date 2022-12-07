@@ -1445,6 +1445,7 @@ GameObject:
   - component: {fileID: 3442441952411077781}
   - component: {fileID: 8687742370141043545}
   - component: {fileID: -5320358110883276758}
+  - component: {fileID: 5255174672835940323}
   m_Layer: 0
   m_Name: Test Item
   m_TagString: ItemBoxItem
@@ -1679,6 +1680,24 @@ MonoBehaviour:
   InitialStateModel: {fileID: 2671377586482141257}
   ChoppedStateModel: {fileID: 6244895819244883999}
   CookedStateModel: {fileID: 4072183274169945457}
+--- !u!114 &5255174672835940323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5647523296227533437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd24fe8d8bcb1e43a6293ec85580502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed:
+    m_PersistentCalls:
+      m_Calls: []
+  Released:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5661052008847684483
 GameObject:
   m_ObjectHideFlags: 0

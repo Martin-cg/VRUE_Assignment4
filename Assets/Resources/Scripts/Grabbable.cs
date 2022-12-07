@@ -31,12 +31,12 @@ public class Grabbable : MonoBehaviourPun {
     protected virtual void OnEnable() {
         Interactable.selectEntered.AddListener(OnSelectEntered);
         Interactable.selectExited.AddListener(OnSelectExited);
-        Interactable.selectFilters.Add(SelectFilter);
+        // Interactable.selectFilters.Add(SelectFilter);
     }
     private void OnDestroy() {
         Interactable.selectEntered.RemoveListener(OnSelectEntered);
         Interactable.selectExited.RemoveListener(OnSelectExited);
-        Interactable.selectFilters.Remove(SelectFilter);
+        // Interactable.selectFilters.Remove(SelectFilter);
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args) {
