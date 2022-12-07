@@ -2,22 +2,44 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public sealed class CharacterManager : Singleton<CharacterManager> {
+public sealed class CharacterManager : MonoBehaviourPunCallbacks {
+    public static CharacterManager Instance { get; private set; }
+
+    private void Awake() {
+        if (Instance != null && Instance != this) {
+            Destroy(this.gameObject);
+        } else {
+            Instance = this;
+        }
+    }
+
     public GameObject CharacterPrefab;
     public Transform Spawn;
 
     public UnityEvent<Character> CharacterSpawned = new();
     public UnityEvent<Character> LocalCharacterSpawned = new();
-    private GameObject LocalOfflineCharacter;
 
-    public void Start() {
-        // Create a new Character instance so that the user can see his hands and stuff until we connect.
+    private bool IsOfflineCharacter;
+
+    private void Start() {
+        SpawnLocalOfflineCharacter();
+    }
+
+    public override void OnJoinedRoom() {
+        base.OnJoinedRoom();
+
+        SpawnLocalCharacter();
+    }
+
+    public override void OnLeftRoom() {
+        base.OnLeftRoom();
+
         SpawnLocalOfflineCharacter();
     }
 
     public void SpawnLocalCharacter() {
-        if (LocalOfflineCharacter) {
-            DestroyImmediate(LocalOfflineCharacter);
+        if (LocalCharacter.Instance && IsOfflineCharacter) {
+            DestroyImmediate(LocalCharacter.Instance.gameObject);
         }
 
         var characterObject = PhotonNetwork.Instantiate($"Prefabs/{CharacterPrefab.name}", Spawn.position, Spawn.rotation, default, new object[] {
@@ -30,13 +52,21 @@ public sealed class CharacterManager : Singleton<CharacterManager> {
 
         CharacterSpawned.Invoke(character);
         LocalCharacterSpawned.Invoke(character);
+
+        IsOfflineCharacter = false;
     }
 
     public void SpawnLocalOfflineCharacter() {
-        LocalOfflineCharacter = Instantiate(CharacterPrefab, Spawn.position, Spawn.rotation);
-        LocalOfflineCharacter.name = "Local Offline Player";
-        var character = LocalOfflineCharacter.AddComponent<LocalCharacter>();
+        if (LocalCharacter.Instance && IsOfflineCharacter) {
+            DestroyImmediate(LocalCharacter.Instance.gameObject);
+        }
+
+        var characterObject = Instantiate(CharacterPrefab, Spawn.position, Spawn.rotation);
+        characterObject.name = "Local Offline Player";
+        var character = characterObject.AddComponent<LocalCharacter>();
         character.Rig = GameObject.FindGameObjectWithTag(Tags.XROrigin).GetComponent<XRRig>();
+
+        IsOfflineCharacter = true;
     }
 
 }

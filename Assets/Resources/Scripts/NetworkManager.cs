@@ -2,14 +2,26 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
-public class NetworkManager : MonoBehaviourPunCallbacks {
+public sealed class NetworkManager : MonoBehaviourPunCallbacks {
+    public bool AutoConnect = true;
+
     private void Start() {
         PhotonPeer.RegisterType(typeof(Character.InstantiationData), 0, Character.InstantiationData.Serialize, Character.InstantiationData.Deserialize);
         PhotonNetwork.AutomaticallySyncScene = true;
 
+        if (AutoConnect) {
+            Connect();
+        }
+    }
+
+    public void Connect() {
         if (!PhotonNetwork.ConnectUsingSettings()) {
             Debug.LogError("Failed to connect using settings.");
         }
+    }
+
+    public void Disconnect() {
+        PhotonNetwork.Disconnect();
     }
 
     public override void OnConnectedToMaster() {
@@ -26,7 +38,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
         if (string.IsNullOrWhiteSpace(PhotonNetwork.LocalPlayer.NickName)) {
             PhotonNetwork.LocalPlayer.NickName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
         }
-        CharacterManager.Instance.SpawnLocalCharacter();
     }
 
     public override void OnLeftRoom() {

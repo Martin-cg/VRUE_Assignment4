@@ -14,7 +14,9 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     protected void SetProperty<T>(string key, T value, bool triggerLocalCallback=false) {
         var property = GetProperty(key);
         property.PropertyTableCache[key] = value;
-        PhotonNetwork.CurrentRoom.SetCustomProperties(property.PropertyTableCache);
+        if (PhotonNetwork.CurrentRoom != null) {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(property.PropertyTableCache);
+        }
         if (triggerLocalCallback) {
             property.PropertyChange.Invoke(value);
         }
