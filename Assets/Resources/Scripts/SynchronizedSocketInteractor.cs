@@ -59,8 +59,8 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
             return;
         }
 
-        Socket.interactionManager.SelectEnter(Socket, interactable);
-        interactable.transform.parent = Socket.attachTransform;
+        Socket.interactionManager.SelectEnter(Socket, interactable);    
+        // interactable.transform.parent = Socket.attachTransform;
     }
 
     private void OnRemoteInteractableExited() {
@@ -70,7 +70,8 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
 
         var interactable = Socket.firstInteractableSelected;
         // TODO: what of this madness is actually required
-        Socket.socketActive = false;
+        Socket.interactionManager.SelectExit(Socket, interactable);
+        /*Socket.socketActive = false;
         Socket.allowHover = false;
         Socket.allowSelect = false;
         var layers = Socket.interactionLayers;
@@ -82,8 +83,8 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject {
         Socket.socketActive = true;
         Socket.allowHover = true;
         Socket.allowSelect = true;
-        Socket.interactionLayers = layers;
-        interactable.transform.parent = null;
+        Socket.interactionLayers = layers;*/
+        // interactable.transform.parent = null;
     }
 
     private void OnLocalInteractableEntered(IXRSelectInteractable interactable) {

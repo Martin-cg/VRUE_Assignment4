@@ -9,7 +9,6 @@ using UnityEngine.XR.Interaction.Toolkit.Filtering;
 [RequireComponent(typeof(XRGrabInteractable))]
 public class Grabbable : MonoBehaviourPun {
     protected XRGrabInteractable Interactable;
-    private GrabbableSelectFilter SelectFilter;
     public UnityEvent Grabbed = new();
     public UnityEvent Released = new();
 
@@ -19,8 +18,6 @@ public class Grabbable : MonoBehaviourPun {
 
     protected virtual void Awake() {
         Init();
-
-        SelectFilter = new GrabbableSelectFilter(this);
     }
 
     private void Init() {
@@ -31,12 +28,10 @@ public class Grabbable : MonoBehaviourPun {
     protected virtual void OnEnable() {
         Interactable.selectEntered.AddListener(OnSelectEntered);
         Interactable.selectExited.AddListener(OnSelectExited);
-        // Interactable.selectFilters.Add(SelectFilter);
     }
     private void OnDestroy() {
         Interactable.selectEntered.RemoveListener(OnSelectEntered);
         Interactable.selectExited.RemoveListener(OnSelectExited);
-        // Interactable.selectFilters.Remove(SelectFilter);
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args) {

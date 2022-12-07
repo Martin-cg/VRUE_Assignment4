@@ -47,6 +47,7 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
         foreach (var (name, property) in CustomProperties) {
             if (propertiesThatChanged.TryGetValue(name, out var newValue)) {
                 if (newValue != property.Value) {
+                    property.Value = newValue;
                     property.ChangeCallback.Invoke(newValue);
                 }
             }
