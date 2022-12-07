@@ -18,6 +18,10 @@ public class InOnlineRoomOnly : MonoBehaviourPunCallbacks {
     }
 
     private void SetTargetsState(bool enabled) {
+        if (!this) {
+            return;
+        }
+
         for (int i=0; i<TargetBehaviours.Count; i++) {
             var behaviour = TargetBehaviours[i];
             if (behaviour != null && behaviour.gameObject) {

@@ -1,7 +1,9 @@
-﻿using UnityEngine.XR.Interaction.Toolkit;
+﻿using System.Collections.Generic;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class ChefHatSocket : XRSocketInteractor {
-    private Character Character;
+    private LocalCharacter Character;
+    private HashSet<IXRSelectInteractable> PotentialTargets = new();
 
     protected override void Reset() {
         base.Reset();
@@ -9,38 +11,47 @@ public class ChefHatSocket : XRSocketInteractor {
         FindReferences();
     }
 
-    protected override void Awake() {
+    protected override void Start() {
         base.Awake();
 
         FindReferences();
     }
 
     private void FindReferences() {
-        Character = Character == null ? GetComponentInParent<Character>() : Character;
+        Character = Character == null ? GetComponentInParent<LocalCharacter>() : Character;
     }
 
-    public override bool CanHover(IXRHoverInteractable interactable) {
-        return base.CanHover(interactable)
-            && interactable.transform.HasComponent<ChefHat>()
-            && interactable is IXRSelectInteractable selectInteractable
-            && Character.transform.IsParentOf(selectInteractable.GetOldestInteractorSelecting().transform);
+    protected override void OnHoverEntered(HoverEnterEventArgs args) {
+        base.OnHoverEntered(args);
+
+        var interactable = args.interactableObject as IXRSelectInteractable;
+        if (interactable.transform.HasComponent<ChefHat>()
+            && interactable.firstInteractorSelecting != null
+            && Character.Rig.transform.IsParentOf(interactable.firstInteractorSelecting.transform)) {
+            PotentialTargets.Add(interactable);
+        }
+    }
+
+    protected override void OnHoverExited(HoverExitEventArgs args) {
+        base.OnHoverExited(args);
+
+        var interactable = args.interactableObject as IXRSelectInteractable;
+        PotentialTargets.Remove(interactable);
     }
 
     public override bool CanSelect(IXRSelectInteractable interactable) {
-        return base.CanSelect(interactable)
-            && interactable.transform.HasComponent<ChefHat>()
-            && Character.transform.IsParentOf(interactable.GetOldestInteractorSelecting().transform);
+        return IsSelecting(interactable) || (interactablesSelected.Count == 0 && PotentialTargets.Contains(interactable));
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
         base.OnSelectEntered(args);
 
-        Character.SetRole(CharacterRole.Player);
+        Character.Character.SetRole(CharacterRole.Player);
     }
 
     protected override void OnSelectExited(SelectExitEventArgs args) {
         base.OnSelectExited(args);
 
-        Character.SetRole(CharacterRole.Spectator);
+        Character.Character.SetRole(CharacterRole.Spectator);
     }
 }

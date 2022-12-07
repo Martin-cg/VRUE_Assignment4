@@ -23,13 +23,16 @@ public class IngredientBox : MonoBehaviourPun {
         if (CurrentItem == null) {
             GenerateItem();
         }
+    }
 
+    protected virtual void OnEnable() {
         Socket.selectExited.AddListener(OnSelectExit);
         Socket.selectEntered.AddListener(OnSelectEnter);
     }
 
-    protected virtual void OnDestroy() {
+    protected virtual void OnDisable() {
         Socket.selectExited.RemoveListener(OnSelectExit);
+        Socket.selectEntered.RemoveListener(OnSelectEnter);
     }
 
     private void FindSocket() {
