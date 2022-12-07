@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 6948430655315002760}
   - component: {fileID: 219277398568889617}
   - component: {fileID: 7589962122451243671}
+  - component: {fileID: 3296153700808988621}
   m_Layer: 0
   m_Name: Chef Hat
   m_TagString: Untagged
@@ -340,3 +341,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8547acc9b21eac4db632dd3d3d5f201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3296153700808988621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6241091874267012268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd24fe8d8bcb1e43a6293ec85580502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grabbed:
+    m_PersistentCalls:
+      m_Calls: []
+  Released:
+    m_PersistentCalls:
+      m_Calls: []
