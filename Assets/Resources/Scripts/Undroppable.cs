@@ -40,6 +40,9 @@ public class Undroppable : MonoBehaviour {
 
     private IEnumerator AntiDrop() {
         yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
 
         if (Interactable.isSelected) {
             yield break;
@@ -49,7 +52,9 @@ public class Undroppable : MonoBehaviour {
                 Destroy(gameObject);
                 break;
             case DropMode.Return:
-                InteractionManager.SelectEnter(LastSocket, (IXRSelectInteractable)Interactable);
+                if (InteractionManager && LastSocket && Interactable) {
+                    InteractionManager.SelectEnter(LastSocket, (IXRSelectInteractable)Interactable);
+                }
                 break;
         }
     }

@@ -1,2 +1,4 @@
-public class ChefHat : Grabbable {
+using UnityEngine;
+
+public class ChefHat : MonoBehaviour {
 }

@@ -33,7 +33,7 @@ public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
         Player.TagObject = this;
         SetRole(CharacterRole.Spectator);
 
-        name = string.IsNullOrWhiteSpace(Player.NickName) ? $"Player {Player.ActorNumber + 1}" : Player.NickName;
+        name = Player.NickName;
         if (IsLocal) {
             name += " (Local)";
         }

@@ -49,11 +49,11 @@ public class NetworkLogger : MonoBehaviourPunCallbacks {
         Debug.Log("[Network] Lobby statistics updated");
     }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
+    public override void OnPlayerEnteredRoom(Player newPlayer) {
         Debug.Log($"[Network] Player {newPlayer.NickName} entered Room");
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) {
+    public override void OnPlayerLeftRoom(Player otherPlayer) {
         Debug.Log($"[Network] Player {otherPlayer.NickName} left Room");
     }
 
@@ -61,11 +61,11 @@ public class NetworkLogger : MonoBehaviourPunCallbacks {
         // Debug.Log("[Network] Room properties updated");
     }
 
-    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps) {
-        Debug.Log($"[Network] Player {targetPlayer.NickName} properties updated");
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
+        Debug.Log($"[Network] Player {targetPlayer.ActorNumber} properties updated ({changedProps})");
     }
 
-    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient) {
+    public override void OnMasterClientSwitched(Player newMasterClient) {
         Debug.Log("[Network] Master client switched");
     }
 }

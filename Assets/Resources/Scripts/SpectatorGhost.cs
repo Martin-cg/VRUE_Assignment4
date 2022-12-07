@@ -38,7 +38,10 @@ public class SpectatorGhost : RoleSpecific {
                 var material = mesh.material; // this makes a copy
                 var color = material.color;
                 color.a = Opacity;
-                material.color = color; material.SetOverrideTag("RenderType", "Transparent");
+                material.color = color;
+                // https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/Inspector/StandardShaderGUI.cs
+                // we could also create seperate materials at compile time
+                material.SetOverrideTag("RenderType", "Transparent");
                 material.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.One);
                 material.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                 material.SetFloat("_ZWrite", 0.0f);

@@ -51,7 +51,9 @@ public class ChefHatSocket : MonoBehaviour {
         }
 
         public bool Process(IXRSelectInteractor interactor, IXRSelectInteractable interactable) {
-            return ChefHatSocket.SocketInteractor.interactablesSelected.Count == 0 && ChefHatSocket.Character.transform.IsParentOf(interactor.transform);
+            return ChefHatSocket.SocketInteractor.interactablesSelected.Count == 0
+                && ChefHatSocket.Character.transform.IsParentOf(interactor.transform)
+                && interactable.transform.GetComponent<ChefHat>();
         }
     }
 }

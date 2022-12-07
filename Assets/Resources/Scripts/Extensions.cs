@@ -4,6 +4,9 @@ using System.Linq;
 using UnityEngine;
 
 public static class Extensions {
+    public static bool HasComponent<T>(this GameObject obj) where T: Component => obj.GetComponent<T>() != null;
+    public static bool HasComponent<T>(this Component component) where T : Component => component.GetComponent<T>() != null;
+
     public static IEnumerable<GameObject> FindChildrenWithTag(this GameObject parent, string tag) {
         return parent.GetAllChildren().Where(component => component.CompareTag(tag));
     }

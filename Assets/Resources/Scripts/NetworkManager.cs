@@ -23,6 +23,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
 
+        if (string.IsNullOrWhiteSpace(PhotonNetwork.LocalPlayer.NickName)) {
+            PhotonNetwork.LocalPlayer.NickName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+        }
         CharacterManager.Instance.SpawnLocalCharacter();
     }
 
