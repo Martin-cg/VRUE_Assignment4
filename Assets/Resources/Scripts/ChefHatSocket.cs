@@ -26,6 +26,12 @@ public class ChefHatSocket : XRSocketInteractor {
             && Character.transform.IsParentOf(selectInteractable.GetOldestInteractorSelecting().transform);
     }
 
+    public override bool CanSelect(IXRSelectInteractable interactable) {
+        return base.CanSelect(interactable)
+            && interactable.transform.HasComponent<ChefHat>()
+            && Character.transform.IsParentOf(interactable.GetOldestInteractorSelecting().transform);
+    }
+
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
         base.OnSelectEntered(args);
 
