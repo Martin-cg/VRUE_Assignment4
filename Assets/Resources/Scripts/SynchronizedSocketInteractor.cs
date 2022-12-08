@@ -103,10 +103,10 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRHoverFilt
     }
 
     public bool Process(IXRHoverInteractor interactor, IXRHoverInteractable interactable) {
-        return this.photonView.IsMine;
+        return PhotonView.Get(interactable.transform).IsMine;
     }
 
     public bool Process(IXRSelectInteractor interactor, IXRSelectInteractable interactable) {
-        return this.photonView.IsMine;
+        return PhotonView.Get(interactable.transform).IsMine;
     }
 }
