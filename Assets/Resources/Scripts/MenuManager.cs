@@ -6,7 +6,7 @@ public class MenuManager : MonoBehaviour {
     public GameObject Menu;
 
     protected virtual void Start() {
-        SetMenuState(false);
+        // SetMenuState(false);
 
         ToggleMenuAction.Enable();
         ToggleMenuAction.performed += ToggleMenuActionPerformed;

@@ -1,8 +1,17 @@
+using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class RoleBasedInteractionLayerMask : RoleSpecific {
-    public XRBaseInteractor Interactor;
-    public XRBaseInteractable Interactable;
+    public Component Target;
+
+    private XRBaseInteractor Interactor;
+    private XRBaseInteractable Interactable;
+
+    protected virtual void OnEnable() {
+        Interactor = Target.GetComponent<XRBaseInteractor>();
+        Interactable = Target.GetComponent<XRBaseInteractable>();
+        Target = Interactor == null ? Interactable : Interactor;
+    }
 
     protected override void OnRoleChanged(CharacterRole role) {
         var layer = role switch {

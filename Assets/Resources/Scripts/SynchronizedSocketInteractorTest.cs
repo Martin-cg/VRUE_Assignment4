@@ -12,7 +12,6 @@ public class SynchronizedSocketInteractorTest : MonoBehaviour {
     }
 }
 
-
 #if UNITY_EDITOR
 [CustomEditor(typeof(SynchronizedSocketInteractorTest))]
 public class SynchronizedSocketInteractorTestEditor : Editor {
