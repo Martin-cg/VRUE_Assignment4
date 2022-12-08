@@ -31,6 +31,9 @@ public class Grabbable : MonoBehaviourPun {
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args) {
+        if (args.interactorObject.transform.GetComponentInParent<XRRig>() == null) {
+            return;
+        }
         photonView.RequestOwnership();
     }
 
