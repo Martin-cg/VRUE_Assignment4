@@ -1,86 +1,59 @@
 using Photon.Pun;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class IngredientBox : MonoBehaviourPun {
     public GameObject ItemPrefab;
-    public GameObject CurrentItem;
-    public XRSocketInteractor Socket;
+    public Transform Socket;
+    public Collider RefillRegion;
+
+    private GameObject currentItem;
+    public GameObject CurrentItem {
+        get => currentItem;
+        set {
+            currentItem = value;
+            if (value) {
+                CurrentItemRigidbody = CurrentItem.GetComponent<Rigidbody>();
+            } else {
+                CurrentItemRigidbody = null;
+            }
+        }
+    }
+    private Rigidbody CurrentItemRigidbody;
 
     protected virtual void Reset() {
-        FindSocket();
-
         GetComponent<MasterClientOnly>().TargetBehaviours.Add(this);
     }
 
     protected virtual void Start() {
-        FindSocket();
-
-        // Do we filter the items here?
-        CurrentItem = Socket.interactablesSelected.Select(interactable => interactable.transform.gameObject).SingleOrDefault();
+        CurrentItem = Socket.GetChildren().Select(transform => transform.gameObject).SingleOrDefault();
         if (CurrentItem == null) {
-            StartCoroutine(GenerateItem());
+            GenerateItem();
         }
-    }
-
-    protected virtual void OnEnable() {
-        Socket.selectExited.AddListener(OnSelectExit);
-        Socket.selectEntered.AddListener(OnSelectEnter);
-    }
-
-    protected virtual void OnDisable() {
-        Socket.selectExited.RemoveListener(OnSelectExit);
-        Socket.selectEntered.RemoveListener(OnSelectEnter);
-    }
-
-    private void FindSocket() {
-        Socket = Socket == null ? GetComponent<XRSocketInteractor>() : Socket;
-        Socket = Socket == null ? GetComponentInChildren<XRSocketInteractor>() : Socket;
-    }
-
-    private void OnSelectExit(SelectExitEventArgs args) {
-        OnItemTaken();
-    }
-    private void OnSelectEnter(SelectEnterEventArgs args) {
-        OnItemEntered();
-    }
-
-    private void OnItemTaken() {
-        Debug.Log("Item Taken");
-        //CurrentItem.GetComponent<Collider>().enabled = true;
-        CurrentItem = null;
-        StartCoroutine(GenerateItem());
-    }
-
-    private void OnItemEntered() {
-        Debug.Log("Item Entered");
-        CurrentItem = Socket.interactablesSelected.Select(interactable => interactable.transform.gameObject).FirstOrDefault();
-    }
-
-    private IEnumerator GenerateItem() {
-        yield return new WaitForSeconds(1);
-
-        if (CurrentItem != null) {
-            yield break;
-        }
-
-        Debug.Log("NEW ITEM");
-        CurrentItem = PhotonNetwork.InstantiateRoomObject($"Prefabs/{ItemPrefab.name}", Socket.attachTransform.position, Socket.attachTransform.rotation);
-        //CurrentItem.GetComponent<Collider>().enabled = false;
-        Socket.interactionManager.SelectEnter(Socket, (IXRSelectInteractable) CurrentItem.GetComponent<XRGrabInteractable>());
-    }
-
-    private void OnTriggerEnter(Collider other) {
-        //Debug.Log("ENTER", other);
-    }
-
-    private void OnTriggerStay(Collider other) {
-        //Debug.Log("STAY", other);
     }
 
     private void OnTriggerExit(Collider other) {
-        Debug.Log("EXIT", other);
+        Debug.Log(other);
+        if (other.gameObject != CurrentItem) {
+            return;
+        }
+
+        OnItemTaken();
+    }
+
+    private void GenerateItem() {
+        CurrentItem = PhotonNetwork.InstantiateRoomObject($"Prefabs/{ItemPrefab.name}", Socket.position, Socket.rotation);
+        Debug.Assert(CurrentItem.GetComponent<SyncParent>());
+        Debug.Assert(CurrentItem.GetPhotonView().IsMine);
+        CurrentItem.transform.parent = Socket.transform;
+        CurrentItemRigidbody.useGravity = false;
+    }
+
+    private void OnItemTaken() {
+        CurrentItemRigidbody.useGravity = true;
+        CurrentItem.transform.parent = transform.parent;
+
+        CurrentItem = null;
+        GenerateItem();
     }
 }

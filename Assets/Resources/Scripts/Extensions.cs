@@ -11,6 +11,9 @@ public static class Extensions {
         return parent.GetAllChildren().Where(component => component.CompareTag(tag));
     }
 
+    public static IEnumerable<Transform> GetChildren(this Transform parent) {
+        return parent.Cast<Transform>();
+    }
     public static IEnumerable<Transform> GetAllChildren(this Transform parent) {
         foreach (Transform child in parent) {
             yield return child;
