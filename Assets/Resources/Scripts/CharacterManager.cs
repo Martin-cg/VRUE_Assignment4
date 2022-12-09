@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -33,6 +35,10 @@ public sealed class CharacterManager : MonoBehaviourPunCallbacks {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
 
+        if (string.IsNullOrWhiteSpace(PhotonNetwork.LocalPlayer.NickName)) {
+            PhotonNetwork.LocalPlayer.NickName = $"Player {PhotonNetwork.LocalPlayer.ActorNumber}";
+        }
+
         SpawnLocalCharacter();
     }
 
@@ -40,6 +46,14 @@ public sealed class CharacterManager : MonoBehaviourPunCallbacks {
         base.OnLeftRoom();
 
         SpawnLocalOfflineCharacter();
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
+        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
+
+        if (changedProps.TryGetValue(nameof(Character.Role), out var newRole)) {
+            Character.ForPlayer(targetPlayer).SetRole((CharacterRole) newRole);
+        }
     }
 
     public void SpawnLocalCharacter() {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class ChefHatSocket : XRSocketInteractor {
     private LocalCharacter Character;
-    private HashSet<IXRSelectInteractable> PotentialTargets = new();
 
     protected override void Reset() {
         base.Reset();
@@ -21,26 +21,19 @@ public class ChefHatSocket : XRSocketInteractor {
         Character = Character == null ? GetComponentInParent<LocalCharacter>() : Character;
     }
 
-    protected override void OnHoverEntered(HoverEnterEventArgs args) {
-        base.OnHoverEntered(args);
+    public override void GetValidTargets(List<IXRInteractable> targets) {
+        base.GetValidTargets(targets);
 
-        var interactable = args.interactableObject as IXRSelectInteractable;
-        if (interactable.transform.HasComponent<ChefHat>()
-            && interactable.firstInteractorSelecting != null
-            && Character.Rig.transform.IsParentOf(interactable.firstInteractorSelecting.transform)) {
-            PotentialTargets.Add(interactable);
+        for (int i=targets.Count-1; i>=0; i--) {
+            var interactable = targets[i] as IXRHoverInteractable;
+            if (!interactable.transform.HasComponent<ChefHat>() || !BelongsToLocalCharacter(interactable)) {
+                targets.RemoveAt(i);
+            }
         }
     }
 
-    protected override void OnHoverExited(HoverExitEventArgs args) {
-        base.OnHoverExited(args);
-
-        var interactable = args.interactableObject as IXRSelectInteractable;
-        PotentialTargets.Remove(interactable);
-    }
-
-    public override bool CanSelect(IXRSelectInteractable interactable) {
-        return IsSelecting(interactable) || (interactablesSelected.Count == 0 && PotentialTargets.Contains(interactable));
+    private bool BelongsToLocalCharacter(IXRHoverInteractable interactable) {
+        return Character && Character.Rig && interactable.interactorsHovering.Any(interactor => !ReferenceEquals(interactor, this) && Character.Rig.transform.IsParentOf(interactor.transform));
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {

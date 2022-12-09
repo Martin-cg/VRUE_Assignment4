@@ -1,12 +1,13 @@
 ﻿using Photon.Pun;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Filtering;
 
 [RequireComponent(typeof(XRSocketInteractor))]
-public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRHoverFilter, IXRSelectFilter {
+public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFilter {
     private XRSocketInteractor Socket;
-    private const string PropertyKey = "CurrentInteractableSceneViewId";
+    private SynchronizedRoomProperty<int?> CurrentInteractable;
 
     public bool canProcess => true;
 
@@ -18,6 +19,9 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRHoverFilt
         if (Socket) {
             Socket.selectEntered.RemoveListener(OnSelectEnter);
             Socket.selectExited.RemoveListener(OnSelectExit);
+
+            // Socket.hoverFilters.Remove(this);
+            Socket.selectFilters.Remove(this);
         }
     }
 
@@ -26,24 +30,27 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRHoverFilt
 
         FindSocket();
 
-        RegisterProperty<int?>(PropertyKey, null, sceneViewId => {
-            if (sceneViewId.HasValue) {
-                var photonView = PhotonView.Find(sceneViewId.Value);
-                var interactable = photonView.GetComponent<XRGrabInteractable>();
-                OnRemoteInteractableEntered(interactable);
-            } else {
-                OnRemoteInteractableExited();
-            }
-        });
+        CurrentInteractable = RegisterProperty<int?>(nameof(CurrentInteractable), null);
+        CurrentInteractable.ValueChanged += OnCurrentInteractableRoomPropertyChanged;
 
         Socket.selectEntered.AddListener(OnSelectEnter);
         Socket.selectExited.AddListener(OnSelectExit);
 
-        Socket.hoverFilters.Add(this);
+        // Socket.hoverFilters.Add(this);
         Socket.selectFilters.Add(this);
 
         if (Socket.firstInteractableSelected != null) {
             OnLocalInteractableEntered(Socket.firstInteractableSelected);
+        }
+    }
+
+    private void OnCurrentInteractableRoomPropertyChanged(object sender, int? sceneViewId) {
+        if (sceneViewId.HasValue) {
+            var photonView = PhotonView.Find(sceneViewId.Value);
+            var interactable = photonView.GetComponent<XRGrabInteractable>();
+            OnRemoteInteractableEntered(interactable);
+        } else {
+            OnRemoteInteractableExited();
         }
     }
 
@@ -94,19 +101,33 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRHoverFilt
     }
 
     private void OnLocalInteractableEntered(IXRSelectInteractable interactable) {
-        var photonView = PhotonView.Get(interactable.transform);
-        SetProperty<int?>(PropertyKey, photonView.ViewID);
+        if (Socket && Socket.gameObject.activeInHierarchy) {
+            StartCoroutine(UpdateSynchronizedProperty());
+        }
     }
 
     private void OnLocalInteractableExited() {
-        SetProperty<int?>(PropertyKey, null);
+        if (Socket && Socket.gameObject.activeInHierarchy) {
+            StartCoroutine(UpdateSynchronizedProperty());
+        }
     }
 
-    public bool Process(IXRHoverInteractor interactor, IXRHoverInteractable interactable) {
-        return PhotonView.Get(interactable.transform).IsMine;
+    private IEnumerator UpdateSynchronizedProperty() {
+        yield return null;
+
+        switch (Socket.firstInteractableSelected) {
+            case IXRSelectInteractable interactable:
+                var photonView = PhotonView.Get(interactable.transform);
+                CurrentInteractable.Value = photonView.ViewID;
+                break;
+            case null:
+                CurrentInteractable.Value = null;
+                break;
+        }
     }
 
     public bool Process(IXRSelectInteractor interactor, IXRSelectInteractable interactable) {
-        return PhotonView.Get(interactable.transform).IsMine;
+        var photonView = PhotonView.Get(interactable.transform);
+        return photonView.IsMine || photonView.ViewID == CurrentInteractable.Value;
     }
 }

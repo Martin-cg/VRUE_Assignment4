@@ -332,7 +332,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 50977732}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 437637086}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
@@ -772,9 +772,8 @@ GameObject:
   - component: {fileID: 164040822}
   - component: {fileID: 164040821}
   - component: {fileID: 164040819}
-  - component: {fileID: 164040823}
   m_Layer: 0
-  m_Name: Socket Left
+  m_Name: Socket Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -888,20 +887,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetBehaviours:
   - {fileID: 164040821}
---- !u!114 &164040823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 164040817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c21b8e414247f648b39963174073655, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Interactor: {fileID: 164040821}
-  Current: {fileID: 0}
 --- !u!1 &175491940
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,6 +1090,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 197605772}
+  - component: {fileID: 197605773}
   m_Layer: 0
   m_Name: Globals
   m_TagString: Untagged
@@ -1133,6 +1119,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &197605773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197605771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a9d326fa5421624a9e87ccd007cd3d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &254096119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,6 +1488,28 @@ Transform:
   m_Father: {fileID: 197605772}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &437637086 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6241091874267012268, guid: c1e3f3543475aa048a0c225ad60acec8,
+    type: 3}
+  m_PrefabInstance: {fileID: 50977732}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &437637094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437637086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &462540748
 GameObject:
   m_ObjectHideFlags: 0
@@ -3234,7 +3254,7 @@ GameObject:
   - component: {fileID: 1108510009}
   - component: {fileID: 1108510007}
   m_Layer: 0
-  m_Name: Socket Right
+  m_Name: Socket Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5937,6 +5957,7 @@ GameObject:
   - component: {fileID: 1745325855}
   - component: {fileID: 1745325854}
   - component: {fileID: 1745325862}
+  - component: {fileID: 1745325863}
   m_Layer: 0
   m_Name: Test Cube
   m_TagString: Untagged
@@ -6226,6 +6247,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd24fe8d8bcb1e43a6293ec85580502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1745325863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745325852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &1774051648
 GameObject:
   m_ObjectHideFlags: 0
@@ -6639,7 +6676,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1940586661
 GameObject:

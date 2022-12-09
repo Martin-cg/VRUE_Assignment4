@@ -1440,13 +1440,13 @@ GameObject:
   m_Component:
   - component: {fileID: 251300948692854092}
   - component: {fileID: 926772263571800809}
-  - component: {fileID: 6672320913583902065}
   - component: {fileID: 4158958179395514667}
   - component: {fileID: 3442441952411077781}
   - component: {fileID: 8687742370141043545}
   - component: {fileID: -5320358110883276758}
   - component: {fileID: 5255174672835940323}
-  - component: {fileID: -9205887405758272851}
+  - component: {fileID: 329339661989746029}
+  - component: {fileID: 5101762017624418544}
   m_Layer: 0
   m_Name: Test Item
   m_TagString: ItemBoxItem
@@ -1488,22 +1488,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6672320913583902065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5647523296227533437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &4158958179395514667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1523,8 +1507,8 @@ MonoBehaviour:
   OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6672320913583902065}
   - {fileID: -5320358110883276758}
+  - {fileID: 329339661989746029}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1694,7 +1678,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd24fe8d8bcb1e43a6293ec85580502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-9205887405758272851
+--- !u!114 &329339661989746029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5647523296227533437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &5101762017624418544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

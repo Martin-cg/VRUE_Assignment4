@@ -26,7 +26,7 @@ public class ButtonController : SynchronizedRoomObject {
         base.Start();
 
         Init();
-        RegisterProperty<bool>(nameof(IsPressed), IsPressed, newValue => IsPressed = newValue);
+        // RegisterProperty<bool>(nameof(IsPressed), IsPressed, newValue => IsPressed = newValue);
     }
 
     private void Reset() {
@@ -41,7 +41,7 @@ public class ButtonController : SynchronizedRoomObject {
     protected virtual void OnStateChanged() {
         StateChanged?.Invoke(isPressed);
 
-        SetProperty(nameof(IsPressed), IsPressed);
+        // SetProperty(nameof(IsPressed), IsPressed);
     }
 
     protected virtual void OnPressed() {

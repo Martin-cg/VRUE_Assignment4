@@ -3,8 +3,10 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(PhotonView))]
-[RequireComponent(typeof(PhotonTransformView))]
+// [RequireComponent(typeof(PhotonTransformView))]
 [RequireComponent(typeof(XRGrabInteractable))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(PhotonRigidbodyView))]
 public class Grabbable : MonoBehaviourPun {
     protected XRGrabInteractable Interactable;
 
@@ -34,7 +36,11 @@ public class Grabbable : MonoBehaviourPun {
         if (args.interactorObject.transform.GetComponentInParent<XRRig>() == null) {
             return;
         }
+
         photonView.RequestOwnership();
+        // RequestOwnership does not update IsMine immediatly, which confuses our other scripts for a few frames.
+        typeof(PhotonView).GetProperty(nameof(photonView.IsMine)).SetValue(photonView, true);
+        Debug.Assert(photonView.IsMine);
     }
 
     private void OnSelectExited(SelectExitEventArgs args) {

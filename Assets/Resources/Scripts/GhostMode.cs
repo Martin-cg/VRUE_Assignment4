@@ -6,11 +6,13 @@ public class GhostMode : RoleSpecific {
     private Material[] OriginalMaterials;
     private Material[] GhostMaterials;
 
-    protected override void Start() {
-        base.Start();
+    protected virtual void Reset() {
+        RequiredRole = CharacterRole.Spectator;
     }
 
-    protected virtual void Reset() {
+    protected override void Start() {
+        base.Start();
+
         RequiredRole = CharacterRole.Spectator;
     }
 

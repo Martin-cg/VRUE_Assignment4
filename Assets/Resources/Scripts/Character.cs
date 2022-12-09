@@ -40,6 +40,9 @@ public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
     }
 
     public void SetRole(CharacterRole newRole) {
+        if (_Role == newRole) {
+            return;
+        }
         _Role = newRole;
 
         Debug.Log($"{name} switched to role {newRole}");

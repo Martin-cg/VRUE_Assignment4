@@ -43,14 +43,15 @@ public class IngredientBox : MonoBehaviourPun {
 
     private void GenerateItem() {
         CurrentItem = PhotonNetwork.InstantiateRoomObject($"Prefabs/{ItemPrefab.name}", Socket.position, Socket.rotation);
-        Debug.Assert(CurrentItem.GetComponent<SyncParent>());
-        Debug.Assert(CurrentItem.GetPhotonView().IsMine);
+        Debug.Assert(CurrentItem.GetComponent<TransformParentSync>());
         CurrentItem.transform.parent = Socket.transform;
         CurrentItemRigidbody.useGravity = false;
+        CurrentItemRigidbody.isKinematic = true;
     }
 
     private void OnItemTaken() {
         CurrentItemRigidbody.useGravity = true;
+        CurrentItemRigidbody.isKinematic = false;
         CurrentItem.transform.parent = transform.parent;
 
         CurrentItem = null;
