@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GhostMode : RoleSpecific {
     public Renderer[] Meshes = new Renderer[0];
     public float Opacity = 0.4f;

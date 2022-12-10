@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine;
 
-public class ChefHatSocket : XRSocketInteractor {
+[DisallowMultipleComponent]
+public class ChefHatOnCharacterSocket : XRSocketInteractor {
     private LocalCharacter Character;
 
     protected override void Reset() {

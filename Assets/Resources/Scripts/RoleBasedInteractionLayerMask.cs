@@ -17,6 +17,7 @@ public class RoleBasedInteractionLayerMask : RoleSpecific {
         var layer = role switch {
             CharacterRole.Player => InteractionLayers.Player,
             CharacterRole.Spectator => InteractionLayers.Spectator,
+            CharacterRole.Offline => InteractionLayers.Offline,
             _ => 0
         };
         var mask = new InteractionLayerMask() { value = layer };

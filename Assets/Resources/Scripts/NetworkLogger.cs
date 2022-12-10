@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NetworkLogger : MonoBehaviourPunCallbacks {
+    public bool PrintRoomPropertyChanges = false;
+    public bool PrintPlayerPropertyChanges = false;
+
     public override void OnConnected() {
         Debug.Log("[Network] Connected");
     }
@@ -58,14 +61,18 @@ public class NetworkLogger : MonoBehaviourPunCallbacks {
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) {
-        Debug.Log($"[Network] Room properties updated ({propertiesThatChanged})");
+        if (PrintRoomPropertyChanges) {
+            Debug.Log($"[Network] Room properties updated ({propertiesThatChanged})");
+        }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
-        Debug.Log($"[Network] Player {targetPlayer.ActorNumber} properties updated ({changedProps})");
+        if (PrintPlayerPropertyChanges) {
+            Debug.Log($"[Network] Player {targetPlayer.ActorNumber} properties updated ({changedProps})");
+        }
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient) {
-        Debug.Log("[Network] Master client switched");
+        Debug.Log($"[Network] Master client switched to Player {newMasterClient.ActorNumber}");
     }
 }

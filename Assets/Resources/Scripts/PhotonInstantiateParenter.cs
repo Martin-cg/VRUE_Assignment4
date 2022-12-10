@@ -1,6 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class PhotonInstantiateParenter : MonoBehaviourPun, IPunInstantiateMagicCallback {
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
         var instantiationData = info.photonView.InstantiationData;

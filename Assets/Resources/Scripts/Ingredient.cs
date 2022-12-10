@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(XRGrabInteractable))]
 public class Ingredient : MonoBehaviour, IPunObservable {
 

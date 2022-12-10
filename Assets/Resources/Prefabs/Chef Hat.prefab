@@ -93,14 +93,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1981596598784744349}
   - component: {fileID: 1450239398212828216}
-  - component: {fileID: 4928099071617774496}
-  - component: {fileID: 2399100389937025018}
-  - component: {fileID: 3979710707837760068}
   - component: {fileID: 6948430655315002760}
-  - component: {fileID: 219277398568889617}
+  - component: {fileID: 2399100389937025018}
+  - component: {fileID: 5774653733210075897}
+  - component: {fileID: 3979710707837760068}
   - component: {fileID: 7589962122451243671}
   - component: {fileID: 3296153700808988621}
-  - component: {fileID: 5774653733210075897}
   - component: {fileID: 7665612185976500442}
   m_Layer: 0
   m_Name: Chef Hat
@@ -141,22 +139,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4928099071617774496
-MonoBehaviour:
+--- !u!65 &6948430655315002760
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6241091874267012268}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  serializedVersion: 2
+  m_Size: {x: 0.2, y: 0.2145, z: 0.2}
+  m_Center: {x: 0, y: 0.10725, z: 0}
 --- !u!114 &2399100389937025018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,11 +171,26 @@ MonoBehaviour:
   OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 4928099071617774496}
   - {fileID: 5774653733210075897}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &5774653733210075897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6241091874267012268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &3979710707837760068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,32 +316,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!65 &6948430655315002760
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6241091874267012268}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.2145, z: 0.2}
-  m_Center: {x: 0, y: 0.10725, z: 0}
---- !u!114 &219277398568889617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6241091874267012268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3698fb5ccc686084fbfde17d855f8bcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Mode: 1
 --- !u!114 &7589962122451243671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,22 +340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd24fe8d8bcb1e43a6293ec85580502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5774653733210075897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6241091874267012268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &7665612185976500442
 MonoBehaviour:
   m_ObjectHideFlags: 0

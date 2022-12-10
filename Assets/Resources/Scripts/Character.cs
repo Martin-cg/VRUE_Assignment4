@@ -7,6 +7,7 @@ using ExitGames.Client.Photon;
 using System.Runtime.InteropServices;
 using UnityEngine.Events;
 
+[DisallowMultipleComponent]
 public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
     public static Character Local => ForPlayer(PhotonNetwork.LocalPlayer);
     public static Character ForPlayer(Player player) => player.TagObject as Character;
@@ -19,7 +20,7 @@ public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
     public Player Player { get; private set; }
     public bool IsLocal => Player.IsLocal;
     private CharacterRole _Role = CharacterRole.Offline;
-    public CharacterRole Role => Player.CustomProperties.TryGetValue(nameof(Role), out var value) ? (CharacterRole)value : _Role;
+    public CharacterRole Role => Player != null && Player.CustomProperties.TryGetValue(nameof(Role), out var value) ? (CharacterRole)value : _Role;
     public UnityEvent<CharacterRole> RoleChanged = new();
 
     public GameObject Root;

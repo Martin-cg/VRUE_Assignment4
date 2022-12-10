@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(PhotonView))]
-// [RequireComponent(typeof(PhotonTransformView))]
 [RequireComponent(typeof(XRGrabInteractable))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PhotonRigidbodyView))]

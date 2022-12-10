@@ -1,5 +1,4 @@
 ﻿using Photon.Pun;
-using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -19,7 +18,8 @@ public class TransformParentSync : SynchronizedRoomObject {
     }
 
     protected virtual void OnScenePathPropertyChanged(string[] scenePath) {
-        transform.parent = Utils.FindObjectByScenePath(scenePath).transform;
+        Debug.LogWarning(string.Join("/", scenePath));
+        transform.parent = Utils.FindObjectByScenePath(scenePath)?.transform;
     }
 
     protected virtual void OnTransformParentChanged() {
@@ -31,6 +31,8 @@ public class TransformParentSync : SynchronizedRoomObject {
             return;
         }
 
-        ScenePath.Value = gameObject.GetScenePath(null, false).ToArray();
+        var path = gameObject.GetScenePathString(null, false);
+        Debug.LogError(path);
+        ScenePath.SetValue(gameObject.GetScenePath(null, false).ToArray(), notifyLocal: false, notifyRemote: true);
     }
 }

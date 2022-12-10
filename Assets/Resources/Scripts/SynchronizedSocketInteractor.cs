@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Filtering;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(XRSocketInteractor))]
 public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFilter {
     private XRSocketInteractor Socket;
@@ -118,10 +119,10 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
         switch (Socket.firstInteractableSelected) {
             case IXRSelectInteractable interactable:
                 var photonView = PhotonView.Get(interactable.transform);
-                CurrentInteractable.Value = photonView.ViewID;
+                CurrentInteractable.SetValue(photonView.ViewID);
                 break;
             case null:
-                CurrentInteractable.Value = null;
+                CurrentInteractable.SetValue(null);
                 break;
         }
     }

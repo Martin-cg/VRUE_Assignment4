@@ -1,6 +1,7 @@
 using Photon.Pun;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class IngredientBox : MonoBehaviourPun {
     public GameObject ItemPrefab;
@@ -33,10 +34,10 @@ public class IngredientBox : MonoBehaviourPun {
     }
 
     private void OnTriggerExit(Collider other) {
-        Debug.Log(other);
         if (other.gameObject != CurrentItem) {
             return;
         }
+        Debug.Log("Item Taken", other.gameObject);
 
         OnItemTaken();
     }
@@ -50,8 +51,23 @@ public class IngredientBox : MonoBehaviourPun {
     }
 
     private void OnItemTaken() {
-        CurrentItemRigidbody.useGravity = true;
-        CurrentItemRigidbody.isKinematic = false;
+        if (CurrentItem.GetComponent<XRBaseInteractable>() is var interactable && interactable.isSelected) {
+            static void OnTakenItemReleased(SelectExitEventArgs args) {
+                var interactable = args.interactableObject;
+                var obj = interactable.transform.gameObject;
+
+                interactable.selectExited.RemoveListener(OnTakenItemReleased);
+
+                if (obj.GetComponent<Rigidbody>() is var rigidbody) {
+                    rigidbody.useGravity = true;
+                    rigidbody.isKinematic = false;
+                }
+            }
+            interactable.selectExited.AddListener(OnTakenItemReleased);
+        } else {
+            CurrentItemRigidbody.useGravity = true;
+            CurrentItemRigidbody.isKinematic = false;
+        }
         CurrentItem.transform.parent = transform.parent;
 
         CurrentItem = null;

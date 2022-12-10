@@ -1,8 +1,8 @@
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     private readonly List<ISynchronizedRoomProperty> Properties = new();
@@ -26,7 +26,8 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     private void SetRoomProperty(string key, object value) {
         CurrentPropertyTableCache[key] = value;
         if (PhotonNetwork.CurrentRoom != null) {
-            Debug.LogWarning($"SetCustomProperties(Key={key}, Old={PreviousPropertyTableCache[key]}, New={CurrentPropertyTableCache[key]})");
+            var oldValue = PreviousPropertyTableCache[key];
+            Debug.Log($"[RoomProperties] Set(Key={key}, Old={(oldValue == null ? "null" : oldValue.ToString())}, New={(value == null ? "null" : value.ToString())})");
             PhotonNetwork.CurrentRoom.SetCustomProperties(CurrentPropertyTableCache, PreviousPropertyTableCache);
         }
         PreviousPropertyTableCache[key] = value;
@@ -56,35 +57,32 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     public class SynchronizedRoomProperty<T> : ISynchronizedRoomProperty {
         public string Name { get; private set; }
         public string Key { get; private set; }
-        private T _Value;
-        public T Value {
-            get => _Value;
-            set => SetValue(value, true, true);
-        }
+        public event EventHandler<T> ValueChanged;
+        public SynchronizedRoomObject Object { get; private set; }
+        public IEqualityComparer<T> Comparer { get; private set; }
+        public T Value { get; private set; }
         object ISynchronizedRoomProperty.Value { get => Value; set => Value = (T) value; }
 
-        public void SetValue(T newValue, bool notifyLocal, bool notifyRemote) {
-            if (Equals(_Value, newValue)) {
+        public void SetValue(T newValue, bool notifyLocal=false, bool notifyRemote=true) {
+            if (Comparer.Equals(Value, newValue)) {
                 return;
             }
-            _Value = newValue;
+            Value = newValue;
             if (notifyLocal) {
-                ValueChanged?.Invoke(this, _Value);
+                ValueChanged?.Invoke(this, Value);
             }
             if (notifyRemote) {
-                Object.SetRoomProperty(Key, _Value);
+                Object.SetRoomProperty(Key, Value);
             }
         }
         void ISynchronizedRoomProperty.SetValue(object newValue, bool notifyLocal, bool notifyRemote) => SetValue((T)newValue, notifyLocal, notifyRemote);
 
-        public event EventHandler<T> ValueChanged;
-        public SynchronizedRoomObject Object;
-
-        internal SynchronizedRoomProperty(string name, string key, T startingValue, SynchronizedRoomObject @object) {
+        internal SynchronizedRoomProperty(string name, string key, T startingValue, SynchronizedRoomObject @object, IEqualityComparer<T> comparer=null) {
             Name = name;
             Key = key;
             Value = startingValue;
             Object = @object;
+            Comparer = comparer ?? StructuralEqualityComparer<T>.Default;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class InOnlineRoomOnly : MonoBehaviourPunCallbacks {
     public List<Behaviour> TargetBehaviours = new();
 

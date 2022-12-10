@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class MasterClientOnly : MonoBehaviourPunCallbacks {
     public List<Behaviour> TargetBehaviours = new();
     private bool AreTargetsEnabled;

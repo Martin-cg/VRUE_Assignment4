@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(Character))]
 public class LocalCharacter : MonoBehaviour {
     public static LocalCharacter Instance { get; private set; }

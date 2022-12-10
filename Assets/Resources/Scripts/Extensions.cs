@@ -28,18 +28,18 @@ public static class Extensions {
         return parent.transform.GetAllChildren().Select(e => e.gameObject);
     }
 
-    public static IEnumerable<string> GetScenePath(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true) =>
+    public static List<string> GetScenePath(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true) =>
         GetScenePath(target.transform, parent == null ? null : parent.transform, includeTarget, includeParent);
 
     public static string GetScenePathString(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true, string delimiter = "/") =>
         GetScenePathString(target.transform, parent == null ? null : parent.transform, includeTarget, includeParent, delimiter);
 
-    public static IEnumerable<string> GetScenePath(this Transform target, Transform parent = null, bool includeTarget = true, bool includeParent = true) {
-        if (ReferenceEquals(target, parent)) {
-            return Enumerable.Empty<string>();
-        }
-
+    public static List<string> GetScenePath(this Transform target, Transform parent = null, bool includeTarget = true, bool includeParent = true) {
         var path = new List<string>();
+
+        if (ReferenceEquals(target, parent)) {
+            return path;
+        }
 
         if (includeTarget) {
             path.Add(target.name);
@@ -55,7 +55,9 @@ public static class Extensions {
             path.Add(parent.name);
         }
 
-        return Enumerable.Reverse(path);
+        path.Reverse();
+
+        return path;
     }
 
     public static string GetScenePathString(this Transform target, Transform parent = null, bool includeTarget = true, bool includeParent = true, string delimiter = "/") {
