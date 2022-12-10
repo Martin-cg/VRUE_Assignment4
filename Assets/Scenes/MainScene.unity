@@ -1664,7 +1664,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 192
+    m_Bits: 0
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
   m_StartingSelectedInteractable: {fileID: 0}
@@ -1743,7 +1743,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 359d6340f8ea47149b4c0c72f7c21b13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RequiredRole: 0
   Target: {fileID: 523263696}
 --- !u!1001 &526736181
 PrefabInstance:
@@ -4853,7 +4852,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 192
+    m_Bits: 0
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
   m_StartingSelectedInteractable: {fileID: 0}
@@ -4932,7 +4931,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 359d6340f8ea47149b4c0c72f7c21b13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RequiredRole: 0
   Target: {fileID: 1636534282}
 --- !u!1 &1636932659
 GameObject:

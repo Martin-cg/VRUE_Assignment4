@@ -11,13 +11,7 @@ public class GhostMode : RoleSpecific {
         RequiredRole = CharacterRole.Spectator;
     }
 
-    protected override void Start() {
-        base.Start();
-
-        RequiredRole = CharacterRole.Spectator;
-    }
-
-    protected override void OnRoleChanged(CharacterRole role) {
+    protected override void OnRoleChanged(bool isRequiredRole) {
         if (Meshes.Length == 0) {
             Meshes = GetComponentsInChildren<Renderer>();
 
@@ -58,7 +52,7 @@ public class GhostMode : RoleSpecific {
 
         for (var i = 0; i < Meshes.Length; i++) {
             var mesh = Meshes[i];
-            mesh.material = role == RequiredRole ? GhostMaterials[i] : OriginalMaterials[i];
+            mesh.material = isRequiredRole ? GhostMaterials[i] : OriginalMaterials[i];
         }
     }
 }

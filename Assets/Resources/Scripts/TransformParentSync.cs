@@ -18,7 +18,6 @@ public class TransformParentSync : SynchronizedRoomObject {
     }
 
     protected virtual void OnScenePathPropertyChanged(string[] scenePath) {
-        Debug.LogWarning(string.Join("/", scenePath));
         transform.parent = Utils.FindObjectByScenePath(scenePath)?.transform;
     }
 
@@ -32,7 +31,6 @@ public class TransformParentSync : SynchronizedRoomObject {
         }
 
         var path = gameObject.GetScenePathString(null, false);
-        Debug.LogError(path);
         ScenePath.SetValue(gameObject.GetScenePath(null, false).ToArray(), notifyLocal: false, notifyRemote: true);
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 public class RoleSpecificBehaviour : RoleSpecific {
     public Behaviour[] Behaviours;
 
-    protected override void OnRoleChanged(CharacterRole role) {
+    protected override void OnRoleChanged(bool isRequiredRole) {
         foreach (var behaviour in Behaviours) {
-            behaviour.enabled = role == RequiredRole;
+            behaviour.enabled = isRequiredRole;
         }
     }
 }

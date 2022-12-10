@@ -47,7 +47,7 @@ public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
         _Role = newRole;
 
         Debug.Log($"{name} switched to role {newRole}");
-        if (PhotonNetwork.IsConnected) {
+        if (Player != null) {
             Player.SetCustomProperties(new Hashtable() { [nameof(Role)] = newRole });
         }
         RoleChanged.Invoke(newRole);
