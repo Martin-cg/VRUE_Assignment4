@@ -5,14 +5,24 @@ using UnityEngine.XR.Interaction.Toolkit;
 [DisallowMultipleComponent]
 [RequireComponent(typeof(XRGrabInteractable))]
 public class Ingredient : MonoBehaviour, IPunObservable {
-
     public enum IngredientState {
         Initial,
         Chopped,
         Cooked
     }
 
-    public IngredientState CurrentState = IngredientState.Initial;
+    public IngredientState _CurrentState = IngredientState.Initial;
+    public IngredientState CurrentState {
+        get => _CurrentState;
+        set {
+            if (value != _CurrentState) {
+                return;
+            }
+
+            _CurrentState = value;
+            UpdateModelState();
+        }
+    }
 
     public GameObject InitialStateModel;
     public GameObject ChoppedStateModel;
@@ -22,32 +32,10 @@ public class Ingredient : MonoBehaviour, IPunObservable {
     // This enforces Collision Enter => Chop => Collision Exit => Collision Enter => Chop => ...
     private bool ChopFlag = false;
 
-    private void Update() {
-        HideAllStates();
-        ShowActiveState();
-    }
-
-    private void HideAllStates() {
-        InitialStateModel.SetActive(false);
-        ChoppedStateModel.SetActive(false);
-        CookedStateModel.SetActive(false);
-    }
-
-    private void ShowActiveState() {
-        switch (CurrentState) {
-            case IngredientState.Initial:
-                InitialStateModel.SetActive(true);
-                break;
-            case IngredientState.Chopped:
-                ChoppedStateModel.SetActive(true);
-                break;
-            case IngredientState.Cooked:
-                CookedStateModel.SetActive(true);
-                break;
-            default:
-                InitialStateModel.SetActive(true);
-                break;
-        }
+    private void UpdateModelState() {
+        InitialStateModel.SetActive(CurrentState == IngredientState.Initial);
+        ChoppedStateModel.SetActive(CurrentState == IngredientState.Chopped);
+        CookedStateModel.SetActive(CurrentState == IngredientState.Cooked);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {

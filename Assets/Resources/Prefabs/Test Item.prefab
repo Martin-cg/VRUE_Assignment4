@@ -1442,14 +1442,13 @@ GameObject:
   - component: {fileID: 926772263571800809}
   - component: {fileID: 4158958179395514667}
   - component: {fileID: 3442441952411077781}
-  - component: {fileID: 8687742370141043545}
   - component: {fileID: -5320358110883276758}
   - component: {fileID: 5255174672835940323}
   - component: {fileID: 329339661989746029}
   - component: {fileID: 5101762017624418544}
   m_Layer: 0
   m_Name: Test Item
-  m_TagString: ItemBoxItem
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1631,25 +1630,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_ThrowVelocityScale: 1.5
   m_ThrowAngularVelocityScale: 1
-  m_ForceGravityOnDetach: 0
+  m_ForceGravityOnDetach: 1
   m_RetainTransformParent: 0
   m_AttachPointCompatibilityMode: 0
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!65 &8687742370141043545
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5647523296227533437}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.2, z: 0.4}
-  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!114 &-5320358110883276758
 MonoBehaviour:
   m_ObjectHideFlags: 0
