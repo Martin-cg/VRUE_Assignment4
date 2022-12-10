@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd998a4d9880cb4409b83c3d7969609b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentState: 0
+  _CurrentState: 0
   InitialStateModel: {fileID: 2671377586482141257}
   ChoppedStateModel: {fileID: 6244895819244883999}
   CookedStateModel: {fileID: 4072183274169945457}
