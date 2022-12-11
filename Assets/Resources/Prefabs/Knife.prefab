@@ -239,6 +239,8 @@ GameObject:
   - component: {fileID: 695360957490289196}
   - component: {fileID: 5906281405255078967}
   - component: {fileID: 6146415447130961240}
+  - component: {fileID: 7195233188712080640}
+  - component: {fileID: 8709962793871654539}
   m_Layer: 0
   m_Name: Knife
   m_TagString: Untagged
@@ -300,6 +302,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 695360957490289196}
+  - {fileID: 8709962793871654539}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -456,3 +459,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd24fe8d8bcb1e43a6293ec85580502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7195233188712080640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7046855027255043870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7b759ce2f3dbcf46b755b9ce89e83a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8709962793871654539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7046855027255043870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6274187c60047604d89778f9464d6312, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncMass: 0
+  SyncDrag: 0
+  SyncAngularDrag: 0
+  SyncUseGravity: 1
+  SyncIsKinematic: 1
+  SyncInterpolation: 0
+  SyncCollisionDetectionMode: 0
+  SyncConstraints: 0

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -109,4 +110,6 @@ public static class Extensions {
         }
         return val;
     }
+
+    public static T ReceiveNext<T>(this PhotonStream stream) => (T)stream.ReceiveNext();
 }
