@@ -5,8 +5,16 @@ using System.Linq;
 using UnityEngine;
 
 public static class Extensions {
-    public static bool HasComponent<T>(this GameObject obj) where T: Component => obj.GetComponent<T>() != null;
+    public static bool HasComponent<T>(this GameObject obj) where T : Component => obj.GetComponent<T>() != null;
     public static bool HasComponent<T>(this Component component) where T : Component => component.GetComponent<T>() != null;
+
+    public static T GetOrAddComponent<T>(this GameObject obj) where T : Component {
+        var instance = obj.GetComponent<T>();
+        if (!instance) {
+            instance = obj.AddComponent<T>();
+        }
+        return instance;
+    }
 
     public static IEnumerable<GameObject> FindChildrenWithTag(this GameObject parent, string tag) {
         return parent.GetAllChildren().Where(component => component.CompareTag(tag));
@@ -112,4 +120,41 @@ public static class Extensions {
     }
 
     public static T ReceiveNext<T>(this PhotonStream stream) => (T)stream.ReceiveNext();
+
+    public static Vector3 Average(this IEnumerable<Vector3> source) {
+        if (source == null) {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        var sum = Vector3.zero;
+        var count = 0L;
+        checked {
+            foreach (var item in source) {
+                sum += item;
+                count++;
+            }
+        }
+        if (count > 0) {
+            return sum / count;
+        }
+        throw new InvalidOperationException("source sequence is empty");
+    }
+    public static Vector2 Average(this IEnumerable<Vector2> source) {
+        if (source == null) {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        var sum = Vector2.zero;
+        var count = 0L;
+        checked {
+            foreach (var item in source) {
+                sum += item;
+                count++;
+            }
+        }
+        if (count > 0) {
+            return sum / count;
+        }
+        throw new InvalidOperationException("source sequence is empty");
+    }
 }
