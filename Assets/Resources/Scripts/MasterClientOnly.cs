@@ -5,6 +5,11 @@ using UnityEngine;
 
 [DisallowMultipleComponent]
 public class MasterClientOnly : MonoBehaviourPunCallbacks {
+    public static void AddTo(Behaviour behaviour) {
+        var instance = behaviour.gameObject.GetOrAddComponent<InOnlineRoomOnly>();
+        instance.TargetBehaviours.Add(behaviour);
+    }
+
     public List<Behaviour> TargetBehaviours = new();
     private bool AreTargetsEnabled;
 

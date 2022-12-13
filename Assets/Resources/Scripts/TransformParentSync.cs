@@ -5,7 +5,9 @@ using UnityEngine;
 public class TransformParentSync : SynchronizedRoomObject {
     private SynchronizedRoomProperty<string[]> ScenePath;
 
-    protected virtual void Awake() {
+    protected override void Awake() {
+        base.Awake();
+
         var key = $"{nameof(TransformParentSync)}-{photonView.ViewID}";
         ScenePath = RegisterProperty<string[]>("ScenePath", null, key);
         ScenePath.ValueChanged += (s, e) => OnScenePathPropertyChanged(e);

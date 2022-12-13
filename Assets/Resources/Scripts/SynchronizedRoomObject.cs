@@ -10,6 +10,10 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     private readonly Hashtable PreviousPropertyTableCache = new();
     private string ScenePath;
 
+    protected virtual void Awake() {
+        InOnlineRoomOnly.AddTo(this);
+    }
+
     protected virtual void Start() {
         ScenePath = gameObject.GetScenePathString();
     }
