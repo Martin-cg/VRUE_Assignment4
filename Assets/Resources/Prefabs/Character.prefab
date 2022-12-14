@@ -429,6 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11e18e326f0bcb4b8de3993da696c09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShareAcrossBehavioursOnSameObject: 0
 --- !u!1001 &3679101255131649811
 PrefabInstance:
   m_ObjectHideFlags: 0
