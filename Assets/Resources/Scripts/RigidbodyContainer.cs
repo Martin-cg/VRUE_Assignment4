@@ -4,8 +4,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
+[RequireComponent(typeof(Rigidbody))]
 public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     protected readonly IDictionary<GameObject, ContainedObject> Contents = new Dictionary<GameObject, ContainedObject>();
+
+    protected override void Awake() {
+        base.Awake();
+
+        if (GetComponent<XRBaseInteractable>()) {
+            gameObject.GetOrAddComponent<SynchronizedMoveableSocketInteractor>();
+        }
+    }
 
     public override Transform GetAttachTransform(IXRInteractable interactable) {
         return Contents.TryGetValue(interactable.transform.gameObject, out var obj) ? obj.AttachTransform : base.GetAttachTransform(interactable);
@@ -28,6 +37,19 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         UnstickObject(args.interactableObject.transform.gameObject);
     }
 
+    private void OnJointBreak(float breakForce) {
+        var expectedJoints = Contents.Values.ToDictionary(e => e.Joint);
+
+        foreach (var joint in GetComponents<FixedJoint>()) {
+            if (expectedJoints.TryGetValue(joint, out var obj)) {
+                interactionManager.SelectExit(this, obj.Interactable as IXRSelectInteractable);
+                UnstickObject(obj);
+            } else {
+                Destroy(joint);
+            }
+        }
+    }
+
     public void StickObject(GameObject gameObject) {
         StickObject(gameObject, out var _);
     }
@@ -36,10 +58,15 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             Rigidbody = gameObject.GetComponent<Rigidbody>(),
             PhotonView = gameObject.GetComponent<PhotonView>(), // We use this istead of PhotonView.Get(gameObject) because we want to assert that the view is present in the object itself.
             Interactable = gameObject.GetComponent<XRGrabInteractable>(),
-            Colliders = gameObject.GetComponentsInChildren<Collider>().Where(collider => !collider.isTrigger).ToArray(),
-            AttachTransform = new GameObject($"[Attach] {gameObject.name}").transform
+            AttachTransform = new GameObject($"[Attach] {gameObject.name}").transform,
+            Joint = this.gameObject.AddComponent<FixedJoint>()
         };
         obj.AttachTransform.parent = transform;
+
+        obj.Joint.enableCollision = false;
+        obj.Joint.autoConfigureConnectedAnchor = true;
+        obj.Joint.connectedBody = obj.Rigidbody;
+        obj.Joint.breakForce = 10;
 
         Debug.Assert(obj.Rigidbody != null, $"No {obj.Rigidbody.GetType().Name} on contained object", gameObject);
         Debug.Assert(obj.PhotonView != null, $"No {obj.PhotonView.GetType().Name} on contained object", gameObject);
@@ -55,25 +82,24 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         OnStickObject(obj);
         containedObject = obj;
     }
+
     protected virtual void OnStickObject(ContainedObject obj) {
         obj.PhotonView.RequestOwnership();
 
-        obj.Rigidbody.isKinematic = true;
-        obj.Rigidbody.useGravity = false;
+        obj.Rigidbody.isKinematic = false;
+        obj.Rigidbody.useGravity = true;
+
+        // TODO resolve existing collision
 
         var attachPose = CaptureAttachPose(obj);
         obj.AttachTransform.localPosition = attachPose.position;
         obj.AttachTransform.localRotation = attachPose.rotation;
-
-        foreach (var collider in obj.Colliders) {
-            collider.isTrigger = true;
-        }
     }
 
     protected virtual Pose CaptureAttachPose(ContainedObject obj) {
         return new Pose {
             position = transform.InverseTransformPoint(obj.GameObject.transform.position),
-            rotation = obj.GameObject.transform.rotation
+            rotation = Quaternion.Inverse(transform.rotation) * obj.GameObject.transform.rotation
         };
     }
 
@@ -83,16 +109,15 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             return;
         }
 
+        UnstickObject(obj);
+    }
+    protected void UnstickObject(ContainedObject obj) {
+        Debug.Assert(!IsSelecting(obj.Interactable));
+
         OnUnstickObject(obj);
     }
     protected virtual void OnUnstickObject(ContainedObject obj) {
-        obj.Rigidbody.isKinematic = false;
-        obj.Rigidbody.useGravity = true;
-
-        foreach (var collider in obj.Colliders) {
-            collider.isTrigger = false;
-        }
-
+        Destroy(obj.Joint);
         Destroy(obj.AttachTransform.gameObject);
     }
 
@@ -135,7 +160,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         public PhotonView PhotonView;
         public XRGrabInteractable Interactable;
         public Transform AttachTransform;
-        public Collider[] Colliders;
+        public FixedJoint Joint;
 
         public ContainedObject(GameObject gameObject) {
             GameObject = gameObject;

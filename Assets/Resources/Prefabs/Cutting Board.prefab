@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9048548520337527143}
   - component: {fileID: 7757858609655080942}
   - component: {fileID: 680304738979166762}
+  - component: {fileID: 8614822287463070758}
   m_Layer: 0
   m_Name: Top
   m_TagString: Untagged
@@ -100,6 +101,22 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+--- !u!54 &8614822287463070758
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5717948693890123789}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7155903414203766076
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,6 +132,7 @@ GameObject:
   - component: {fileID: 9210218500041014239}
   - component: {fileID: 3344053306566312809}
   - component: {fileID: 5008496144432634801}
+  - component: {fileID: 6128124539472651343}
   - component: {fileID: 4535481757909833590}
   m_Layer: 0
   m_Name: Cutting Board
@@ -303,6 +321,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 9210218500041014239}
   - {fileID: 3344053306566312809}
+  - {fileID: 6128124539472651343}
   - {fileID: 680304738979166762}
   sceneViewId: 0
   InstantiationId: 0
@@ -355,6 +374,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa6bc347b8f5ea4d968fae11b666538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6128124539472651343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155903414203766076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c93b0ae6678a6d449d737bf9c7832d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 64
+  m_AttachTransform: {fileID: 0}
+  m_KeepSelectedTargetValid: 1
+  m_StartingSelectedInteractable: {fileID: 0}
+  m_StartingTargetFilter: {fileID: 0}
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ShowInteractableHoverMeshes: 0
+  m_InteractableHoverMeshMaterial: {fileID: 0}
+  m_InteractableCantHoverMeshMaterial: {fileID: 0}
+  m_SocketActive: 1
+  m_InteractableHoverScale: 1
+  m_RecycleDelayTime: 1
 --- !u!114 &4535481757909833590
 MonoBehaviour:
   m_ObjectHideFlags: 0
