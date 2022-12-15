@@ -3271,10 +3271,9 @@ GameObject:
   - component: {fileID: 1145825333}
   - component: {fileID: 1145825336}
   - component: {fileID: 1145825335}
-  - component: {fileID: 1145825334}
   - component: {fileID: 1145825338}
-  - component: {fileID: 1145825340}
   - component: {fileID: 1145825339}
+  - component: {fileID: 1145825340}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: XROrigin
@@ -3377,29 +3376,6 @@ MonoBehaviour:
   Head: {fileID: 83992140}
   RightHand: {fileID: 1499219750}
   LeftHand: {fileID: 1664604272}
---- !u!114 &1145825334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1145825325}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc4f2c0214c9b494fa7eb5b8b2c02885, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_System: {fileID: 1145825336}
-  m_TurnAmount: 45
-  m_DebounceTime: 0.5
-  m_EnableTurnLeftRight: 1
-  m_EnableTurnAround: 1
-  m_DelayTime: 0
-  m_TurnUsage: 0
-  m_Controllers:
-  - {fileID: 1664604272}
-  - {fileID: 1499219750}
-  m_DeadZone: 0.75
 --- !u!114 &1145825335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3488,20 +3464,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145825325}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05985d3e1135ed74aa00bb6f735341b9, type: 3}
+  m_Script: {fileID: 11500000, guid: baca382bd4acd904fbb2a12f74a59ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_System: {fileID: 1145825336}
-  m_MoveSpeed: 5
-  m_EnableStrafe: 1
-  m_EnableFly: 0
-  m_UseGravity: 1
-  m_GravityApplicationMode: 0
-  m_ForwardSource: {fileID: 83992139}
-  LeftHand: {fileID: 1664604267}
-  RightHand: {fileID: 1499219746}
+  RequiredRole: 0
+  Behaviours:
+  - {fileID: 1145825339}
 --- !u!1 &1163329969
 GameObject:
   m_ObjectHideFlags: 0
@@ -5270,7 +5240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1672336937
 Transform:
   m_ObjectHideFlags: 0
@@ -5652,7 +5622,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1672336936}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 137204bb18b673e4f8b0e5fe4d4f4b8e, type: 3}
   m_Name: 
