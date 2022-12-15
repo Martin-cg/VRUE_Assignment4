@@ -3,32 +3,26 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(PhotonView))]
-[RequireComponent(typeof(XRGrabInteractable))]
+[RequireComponent(typeof(XRBaseInteractable))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PhotonRigidbodyView))]
-public class Grabbable : MonoBehaviourPun {
-    protected XRGrabInteractable Interactable;
+public class SynchronizedInteractable : MonoBehaviourPun {
+    protected XRBaseInteractable Interactable;
 
-    protected virtual void Reset() {
-        Init();
-    }
-
-    protected virtual void Awake() {
-        Init();
-    }
+    protected virtual void Reset() => Init();
+    protected virtual void OnValidate() => Init();
+    protected virtual void Awake() => Init();
 
     private void Init() {
-        Interactable = Interactable == null ? GetComponent<XRGrabInteractable>() : Interactable;
+        Interactable = Interactable == null ? GetComponent<XRBaseInteractable>() : Interactable;
         photonView.OwnershipTransfer = OwnershipOption.Takeover;
     }
 
     protected virtual void OnEnable() {
         Interactable.selectEntered.AddListener(OnSelectEntered);
-        Interactable.selectExited.AddListener(OnSelectExited);
     }
     protected virtual void OnDisable() {
         Interactable.selectEntered.RemoveListener(OnSelectEntered);
-        Interactable.selectExited.RemoveListener(OnSelectExited);
     }
 
     private void OnSelectEntered(SelectEnterEventArgs args) {
@@ -40,8 +34,5 @@ public class Grabbable : MonoBehaviourPun {
         // RequestOwnership does not update IsMine immediatly, which confuses our other scripts for a few frames.
         typeof(PhotonView).GetProperty(nameof(photonView.IsMine)).SetValue(photonView, true);
         Debug.Assert(photonView.IsMine);
-    }
-
-    private void OnSelectExited(SelectExitEventArgs args) {
     }
 }

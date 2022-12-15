@@ -1440,13 +1440,13 @@ GameObject:
   m_Component:
   - component: {fileID: 251300948692854092}
   - component: {fileID: 926772263571800809}
-  - component: {fileID: 4158958179395514667}
   - component: {fileID: 3442441952411077781}
+  - component: {fileID: 4158958179395514667}
   - component: {fileID: -5320358110883276758}
-  - component: {fileID: 5255174672835940323}
   - component: {fileID: 329339661989746029}
   - component: {fileID: 5101762017624418544}
   - component: {fileID: 5280308729415943654}
+  - component: {fileID: 3784470027997768546}
   m_Layer: 0
   m_Name: Test Item
   m_TagString: Untagged
@@ -1488,31 +1488,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4158958179395514667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5647523296227533437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 1
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: -5320358110883276758}
-  - {fileID: 329339661989746029}
-  - {fileID: 5280308729415943654}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &3442441952411077781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1638,6 +1613,31 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &4158958179395514667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5647523296227533437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 1
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: -5320358110883276758}
+  - {fileID: 329339661989746029}
+  - {fileID: 5280308729415943654}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &-5320358110883276758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1654,18 +1654,6 @@ MonoBehaviour:
   InitialStateModel: {fileID: 2671377586482141257}
   ChoppedStateModel: {fileID: 6244895819244883999}
   CookedStateModel: {fileID: 4072183274169945457}
---- !u!114 &5255174672835940323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5647523296227533437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd24fe8d8bcb1e43a6293ec85580502, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &329339661989746029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1694,6 +1682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b759ce2f3dbcf46b755b9ce89e83a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShareAcrossBehavioursOnSameObject: 0
 --- !u!114 &5280308729415943654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1714,6 +1703,18 @@ MonoBehaviour:
   SyncInterpolation: 0
   SyncCollisionDetectionMode: 0
   SyncConstraints: 0
+--- !u!114 &3784470027997768546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5647523296227533437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fa6bc347b8f5ea4d968fae11b666538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5661052008847684483
 GameObject:
   m_ObjectHideFlags: 0
