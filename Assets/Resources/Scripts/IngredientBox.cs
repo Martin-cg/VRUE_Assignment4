@@ -1,5 +1,4 @@
 using Photon.Pun;
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -24,8 +23,7 @@ public class IngredientBox : MonoBehaviourPun {
     }
     private Rigidbody CurrentItemRigidbody;
     private XRBaseInteractable CurrentItemInteractable;
-    private GameObject LastItem;
-    private bool LastItemReentered;
+    private bool CurrentItemReentered;
 
     protected virtual void Reset() {
         GetComponent<MasterClientOnly>().TargetBehaviours.Add(this);
@@ -47,13 +45,13 @@ public class IngredientBox : MonoBehaviourPun {
     }
 
     public void OnTriggerEnter(Collider other) {
-        if (LastItem && other.attachedRigidbody?.gameObject == LastItem) {
-            LastItemReentered = true;
+        if (CurrentItem && other.attachedRigidbody?.gameObject == CurrentItem) {
+            CurrentItemReentered = true;
         }
     }
     public void OnTriggerExit(Collider other) {
-        if (LastItem && other.attachedRigidbody?.gameObject == LastItem) {
-            LastItemReentered = false;
+        if (CurrentItem && other.attachedRigidbody?.gameObject == CurrentItem) {
+            CurrentItemReentered = false;
             // for some reason the item exits once when grabbed and then immediatly reenters for a few frames before exiting again...
             StartCoroutine(ItemMovedAwayReentrancyProtection());
         }
@@ -63,7 +61,7 @@ public class IngredientBox : MonoBehaviourPun {
         yield return null;
         yield return null;
 
-        if (!LastItemReentered) {
+        if (!CurrentItemReentered) {
             OnItemMovedAway();
         }
     }
@@ -82,28 +80,22 @@ public class IngredientBox : MonoBehaviourPun {
         Debug.Log("OnCurrentItemGrabbed()");
         CurrentItemInteractable.selectEntered.RemoveListener(OnCurrentSelectEntered);
         CurrentItemInteractable.selectExited.AddListener(OnTakenItemReleased);
-        CurrentItem.transform.SetParent(transform.parent, true);
-        (CurrentItem, LastItem) = (null, CurrentItem);
     }
 
-    private static void OnTakenItemReleased(SelectExitEventArgs args) {
+    private void OnTakenItemReleased(SelectExitEventArgs args) {
         Debug.Log("OnTakenItemReleased()");
         var interactable = args.interactableObject;
         var obj = interactable.transform.gameObject;
 
         interactable.selectExited.RemoveListener(OnTakenItemReleased);
-        
-        if (obj.GetComponent<Rigidbody>() is var rigidbody) {
-            // rigidbody.useGravity = true;
-            // rigidbody.isKinematic = false;
-        }
+        obj.transform.SetParent(transform.parent, true);
     }
 
     private void OnItemMovedAway() {
         Debug.Log("OnItemMovedAway()");
-        Debug.Assert(CurrentItem == null);
 
-        LastItem = null;
+        CurrentItem.transform.SetParent(transform.parent, true);
+        CurrentItem = null;
         GenerateItem();
     }
 }
