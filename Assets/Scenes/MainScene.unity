@@ -3352,9 +3352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d6b5b19a7aeae447aa2b41ec4d75136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Head: {fileID: 83992140}
-  RightHand: {fileID: 1499219750}
-  LeftHand: {fileID: 1664604272}
 --- !u!114 &1145825335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6895,7 +6892,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 8d69f18e252d6b74c87319a2daa8f755, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
