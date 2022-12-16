@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 public class ResetOnGameStateChange : MonoBehaviourGameStateCallbacks {
-    public bool ResetPose;
-    public bool ResetParent;
+    public bool ResetPose = true;
+    public bool ResetParent = true;
 
     private Pose DefaultPose;
     private Transform DefaultParent;

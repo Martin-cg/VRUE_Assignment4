@@ -460,7 +460,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b759ce2f3dbcf46b755b9ce89e83a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShareAcrossBehavioursOnSameObject: 0
 --- !u!114 &8709962793871654539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,3 +504,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67eebd8122a9034478d3228b00af1860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ResetPose: 1
+  ResetParent: 1

@@ -453,6 +453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67eebd8122a9034478d3228b00af1860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ResetPose: 1
+  ResetParent: 1
 --- !u!1001 &7155903414523981224
 PrefabInstance:
   m_ObjectHideFlags: 0

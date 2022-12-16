@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class GameManager : SynchronizedRoomObject {
@@ -11,7 +12,7 @@ public class GameManager : SynchronizedRoomObject {
 
         if (Instance != null && Instance != this) {
             if (gameObject.GetComponentsInChildren<Component>().All(component => component is not Transform || component == this)) {
-                Destroy(this.gameObject);
+                Destroy(gameObject);
             } else {
                 Destroy(this);
             }
@@ -21,25 +22,22 @@ public class GameManager : SynchronizedRoomObject {
     }
 
     public event Action<GameState> OnGameStateChanged;
-    public GameState State { get; private set; }
+    public GameState _State = GameState.Preparing;
+    public GameState State {
+        get => _State;
+        set {
+            if (_State == value) {
+                return;
+            }
 
-    public void StartGame() {
-        if (State == GameState.InProgress) {
-            return;
+            _State = value;
+            OnGameStateChanged?.Invoke(State);
         }
-
-        State = GameState.InProgress;
-        OnGameStateChanged?.Invoke(State);
     }
 
-    public void ResetGame() {
-        if (State == GameState.Preparing) {
-            return;
-        }
+    public void StartGame() => State = GameState.InProgress;
 
-        State = GameState.Preparing;
-        OnGameStateChanged?.Invoke(State);
-    }
+    public void ResetGame() => State = GameState.Preparing;
 
     public void AddCallbackTarget(IGameStateCallbacks target) {
         OnGameStateChanged += target.OnGameStateChanged;
@@ -49,3 +47,27 @@ public class GameManager : SynchronizedRoomObject {
         OnGameStateChanged -= target.OnGameStateChanged;
     }
 }
+
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(GameManager))]
+[CanEditMultipleObjects] // workaround because "GameManager" is somehow special and cannot have a custom editor otherwise
+public class GameManagerEditor : Editor {
+    public override void OnInspectorGUI() {
+        base.OnInspectorGUI();
+
+        var target = this.target as GameManager;
+
+
+        GUI.enabled = target.State == GameState.Preparing;
+        if (GUILayout.Button("Start")) {
+            target.State = GameState.InProgress;
+        }
+
+        GUI.enabled = target.State == GameState.InProgress;
+        if (GUILayout.Button("Stop")) {
+            target.State = GameState.Preparing;
+        }
+    }
+}
+#endif
