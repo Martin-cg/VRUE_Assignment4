@@ -65,7 +65,7 @@ public sealed class CharacterManager : MonoBehaviourPunCallbacks {
             DestroyImmediate(LocalCharacter.Instance.gameObject);
         }
 
-        var characterObject = PhotonNetwork.Instantiate($"Prefabs/{CharacterPrefab.name}", Spawn.position, Spawn.rotation, default, new object[] {
+        var characterObject = PhotonNetwork.Instantiate(ResourcePathUtils.GetPrefabPath(CharacterPrefab), Spawn.position, Spawn.rotation, default, new object[] {
             new Character.InstantiationData() { ActorNumber = PhotonNetwork.LocalPlayer.ActorNumber }
         });
         characterObject.name = "Local Player";
