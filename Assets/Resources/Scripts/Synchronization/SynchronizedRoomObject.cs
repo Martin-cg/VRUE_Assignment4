@@ -5,7 +5,7 @@ using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
-    public bool ShareAcrossBehavioursOnSameObject = false;
+    protected bool ShareAcrossBehavioursOnSameObject = false;
 
     private const string KeySeparator = "/";
     private static readonly HashSet<string> RegisteredKeys = new();

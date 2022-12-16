@@ -6,7 +6,9 @@ public class MonoBehaviourGameStateCallbacks : MonoBehaviour, IGameStateCallback
     }
 
     protected virtual void OnDisable() {
-        GameManager.Instance.RemoveCallbackTarget(this);
+        if (GameManager.Instance) {
+            GameManager.Instance.RemoveCallbackTarget(this);
+        }
     }
 
     public virtual void OnGameStateChanged(GameState newState) {
