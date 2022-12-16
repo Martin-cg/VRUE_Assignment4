@@ -85,4 +85,14 @@ public static class UnityExtensions {
     }
     public static bool IsParentOf(this GameObject target, GameObject child) => IsParentOf(target.transform, child.transform);
     public static bool IsParentOf(this Transform target, Transform child) => IsChildOf(child, target);
+
+    public static Pose GetPose(this Transform transform) => new(transform.position, transform.rotation);
+    public static Pose GetLocalPose(this Transform transform) => new(transform.localPosition, transform.localRotation);
+    public static void SetPose(this Transform transform, Pose pose) {
+        transform.SetPositionAndRotation(pose.position, pose.rotation);
+    }
+    public static void SetLocalPose(this Transform transform, Pose pose) {
+        transform.localPosition = pose.position;
+        transform.localRotation = pose.rotation;
+    }
 }

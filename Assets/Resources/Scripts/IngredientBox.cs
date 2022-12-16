@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class IngredientBox : MonoBehaviourPun {
+public class IngredientBox : MonoBehaviourGameStateCallbacks {
     public GameObject ItemPrefab;
     public Transform Socket;
 
@@ -25,14 +25,15 @@ public class IngredientBox : MonoBehaviourPun {
     private XRBaseInteractable CurrentItemInteractable;
     private bool CurrentItemReentered;
 
-    protected virtual void Reset() {
-        GetComponent<MasterClientOnly>().TargetBehaviours.Add(this);
+    protected virtual void Awake() {
+        MasterClientOnly.AddTo(this);
     }
 
     protected virtual void Start() {
         Debug.Assert(ItemPrefab.GetComponent<TransformParentSync>());
         Debug.Assert(ItemPrefab.GetComponent<XRBaseInteractable>());
         Debug.Assert(ItemPrefab.GetComponent<Rigidbody>());
+        Debug.Assert(ItemPrefab.GetComponent<TemporaryObject>());
 
         if (Socket.childCount != 0) {
             Debug.LogError($"Children in {nameof(IngredientBox)} socket are invalid and will be removed.", Socket);
@@ -40,8 +41,20 @@ public class IngredientBox : MonoBehaviourPun {
                 Destroy(child);
             }
         }
-        
+    }
+
+    public override void OnGameStarted() {
+        base.OnGameStarted();
+
         GenerateItem();
+    }
+
+    public override void OnGameStopped() {
+        base.OnGameStarted();
+
+        if (CurrentItem) {
+            PhotonNetwork.Destroy(CurrentItem);
+        }
     }
 
     public void OnTriggerEnter(Collider other) {
@@ -60,6 +73,10 @@ public class IngredientBox : MonoBehaviourPun {
     private IEnumerator ItemMovedAwayReentrancyProtection() {
         yield return null;
         yield return null;
+
+        if (CurrentItem == null) {
+            yield break;
+        }
 
         if (!CurrentItemReentered) {
             OnItemMovedAway();

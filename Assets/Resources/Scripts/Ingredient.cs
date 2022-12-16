@@ -4,6 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(XRGrabInteractable))]
+[RequireComponent(typeof(TemporaryObject))]
 public class Ingredient : MonoBehaviour, IPunObservable {
     public enum IngredientState {
         Initial,
