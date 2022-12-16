@@ -510,7 +510,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 439
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2788,6 +2788,11 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5344958643480550142, guid: 4729a561ecd2c7345904ef9ac64d6d22,
+        type: 3}
+      propertyPath: m_TagString
+      value: KnifeBlade
+      objectReference: {fileID: 0}
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
       propertyPath: m_RootOrder
@@ -2796,17 +2801,17 @@ PrefabInstance:
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
@@ -5860,6 +5865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613576c59b8f5c6468534f12f7f39241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AutoStart: 1
   _State: 1
 --- !u!1 &1998113390
 GameObject:
@@ -6295,9 +6301,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2123663623328934529, guid: 510399d190d37d04f8cfbe15ce2d3491,
         type: 3}
-      propertyPath: ItemPrefab
+      propertyPath: IngredientInfoPrefab
       value: 
-      objectReference: {fileID: 5345153972189096749, guid: f7bb0d9fe3dafe649bf47e0d37b98598,
+      objectReference: {fileID: 8406728523896832728, guid: dbec8fd9d65b28b4aa8ba992f9bff722,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 510399d190d37d04f8cfbe15ce2d3491, type: 3}

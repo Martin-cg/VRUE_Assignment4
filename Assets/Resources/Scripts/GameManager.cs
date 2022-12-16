@@ -7,6 +7,8 @@ public class GameManager : SynchronizedRoomObject {
     private static GameManager _Instance;
     public static GameManager Instance => _Instance == null ? _Instance = FindObjectOfType<GameManager>() : _Instance;
 
+    public bool AutoStart = true;
+
     protected override void Awake() {
         base.Awake();
 
@@ -18,6 +20,14 @@ public class GameManager : SynchronizedRoomObject {
             }
         } else {
             _Instance = this;
+        }
+    }
+
+    protected override void Start() {
+        base.Start();
+
+        if (AutoStart) {
+            StartGame();
         }
     }
 

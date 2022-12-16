@@ -1,22 +1,27 @@
 ﻿using Photon.Pun;
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(XRGrabInteractable))]
 [RequireComponent(typeof(TemporaryObject))]
-public class Ingredient : MonoBehaviour, IPunObservable {
-    public enum IngredientState {
-        Initial,
-        Chopped,
-        Cooked
+public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback {
+    public IngredientInfo IngredientInfo;
+    public XRBaseInteractable Interactable;
+
+    private int RemainingChops;
+
+    protected virtual void Awake() {
+        Interactable.enabled = false;
     }
 
-    public IngredientState _CurrentState = IngredientState.Initial;
+    public IngredientState _CurrentState = IngredientState.RawUnchopped;
     public IngredientState CurrentState {
         get => _CurrentState;
         set {
-            if (value != _CurrentState) {
+            if (value == _CurrentState) {
                 return;
             }
 
@@ -25,55 +30,72 @@ public class Ingredient : MonoBehaviour, IPunObservable {
         }
     }
 
-    public GameObject InitialStateModel;
-    public GameObject ChoppedStateModel;
-    public GameObject CookedStateModel;
-
     // Prevent multiple choppings due to multiple collisions.
     // This enforces Collision Enter => Chop => Collision Exit => Collision Enter => Chop => ...
     private bool ChopFlag = false;
 
     private void UpdateModelState() {
-        InitialStateModel.SetActive(CurrentState == IngredientState.Initial);
-        ChoppedStateModel.SetActive(CurrentState == IngredientState.Chopped);
-        CookedStateModel.SetActive(CurrentState == IngredientState.Cooked);
+        var activeModel = CurrentState.IsChopped ? IngredientInfo.ChoppedModel : IngredientInfo.RawModel;
+        var unativeModel = activeModel == IngredientInfo.ChoppedModel ? IngredientInfo.RawModel : IngredientInfo.ChoppedModel;
+
+        unativeModel.SetActive(false);
+        activeModel.SetActive(true);
+
+        var renderers = activeModel.GetComponentsInChildren<Renderer>();
+        switch (CurrentState.CookingState) {
+            case CookingState.Raw:
+                // raw material is default and state cannot change back
+                break;
+            case CookingState.Cooked:
+                if (IngredientInfo.CookedMaterial) {
+                    foreach (var renderer in renderers) {
+                        renderer.material = IngredientInfo.CookedMaterial;
+                    }
+                }
+                break;
+            case CookingState.Burnt:
+                if (IngredientInfo.BurntMaterial) {
+                    foreach (var renderer in renderers) {
+                        renderer.material = IngredientInfo.BurntMaterial;
+                    }
+                }
+                break;
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        if (stream.IsWriting)
+        if (stream.IsWriting) {
             stream.SendNext(CurrentState);
-        else
-            CurrentState = (IngredientState)stream.ReceiveNext();
-    }
-
-    private void OnCollisionExit(Collision collision) {
-        if (collision.collider.gameObject.CompareTag(Tags.KnifeBlade)) {
-            ChopFlag = false;
+            stream.SendNext(RemainingChops);
+        } else {
+            CurrentState = stream.ReceiveNext<IngredientState>();
+            RemainingChops = stream.ReceiveNext<int>();
         }
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.collider.gameObject.CompareTag(Tags.KnifeBlade)) {
-            if (!ChopFlag) {
-                Debug.Log("CHOP");
+    public void OnChopBegin() {
+        ChopFlag = false;
+    }
 
-                switch (CurrentState) {
-                    case IngredientState.Initial:
-                        CurrentState = IngredientState.Chopped;
-                        break;
-                    case IngredientState.Chopped:
-                        CurrentState = IngredientState.Cooked;
-                        break;
-                    case IngredientState.Cooked:
-                        CurrentState = IngredientState.Initial;
-                        break;
-                    default:
-                        CurrentState = IngredientState.Initial;
-                        break;
-                }
-
-                ChopFlag = true;
+    public void OnChopEnd() {
+        if (!ChopFlag) {
+            Debug.Log("CHOP");
+            photonView.RequestOwnership();
+            RemainingChops = Math.Max(0, RemainingChops - 1);
+            if (RemainingChops == 0) {
+                CurrentState = CurrentState.GetAsChopped();
             }
+            ChopFlag = true;
         }
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info) {
+        var ingredientPath = info.photonView.InstantiationData[0] as string;
+        var prefab = Resources.Load<GameObject>(ingredientPath);
+        IngredientInfo = Instantiate(prefab, transform).GetComponent<IngredientInfo>();
+        RemainingChops = IngredientInfo.NumberOfCuts;
+        Interactable.colliders.AddRange(IngredientInfo.GetComponentsInChildren<Collider>().Where(collider => !collider.isTrigger));
+        Interactable.enabled = true;
+        UpdateModelState();
     }
 }

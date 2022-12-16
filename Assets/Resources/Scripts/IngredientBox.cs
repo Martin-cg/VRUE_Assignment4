@@ -5,6 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class IngredientBox : MonoBehaviourGameStateCallbacks {
     public GameObject ItemPrefab;
+    public IngredientInfo IngredientInfoPrefab;
     public Transform Socket;
 
     private GameObject currentItem;
@@ -84,8 +85,9 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks {
     }
 
     private void GenerateItem() {
-        Debug.Log("GenerateItem() " + Socket.transform.position);
-        CurrentItem = PhotonNetwork.InstantiateRoomObject($"Prefabs/{ItemPrefab.name}", Socket.position, Socket.rotation);
+        // Debug.Log("GenerateItem() " + Socket.transform.position);
+        var ingredientInfoPrefabPath = ResourcePathUtils.GetPrefabPath(IngredientInfoPrefab.gameObject);
+        CurrentItem = PhotonNetwork.InstantiateRoomObject(ResourcePathUtils.GetPrefabPath(ItemPrefab), Socket.position, Socket.rotation, 0, new object[] { ingredientInfoPrefabPath });
         CurrentItem.transform.SetParent(Socket.transform, true);
 
         CurrentItemInteractable.selectEntered.AddListener(OnCurrentSelectEntered);
@@ -94,13 +96,13 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks {
     private void OnCurrentSelectEntered(SelectEnterEventArgs args) => OnCurrentItemGrabbed();
 
     private void OnCurrentItemGrabbed() {
-        Debug.Log("OnCurrentItemGrabbed()");
+        // Debug.Log("OnCurrentItemGrabbed()");
         CurrentItemInteractable.selectEntered.RemoveListener(OnCurrentSelectEntered);
         CurrentItemInteractable.selectExited.AddListener(OnTakenItemReleased);
     }
 
     private void OnTakenItemReleased(SelectExitEventArgs args) {
-        Debug.Log("OnTakenItemReleased()");
+        // Debug.Log("OnTakenItemReleased()");
         var interactable = args.interactableObject;
         var obj = interactable.transform.gameObject;
 
@@ -109,7 +111,7 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks {
     }
 
     private void OnItemMovedAway() {
-        Debug.Log("OnItemMovedAway()");
+        // Debug.Log("OnItemMovedAway()");
 
         CurrentItem.transform.SetParent(transform.parent, true);
         CurrentItem = null;

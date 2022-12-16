@@ -94,8 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df53db4698a92a4789bb24e3b18303a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemPrefab: {fileID: 5647523296227533437, guid: ab2bd166a2936834dbbf06c1cc80bf2c,
+  ItemPrefab: {fileID: 5345153972189096749, guid: c655c58071f1ed74484c0b524599b6e8,
     type: 3}
+  IngredientInfo: {fileID: 11400000, guid: 990d316631a0c7748af05eed514669bc, type: 2}
   Socket: {fileID: 2123663623328934530}
 --- !u!135 &2123663623328934531
 SphereCollider:
