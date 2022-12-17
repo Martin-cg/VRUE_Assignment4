@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -38,11 +39,11 @@ public static class UnityExtensions {
         GetScenePathString(target.transform, parent == null ? null : parent.transform, includeTarget, includeParent, delimiter);
 
     public static List<string> GetScenePath(this Transform target, Transform parent = null, bool includeTarget = true, bool includeParent = true) {
-        var path = new List<string>();
-
         if (ReferenceEquals(target, parent)) {
-            return path;
+            return new List<string>();
         }
+
+        var path = new List<string>();
 
         if (includeTarget) {
             path.Add(target.name);

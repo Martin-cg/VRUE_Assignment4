@@ -8,8 +8,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(Rigidbody))]
 public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     public float RestickDelay = 1;
-    public float ReenableCollisionDelay = 0.5f;
-    public bool MakeAttachKinematic;
 
     public Rigidbody Rigidbody;
     protected readonly IDictionary<GameObject, ContainedObject> Contents = new Dictionary<GameObject, ContainedObject>();
@@ -50,12 +48,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         base.OnSelectExited(args);
 
         UnstickObject(args.interactableObject.transform.gameObject);
-    }
-
-    private void OnJointBroken(ContainedObject obj, float breakForce) {
-        Debug.LogWarning("OnJointBroken()");
-        interactionManager.SelectExit(this, obj.Interactable as IXRSelectInteractable);
-        UnstickObject(obj);
     }
 
     public void StickObject(GameObject gameObject) {
@@ -107,21 +99,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             }
 
             obj.Rigidbody.isKinematic = false;
-
-            /*
-            obj.Joint = obj.Rigidbody.gameObject.AddComponent<FixedJoint>();
-            var eventEmitter = obj.Rigidbody.gameObject.AddComponent<FixedJointEventEmitter>();
-            eventEmitter.OnJointBroken.AddListener(breakForce => OnJointBroken(obj, breakForce));
-            obj.Joint.enableCollision = false;
-            obj.Joint.connectedBody = Rigidbody;
-            // obj.Joint.connectedAnchor =  obj.AttachTransform.transform.position;
-            obj.Joint.breakForce = 100;
-            obj.Joint.massScale = 0;
-            */
-
-            if (obj.Rigidbody) {
-                // obj.Rigidbody.isKinematic = false;
-            }
         }
     }
 
@@ -165,10 +142,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         }
     }
 
-    protected override void OnHoverEntered(HoverEnterEventArgs args) {
-        base.OnHoverEntered(args);
-    }
-
     protected override void OnHoverExited(HoverExitEventArgs args) {
         base.OnHoverExited(args);
 
@@ -186,7 +159,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         }
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
             stream.SendNext(Contents.Count);
             foreach (var (_, obj) in Contents) {

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class Plate : RigidbodyContainer {
+public class Plate : RigidbodyContainer, IPunObservable {
     public GameObject PresetRoot;
     private List<Preset> Presets = new();
     private HashSet<string> CurrentIngredients = new();
@@ -38,10 +39,6 @@ public class Plate : RigidbodyContainer {
     }
 
     private Preset GetFirstPossiblePreset(Ingredient newIngredient) {
-        if (newIngredient == null) {
-            var a = 1;
-        }
-
         if (CurrentIngredients.Contains(newIngredient.IngredientInfo.DisplayName)) {
             return null;
         }
@@ -76,7 +73,6 @@ public class Plate : RigidbodyContainer {
         return null;
     }
     private Preset GetCurrentPreset() {
-        // TODO: cache
         foreach (var preset in Presets) {
             if (preset.Ingredients.Count != CurrentIngredients.Count) {
                 continue;
@@ -102,15 +98,6 @@ public class Plate : RigidbodyContainer {
 
         ApplyCurrentPreset();
         base.OnStickObject(obj);
-
-        /*
-        var ingredientModelRoot = ingredient.IngredientInfo.gameObject;
-        foreach (var (presetObject, targetObject) in preset.Root.GetAllChildren().Zip(ingredientModelRoot.GetAllChildren())) {
-            Debug.Assert(presetObject.name == targetObject.name);
-            AttachPose.Add(targetObject, ingredientModelRoot.transform.GetLocalPose());
-            targetObject.transform.SetLocalPose(presetObject.transform.GetLocalPose());
-        }
-        */
     }
 
     private void ApplyCurrentPreset() {
@@ -152,6 +139,41 @@ public class Plate : RigidbodyContainer {
         var ingredient = IngredientFromInteractable(obj.Interactable);
         var preset = GetCurrentPreset();
         return preset.Ingredients[ingredient.IngredientInfo.DisplayName].Object.transform.GetLocalPose();
+    }
+
+    public override void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        base.OnPhotonSerializeView(stream, info);
+
+        if (stream.IsWriting) {
+            stream.SendNext(CurrentIngredients.Count);
+            foreach (var name in CurrentIngredients) {
+                stream.SendNext(name);
+            }
+
+            stream.SendNext(AttachPose.Count);
+            foreach (var (obj, pose) in AttachPose) {
+                var (path, view) = PhotonSerdeUtils.GetPhotonViewRelativeScenePath(obj);
+                stream.SendNext(view.sceneViewId);
+                stream.SendNext(path);
+                stream.SendNext(pose);
+            }
+        } else {
+            CurrentIngredients.Clear();
+            var count = stream.ReceiveNext<int>();
+            for (var i = 0; i < count; i++) {
+                 CurrentIngredients.Add(stream.ReceiveNext<string>());
+            }
+
+            AttachPose.Clear();
+            count = stream.ReceiveNext<int>();
+            for (var i = 0; i < count; i++) {
+                var sceneViewId = stream.ReceiveNext<int>();
+                var path = stream.ReceiveNext<string[]>();
+                var pose = stream.ReceiveNext<Pose>();
+                var target = PhotonSerdeUtils.ResolvePhotonViewRelativeScenePath(sceneViewId, path);
+                AttachPose.Add(target, pose);
+            }
+        }
     }
 
     private class Preset {
