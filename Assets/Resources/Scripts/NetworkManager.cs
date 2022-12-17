@@ -7,9 +7,11 @@ public sealed class NetworkManager : MonoBehaviourPunCallbacks {
 
     private void Start() {
         PhotonPeer.RegisterType(typeof(Character.InstantiationData), 0, Character.InstantiationData.Serialize, Character.InstantiationData.Deserialize);
+        PhotonPeer.RegisterType(typeof(IngredientState), 1, IngredientState.Serialize, IngredientState.Deserialize);
+
         PhotonNetwork.AutomaticallySyncScene = true;
         if (Application.isEditor) {
-            PhotonNetwork.KeepAliveInBackground = float.MaxValue / 2000;
+            PhotonNetwork.KeepAliveInBackground = 1000000000000;
         }
 
         if (AutoConnect) {

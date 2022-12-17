@@ -20,7 +20,7 @@ public class TransformParentSync : SynchronizedRoomObject {
     }
 
     protected virtual void OnScenePathPropertyChanged(string[] scenePath) {
-        transform.parent = Utils.FindObjectByScenePath(scenePath)?.transform;
+        transform.parent = Utils.ResolveScenePath(scenePath)?.transform;
     }
 
     protected virtual void OnTransformParentChanged() {

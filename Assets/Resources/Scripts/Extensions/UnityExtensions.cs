@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -38,11 +39,11 @@ public static class UnityExtensions {
         GetScenePathString(target.transform, parent == null ? null : parent.transform, includeTarget, includeParent, delimiter);
 
     public static List<string> GetScenePath(this Transform target, Transform parent = null, bool includeTarget = true, bool includeParent = true) {
-        var path = new List<string>();
-
         if (ReferenceEquals(target, parent)) {
-            return path;
+            return new List<string>();
         }
+
+        var path = new List<string>();
 
         if (includeTarget) {
             path.Add(target.name);
@@ -90,5 +91,12 @@ public static class UnityExtensions {
     public static void SetLocalPose(this Transform transform, Pose pose) {
         transform.localPosition = pose.position;
         transform.localRotation = pose.rotation;
+    }
+
+    public static void SetLayerRecursively(this GameObject target, int layerMask) {
+        target.layer = layerMask;
+        foreach (var child in target.GetAllChildren()) {
+            child.layer = layerMask;
+        }
     }
 }
