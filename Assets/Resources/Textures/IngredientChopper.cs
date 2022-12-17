@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class IngredientChopper : MonoBehaviour {
-    private readonly Dictionary<Ingredient, int> Chopping;
+    private readonly Dictionary<Ingredient, int> Chopping = new();
 
     protected virtual void OnTriggerEnter(Collider collider) {
         if (collider.gameObject.layer != Layers.Ingredients) {
@@ -10,7 +10,7 @@ public class IngredientChopper : MonoBehaviour {
         }
 
         var ingredient = collider.GetComponentInParent<Ingredient>();
-        if (!ingredient) {
+        if (!ingredient || !ingredient.IngredientInfo || !ingredient.IngredientInfo.CanBeChooped) {
             return;
         }
 
@@ -26,7 +26,7 @@ public class IngredientChopper : MonoBehaviour {
         }
 
         var ingredient = collider.GetComponentInParent<Ingredient>();
-        if (!ingredient) {
+        if (!ingredient || !ingredient.IngredientInfo || !ingredient.IngredientInfo.CanBeChooped) {
             return;
         }
 

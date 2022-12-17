@@ -18,9 +18,8 @@ public static class UnityExtensions {
         return parent.GetAllChildren().Where(component => component.CompareTag(tag));
     }
 
-    public static IEnumerable<Transform> GetChildren(this Transform parent) {
-        return parent.Cast<Transform>();
-    }
+    public static IEnumerable<Transform> GetChildren(this Transform parent) => parent.Cast<Transform>();
+    public static IEnumerable<GameObject> GetChildren(this GameObject parent) => parent.transform.GetChildren().Select(transform => transform.gameObject);
     public static IEnumerable<Transform> GetAllChildren(this Transform parent) {
         foreach (Transform child in parent) {
             yield return child;
@@ -30,10 +29,7 @@ public static class UnityExtensions {
             }
         }
     }
-
-    public static IEnumerable<GameObject> GetAllChildren(this GameObject parent) {
-        return parent.transform.GetAllChildren().Select(e => e.gameObject);
-    }
+    public static IEnumerable<GameObject> GetAllChildren(this GameObject parent) => parent.transform.GetAllChildren().Select(transform => transform.gameObject);
 
     public static List<string> GetScenePath(this GameObject target, GameObject parent = null, bool includeTarget = true, bool includeParent = true) =>
         GetScenePath(target.transform, parent == null ? null : parent.transform, includeTarget, includeParent);
@@ -83,7 +79,7 @@ public static class UnityExtensions {
 
         return false;
     }
-    public static bool IsParentOf(this GameObject target, GameObject child) => IsParentOf(target.transform, child.transform);
+    public static bool IsParentOf(this GameObject target, GameObject child) => IsChildOf(target.transform, child.transform);
     public static bool IsParentOf(this Transform target, Transform child) => IsChildOf(child, target);
 
     public static Pose GetPose(this Transform transform) => new(transform.position, transform.rotation);

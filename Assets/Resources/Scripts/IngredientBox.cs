@@ -1,40 +1,44 @@
 using Photon.Pun;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class IngredientBox : MonoBehaviourGameStateCallbacks {
-    public GameObject ItemPrefab;
+public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
+    public GameObject IngredientPrefab;
     public IngredientInfo IngredientInfoPrefab;
     public Transform Socket;
 
-    private GameObject currentItem;
-    public GameObject CurrentItem {
-        get => currentItem;
+    private GameObject _CurrentIngredient;
+    public GameObject CurrentIngredient {
+        get => _CurrentIngredient;
         set {
-            currentItem = value;
+            _CurrentIngredient = value;
             if (value) {
-                CurrentItemRigidbody = CurrentItem.GetComponent<Rigidbody>();
-                CurrentItemInteractable = CurrentItem.GetComponent<XRBaseInteractable>();
+                CurrentIngredientRigidbody = CurrentIngredient.GetComponent<Rigidbody>();
+                CurrentIngredientInteractable = CurrentIngredient.GetComponent<XRBaseInteractable>();
             } else {
-                CurrentItemRigidbody = null;
-                CurrentItemInteractable = null;
+                CurrentIngredientRigidbody = null;
+                CurrentIngredientInteractable = null;
             }
         }
     }
-    private Rigidbody CurrentItemRigidbody;
-    private XRBaseInteractable CurrentItemInteractable;
+    private Rigidbody CurrentIngredientRigidbody;
+    private XRBaseInteractable CurrentIngredientInteractable;
+    private int CurrentIngredientColliders;
     private bool CurrentItemReentered;
+    private ICollection<Collider> StartingColliders = new HashSet<Collider>();
+    private ICollection<Collider> BlockingColliders = new HashSet<Collider>();
 
     protected virtual void Awake() {
         MasterClientOnly.AddTo(this);
     }
 
     protected virtual void Start() {
-        Debug.Assert(ItemPrefab.GetComponent<TransformParentSync>());
-        Debug.Assert(ItemPrefab.GetComponent<XRBaseInteractable>());
-        Debug.Assert(ItemPrefab.GetComponent<Rigidbody>());
-        Debug.Assert(ItemPrefab.GetComponent<TemporaryObject>());
+        Debug.Assert(IngredientPrefab.GetComponent<TransformParentSync>());
+        Debug.Assert(IngredientPrefab.GetComponent<XRBaseInteractable>());
+        Debug.Assert(IngredientPrefab.GetComponent<Rigidbody>());
+        Debug.Assert(IngredientPrefab.GetComponent<TemporaryObject>());
 
         if (Socket.childCount != 0) {
             Debug.LogError($"Children in {nameof(IngredientBox)} socket are invalid and will be removed.", Socket);
@@ -42,40 +46,61 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks {
                 Destroy(child);
             }
         }
+
+        if (CurrentIngredient) {
+            Destroy(CurrentIngredient);
+            GenerateIngredient();
+        }
     }
 
     public override void OnGameStarted() {
         base.OnGameStarted();
 
-        GenerateItem();
+        GenerateIngredient();
     }
 
     public override void OnGameStopped() {
         base.OnGameStarted();
 
-        if (CurrentItem) {
-            PhotonNetwork.Destroy(CurrentItem);
+        if (CurrentIngredient) {
+            PhotonNetwork.Destroy(CurrentIngredient);
         }
     }
 
     public void OnTriggerEnter(Collider other) {
-        if (CurrentItem && other.attachedRigidbody?.gameObject == CurrentItem) {
+        if (CurrentIngredient && other.attachedRigidbody?.gameObject == CurrentIngredient) {
+            CurrentIngredientColliders++;
             CurrentItemReentered = true;
+        } else if (!IsOwnCollider(other) && !other.isTrigger) {
+            BlockingColliders.Add(other);
         }
     }
     public void OnTriggerExit(Collider other) {
-        if (CurrentItem && other.attachedRigidbody?.gameObject == CurrentItem) {
+        if (CurrentIngredient && other.attachedRigidbody?.gameObject == CurrentIngredient) {
+            CurrentIngredientColliders--;
             CurrentItemReentered = false;
-            // for some reason the item exits once when grabbed and then immediatly reenters for a few frames before exiting again...
-            StartCoroutine(ItemMovedAwayReentrancyProtection());
+
+            if (CurrentIngredientColliders == 0) {
+                // for some reason the item exits once when grabbed and then immediatly reenters for a few frames before exiting again...
+                StartCoroutine(ItemMovedAwayReentrancyProtection());
+            }
+        } else {
+            BlockingColliders.Remove(other);
+            if (CurrentIngredient == null) {
+                GenerateIngredient();
+            }
         }
+    }
+
+    private bool IsOwnCollider(Collider collider) {
+        return collider.gameObject == gameObject || collider.gameObject.IsChildOf(gameObject);
     }
 
     private IEnumerator ItemMovedAwayReentrancyProtection() {
         yield return null;
         yield return null;
 
-        if (CurrentItem == null) {
+        if (CurrentIngredient == null) {
             yield break;
         }
 
@@ -84,21 +109,36 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks {
         }
     }
 
-    private void GenerateItem() {
+    private void GenerateIngredient() {
+        if (!PhotonNetwork.InRoom) {
+            return;
+        }
+
+        // Remove destroyed colliders
+        foreach (var collider in BlockingColliders) {
+            if (!collider) {
+                BlockingColliders.Remove(collider);
+            }
+        }
+
+        if (BlockingColliders.Count != 0) {
+            return;
+        }
+
         // Debug.Log("GenerateItem() " + Socket.transform.position);
         var ingredientInfoPrefabPath = ResourcePathUtils.GetPrefabPath(IngredientInfoPrefab.gameObject);
-        CurrentItem = PhotonNetwork.InstantiateRoomObject(ResourcePathUtils.GetPrefabPath(ItemPrefab), Socket.position, Socket.rotation, 0, new object[] { ingredientInfoPrefabPath });
-        CurrentItem.transform.SetParent(Socket.transform, true);
+        CurrentIngredient = PhotonNetwork.InstantiateRoomObject(ResourcePathUtils.GetPrefabPath(IngredientPrefab), Socket.position, Socket.rotation, 0, new object[] { ingredientInfoPrefabPath });
+        CurrentIngredient.transform.SetParent(Socket.transform, true);
 
-        CurrentItemInteractable.selectEntered.AddListener(OnCurrentSelectEntered);
+        CurrentIngredientInteractable.selectEntered.AddListener(OnCurrentSelectEntered);
     }
 
     private void OnCurrentSelectEntered(SelectEnterEventArgs args) => OnCurrentItemGrabbed();
 
     private void OnCurrentItemGrabbed() {
         // Debug.Log("OnCurrentItemGrabbed()");
-        CurrentItemInteractable.selectEntered.RemoveListener(OnCurrentSelectEntered);
-        CurrentItemInteractable.selectExited.AddListener(OnTakenItemReleased);
+        CurrentIngredientInteractable.selectEntered.RemoveListener(OnCurrentSelectEntered);
+        CurrentIngredientInteractable.selectExited.AddListener(OnTakenItemReleased);
     }
 
     private void OnTakenItemReleased(SelectExitEventArgs args) {
@@ -113,8 +153,16 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks {
     private void OnItemMovedAway() {
         // Debug.Log("OnItemMovedAway()");
 
-        CurrentItem.transform.SetParent(transform.parent, true);
-        CurrentItem = null;
-        GenerateItem();
+        CurrentIngredient.transform.SetParent(transform.parent, true);
+        CurrentIngredient = null;
+        GenerateIngredient();
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+        if (stream.IsWriting) {
+            stream.SendNext(PhotonView.Get(CurrentIngredient).ViewID);
+        } else {
+            CurrentIngredient = PhotonView.Find(stream.ReceiveNext<int>()).gameObject;
+        }
     }
 }

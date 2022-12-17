@@ -17,6 +17,12 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         Interactable.enabled = false;
     }
 
+    protected virtual void Start() {
+        if (IngredientInfo != null && !IngredientInfo.transform.IsChildOf(transform)) {
+            Initialize(IngredientInfo.gameObject);
+        }
+    }
+
     public IngredientState _CurrentState = IngredientState.RawUnchopped;
     public IngredientState CurrentState {
         get => _CurrentState;
@@ -38,28 +44,32 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         var activeModel = CurrentState.IsChopped ? IngredientInfo.ChoppedModel : IngredientInfo.RawModel;
         var unativeModel = activeModel == IngredientInfo.ChoppedModel ? IngredientInfo.RawModel : IngredientInfo.ChoppedModel;
 
-        unativeModel.SetActive(false);
-        activeModel.SetActive(true);
+        if (unativeModel) {
+            unativeModel.SetActive(false);
+        }
+        if (activeModel) {
+            activeModel.SetActive(true);
 
-        var renderers = activeModel.GetComponentsInChildren<Renderer>();
-        switch (CurrentState.CookingState) {
-            case CookingState.Raw:
-                // raw material is default and state cannot change back
-                break;
-            case CookingState.Cooked:
-                if (IngredientInfo.CookedMaterial) {
-                    foreach (var renderer in renderers) {
-                        renderer.material = IngredientInfo.CookedMaterial;
+            var renderers = activeModel.GetComponentsInChildren<Renderer>();
+            switch (CurrentState.CookingState) {
+                case CookingState.Raw:
+                    // raw material is default and state cannot change back
+                    break;
+                case CookingState.Cooked:
+                    if (IngredientInfo.CookedMaterial) {
+                        foreach (var renderer in renderers) {
+                            renderer.material = IngredientInfo.CookedMaterial;
+                        }
                     }
-                }
-                break;
-            case CookingState.Burnt:
-                if (IngredientInfo.BurntMaterial) {
-                    foreach (var renderer in renderers) {
-                        renderer.material = IngredientInfo.BurntMaterial;
+                    break;
+                case CookingState.Burnt:
+                    if (IngredientInfo.BurntMaterial) {
+                        foreach (var renderer in renderers) {
+                            renderer.material = IngredientInfo.BurntMaterial;
+                        }
                     }
-                }
-                break;
+                    break;
+            }
         }
     }
 
@@ -78,7 +88,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     }
 
     public void OnChopEnd() {
-        if (!ChopFlag) {
+        if (!ChopFlag && IngredientInfo.CanBeChooped) {
             Debug.Log("CHOP");
             photonView.RequestOwnership();
             RemainingChops = Math.Max(0, RemainingChops - 1);
@@ -92,6 +102,10 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     public void OnPhotonInstantiate(PhotonMessageInfo info) {
         var ingredientPath = info.photonView.InstantiationData[0] as string;
         var prefab = Resources.Load<GameObject>(ingredientPath);
+        Initialize(prefab);
+    }
+
+    private void Initialize(GameObject prefab) {
         IngredientInfo = Instantiate(prefab, transform).GetComponent<IngredientInfo>();
         RemainingChops = IngredientInfo.NumberOfCuts;
         Interactable.colliders.AddRange(IngredientInfo.GetComponentsInChildren<Collider>().Where(collider => !collider.isTrigger));

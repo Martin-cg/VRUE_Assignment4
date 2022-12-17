@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(Rigidbody))]
 public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     protected readonly IDictionary<GameObject, ContainedObject> Contents = new Dictionary<GameObject, ContainedObject>();
+    private readonly ISet<IXRSelectInteractable> BlockedInteractables = new HashSet<IXRSelectInteractable>();
 
     protected override void Awake() {
         base.Awake();
@@ -20,9 +22,14 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         return Contents.TryGetValue(interactable.transform.gameObject, out var obj) ? obj.AttachTransform : base.GetAttachTransform(interactable);
     }
 
+    public override bool CanHover(IXRHoverInteractable interactable) {
+        return base.CanHover(interactable) && interactable.transform.gameObject.HasComponent<Ingredient>();
+    }
     public override bool CanSelect(IXRSelectInteractable interactable) {
         // TODO: maybe limit to interactables that have been recently touched.
-        return (!interactable.isSelected || (IsSelecting(interactable) && interactable.interactorsSelecting.Count == 1)) && interactable.transform.gameObject.HasComponent<Ingredient>();
+        return (!interactable.isSelected || (IsSelecting(interactable) && interactable.interactorsSelecting.Count == 1))
+            && interactable.transform.gameObject.HasComponent<Ingredient>()
+            && !BlockedInteractables.Contains(interactable);
     }
 
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
@@ -42,12 +49,26 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
 
         foreach (var joint in GetComponents<FixedJoint>()) {
             if (expectedJoints.TryGetValue(joint, out var obj)) {
+                BlockInteractable(obj.Interactable);
                 interactionManager.SelectExit(this, obj.Interactable as IXRSelectInteractable);
                 UnstickObject(obj);
             } else {
                 Destroy(joint);
             }
         }
+    }
+
+    private void BlockInteractable(IXRSelectInteractable interactable) {
+        IEnumerator UnblockInteractableAfterTimeout() {
+            yield return new WaitForSeconds(0.3f);
+            UnblockInteractable(interactable);
+        }
+
+        BlockedInteractables.Add(interactable);
+        StartCoroutine(UnblockInteractableAfterTimeout());
+    }
+    private void UnblockInteractable(IXRSelectInteractable interactable) {
+        BlockedInteractables.Remove(interactable);
     }
 
     public void StickObject(GameObject gameObject) {
@@ -62,11 +83,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             Joint = this.gameObject.AddComponent<FixedJoint>()
         };
         obj.AttachTransform.parent = transform;
-
-        obj.Joint.enableCollision = false;
-        obj.Joint.autoConfigureConnectedAnchor = true;
-        obj.Joint.connectedBody = obj.Rigidbody;
-        obj.Joint.breakForce = 10;
 
         Debug.Assert(obj.Rigidbody != null, $"No {obj.Rigidbody.GetType().Name} on contained object", gameObject);
         Debug.Assert(obj.PhotonView != null, $"No {obj.PhotonView.GetType().Name} on contained object", gameObject);
@@ -87,13 +103,27 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         obj.PhotonView.RequestOwnership();
 
         obj.Rigidbody.isKinematic = false;
-        obj.Rigidbody.useGravity = true;
+        obj.Rigidbody.useGravity = false;
 
         // TODO resolve existing collision
 
         var attachPose = CaptureAttachPose(obj);
-        obj.AttachTransform.localPosition = attachPose.position;
-        obj.AttachTransform.localRotation = attachPose.rotation;
+        obj.AttachTransform.SetLocalPose(attachPose);
+
+        obj.Joint.enableCollision = false;
+        obj.Joint.autoConfigureConnectedAnchor = true;
+        obj.Joint.connectedBody = obj.Rigidbody;
+        obj.Joint.connectedAnchor = obj.Rigidbody.transform.InverseTransformPoint(obj.AttachTransform.transform.position);
+        obj.Interactable.attachEaseInTime = 0;
+
+        StartCoroutine(DelayAllowJointBreak());
+
+        IEnumerator DelayAllowJointBreak() {
+            yield return new WaitForSeconds(obj.Interactable.attachEaseInTime + 0.1f);
+            if (obj.Joint) {
+                obj.Joint.breakForce = 100;
+            }
+        }
     }
 
     protected virtual Pose CaptureAttachPose(ContainedObject obj) {

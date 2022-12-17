@@ -46,11 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01dc59c0c8746064f9dbbd32e43ef7c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayName: Carrot
   NumberOfCuts: 10
   RawModel: {fileID: 2600328257289405471}
   ChoppedModel: {fileID: 1373472096269849057}
   CookedMaterial: {fileID: 0}
   BurntMaterial: {fileID: 2100000, guid: 0a27a5ea91ad9d74883ac61a8f1b4efc, type: 2}
+  CanBeChooped: 1
+  CanBeCooked: 1
+  CanBeBurnt: 1
 --- !u!1 &1373472096269849057
 GameObject:
   m_ObjectHideFlags: 0
@@ -66,7 +70,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8639692493895890912
 Transform:
   m_ObjectHideFlags: 0
