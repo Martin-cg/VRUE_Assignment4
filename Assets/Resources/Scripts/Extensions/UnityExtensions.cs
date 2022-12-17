@@ -91,4 +91,11 @@ public static class UnityExtensions {
         transform.localPosition = pose.position;
         transform.localRotation = pose.rotation;
     }
+
+    public static void SetLayerRecursively(this GameObject target, int layerMask) {
+        target.layer = layerMask;
+        foreach (var child in target.GetAllChildren()) {
+            child.layer = layerMask;
+        }
+    }
 }

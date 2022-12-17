@@ -7,11 +7,19 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Rigidbody))]
 public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
+    public float RestickDelay = 1;
+    public float ReenableCollisionDelay = 0.5f;
+    public bool MakeAttachKinematic;
+
+    public Rigidbody Rigidbody;
     protected readonly IDictionary<GameObject, ContainedObject> Contents = new Dictionary<GameObject, ContainedObject>();
-    private readonly ISet<IXRSelectInteractable> BlockedInteractables = new HashSet<IXRSelectInteractable>();
+    protected readonly IDictionary<GameObject, ContainedObject> HoveredContents = new Dictionary<GameObject, ContainedObject>();
+    private readonly ISet<IXRInteractable> BlockedInteractables = new HashSet<IXRInteractable>();
 
     protected override void Awake() {
         base.Awake();
+
+        Rigidbody = GetComponent<Rigidbody>();
 
         if (GetComponent<XRBaseInteractable>()) {
             gameObject.GetOrAddComponent<SynchronizedMoveableSocketInteractor>();
@@ -44,31 +52,10 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         UnstickObject(args.interactableObject.transform.gameObject);
     }
 
-    private void OnJointBreak(float breakForce) {
-        var expectedJoints = Contents.Values.ToDictionary(e => e.Joint);
-
-        foreach (var joint in GetComponents<FixedJoint>()) {
-            if (expectedJoints.TryGetValue(joint, out var obj)) {
-                BlockInteractable(obj.Interactable);
-                interactionManager.SelectExit(this, obj.Interactable as IXRSelectInteractable);
-                UnstickObject(obj);
-            } else {
-                Destroy(joint);
-            }
-        }
-    }
-
-    private void BlockInteractable(IXRSelectInteractable interactable) {
-        IEnumerator UnblockInteractableAfterTimeout() {
-            yield return new WaitForSeconds(0.3f);
-            UnblockInteractable(interactable);
-        }
-
-        BlockedInteractables.Add(interactable);
-        StartCoroutine(UnblockInteractableAfterTimeout());
-    }
-    private void UnblockInteractable(IXRSelectInteractable interactable) {
-        BlockedInteractables.Remove(interactable);
+    private void OnJointBroken(ContainedObject obj, float breakForce) {
+        Debug.LogWarning("OnJointBroken()");
+        interactionManager.SelectExit(this, obj.Interactable as IXRSelectInteractable);
+        UnstickObject(obj);
     }
 
     public void StickObject(GameObject gameObject) {
@@ -80,7 +67,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             PhotonView = gameObject.GetComponent<PhotonView>(), // We use this istead of PhotonView.Get(gameObject) because we want to assert that the view is present in the object itself.
             Interactable = gameObject.GetComponent<XRGrabInteractable>(),
             AttachTransform = new GameObject($"[Attach] {gameObject.name}").transform,
-            Joint = this.gameObject.AddComponent<FixedJoint>()
+            Joint = null
         };
         obj.AttachTransform.parent = transform;
 
@@ -100,28 +87,40 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     protected virtual void OnStickObject(ContainedObject obj) {
+        Debug.LogWarning("OnStickObject() " + obj.GameObject.name);
+
         obj.PhotonView.RequestOwnership();
 
-        obj.Rigidbody.isKinematic = false;
-        obj.Rigidbody.useGravity = false;
-
+        obj.Rigidbody.gameObject.SetLayerRecursively(Layers.IngredientsOnPlate);
         // TODO resolve existing collision
 
         var attachPose = CaptureAttachPose(obj);
         obj.AttachTransform.SetLocalPose(attachPose);
 
-        obj.Joint.enableCollision = false;
-        obj.Joint.autoConfigureConnectedAnchor = true;
-        obj.Joint.connectedBody = obj.Rigidbody;
-        obj.Joint.connectedAnchor = obj.Rigidbody.transform.InverseTransformPoint(obj.AttachTransform.transform.position);
-        obj.Interactable.attachEaseInTime = 0;
+        StartCoroutine(DelayAttachJoint());
 
-        StartCoroutine(DelayAllowJointBreak());
-
-        IEnumerator DelayAllowJointBreak() {
+        IEnumerator DelayAttachJoint() {
             yield return new WaitForSeconds(obj.Interactable.attachEaseInTime + 0.1f);
-            if (obj.Joint) {
-                obj.Joint.breakForce = 100;
+
+            if (!Contents.TryGetValue(obj.GameObject, out var contained) || contained != obj) {
+                yield break;
+            }
+
+            obj.Rigidbody.isKinematic = false;
+
+            /*
+            obj.Joint = obj.Rigidbody.gameObject.AddComponent<FixedJoint>();
+            var eventEmitter = obj.Rigidbody.gameObject.AddComponent<FixedJointEventEmitter>();
+            eventEmitter.OnJointBroken.AddListener(breakForce => OnJointBroken(obj, breakForce));
+            obj.Joint.enableCollision = false;
+            obj.Joint.connectedBody = Rigidbody;
+            // obj.Joint.connectedAnchor =  obj.AttachTransform.transform.position;
+            obj.Joint.breakForce = 100;
+            obj.Joint.massScale = 0;
+            */
+
+            if (obj.Rigidbody) {
+                // obj.Rigidbody.isKinematic = false;
             }
         }
     }
@@ -147,8 +146,44 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         OnUnstickObject(obj);
     }
     protected virtual void OnUnstickObject(ContainedObject obj) {
-        Destroy(obj.Joint);
+        Debug.LogWarning("OnUnstickObject() " + obj.GameObject.name);
+
+        if (obj.Joint) {
+            obj.Joint.connectedBody = null;
+            Destroy(obj.Joint);
+        }
         Destroy(obj.AttachTransform.gameObject);
+
+        obj.Rigidbody.isKinematic = false;
+        BlockedInteractables.Add(obj.Interactable);
+        HoveredContents.TryAdd(obj.GameObject, obj);
+        StartCoroutine(ResetInteractableDelayed());
+
+        IEnumerator ResetInteractableDelayed() {
+            yield return new WaitForSeconds(1f);
+            ResetInteractable(obj.Interactable);
+        }
+    }
+
+    protected override void OnHoverEntered(HoverEnterEventArgs args) {
+        base.OnHoverEntered(args);
+    }
+
+    protected override void OnHoverExited(HoverExitEventArgs args) {
+        base.OnHoverExited(args);
+
+        ResetInteractable(args.interactableObject);
+    }
+
+    private void ResetInteractable(IXRInteractable interactable) {
+        BlockedInteractables.Remove(interactable);
+        if (HoveredContents.Remove(interactable.transform.gameObject, out var obj)) {
+            if (obj.Rigidbody.gameObject.layer != Layers.IngredientsOnPlate) {
+                return;
+            }
+
+            obj.Rigidbody.gameObject.SetLayerRecursively(Layers.Ingredients);
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
