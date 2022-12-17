@@ -226,10 +226,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -21.041
       objectReference: {fileID: 0}
+    - target: {fileID: -7708148502096698544, guid: fb02bed0dc43b9f4baff9e5f555db919,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fb02bed0dc43b9f4baff9e5f555db919,
         type: 3}
       propertyPath: m_Name
       value: tomato_cut05_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fb02bed0dc43b9f4baff9e5f555db919,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb02bed0dc43b9f4baff9e5f555db919, type: 3}
@@ -321,10 +331,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 7.476
       objectReference: {fileID: 0}
+    - target: {fileID: -382470606130257702, guid: eabc88fbf6116f545b0093f3981acdd6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: eabc88fbf6116f545b0093f3981acdd6,
         type: 3}
       propertyPath: m_Name
       value: tomato_cut06_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eabc88fbf6116f545b0093f3981acdd6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eabc88fbf6116f545b0093f3981acdd6, type: 3}
@@ -421,6 +441,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: tomato_cut03_low
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fb90f4bfa7bdb054d9d8def4d7672b3f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284025368026184426, guid: fb90f4bfa7bdb054d9d8def4d7672b3f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb90f4bfa7bdb054d9d8def4d7672b3f, type: 3}
 --- !u!1 &3277166187146204064 stripped
@@ -511,10 +541,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.461
       objectReference: {fileID: 0}
+    - target: {fileID: -804804336813416787, guid: 46d2ce4adc3cab648882ffff903d73d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 46d2ce4adc3cab648882ffff903d73d2,
         type: 3}
       propertyPath: m_Name
       value: tomato_cut04_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 46d2ce4adc3cab648882ffff903d73d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d2ce4adc3cab648882ffff903d73d2, type: 3}
@@ -610,6 +650,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tomato_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7d7a991e154f5d84b93e7dcc813c8d26,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d7a991e154f5d84b93e7dcc813c8d26, type: 3}

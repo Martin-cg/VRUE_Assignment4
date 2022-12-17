@@ -203,6 +203,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: meat_low
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 00e3bac3999db4c43bab1362d251d56a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759485096731048614, guid: 00e3bac3999db4c43bab1362d251d56a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00e3bac3999db4c43bab1362d251d56a, type: 3}
 --- !u!4 &762198294027520772 stripped
@@ -293,10 +303,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7866678307096056811, guid: 508f5d6f00361444286716871705b841,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 508f5d6f00361444286716871705b841,
         type: 3}
       propertyPath: m_Name
       value: meat_cut07_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 508f5d6f00361444286716871705b841,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 508f5d6f00361444286716871705b841, type: 3}
@@ -388,10 +408,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4162589940245915296, guid: 42407b336f52ee748ad1a1ec8065bcf2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 42407b336f52ee748ad1a1ec8065bcf2,
         type: 3}
       propertyPath: m_Name
       value: meat_cut06_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 42407b336f52ee748ad1a1ec8065bcf2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42407b336f52ee748ad1a1ec8065bcf2, type: 3}
@@ -483,10 +513,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7399822294041130778, guid: 2029da7d50b3b7748abaab129bfc75e6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2029da7d50b3b7748abaab129bfc75e6,
         type: 3}
       propertyPath: m_Name
       value: meat_cut05_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2029da7d50b3b7748abaab129bfc75e6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2029da7d50b3b7748abaab129bfc75e6, type: 3}
@@ -578,10 +618,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3396333473232477235, guid: cf73758d83a692d40ad49e00681af9cf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: cf73758d83a692d40ad49e00681af9cf,
         type: 3}
       propertyPath: m_Name
       value: meat_cut04_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cf73758d83a692d40ad49e00681af9cf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf73758d83a692d40ad49e00681af9cf, type: 3}
