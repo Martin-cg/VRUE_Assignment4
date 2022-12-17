@@ -32,7 +32,6 @@ public class TransformParentSync : SynchronizedRoomObject {
             return;
         }
 
-        var path = gameObject.GetScenePathString(null, false);
         ScenePath.SetValue(gameObject.GetScenePath(null, false).ToArray(), notifyLocal: false, notifyRemote: true);
     }
 }
