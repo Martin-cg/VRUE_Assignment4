@@ -108,7 +108,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     private void Initialize(GameObject prefab) {
         IngredientInfo = Instantiate(prefab, transform).GetComponent<IngredientInfo>();
         RemainingChops = IngredientInfo.NumberOfCuts;
-        Interactable.colliders.AddRange(IngredientInfo.GetComponentsInChildren<Collider>().Where(collider => !collider.isTrigger));
+        Interactable.colliders.AddRange(IngredientInfo.GetComponents<Collider>().Where(collider => collider.isTrigger));
         Interactable.enabled = true;
         UpdateModelState();
     }

@@ -97,14 +97,10 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
     }
 
     private IEnumerator ItemMovedAwayReentrancyProtection() {
-        yield return null;
-        yield return null;
+        yield return new WaitForSeconds(0.5F);
 
-        if (CurrentIngredient == null) {
-            yield break;
-        }
-
-        if (!CurrentItemReentered) {
+        if (CurrentIngredientColliders == 0) {
+            Debug.Log("Debounce Complete. Generating new ingredient.");
             OnItemMovedAway();
         }
     }
