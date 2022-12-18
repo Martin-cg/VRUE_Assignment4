@@ -1,11 +1,19 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class IngredientChopper : MonoBehaviour {
     private readonly Dictionary<Ingredient, int> Chopping = new();
+    private static int[] IngredientLayers;
+
+    protected virtual void Awake() {
+        if (IngredientLayers == null) {
+            IngredientLayers = new int[] { Layers.Ingredients, Layers.IngredientsOnPlate };
+        }
+    }
 
     protected virtual void OnTriggerEnter(Collider collider) {
-        if (collider.gameObject.layer != Layers.Ingredients) {
+        if (!IngredientLayers.Contains(collider.gameObject.layer)) {
             return;
         }
 
@@ -21,7 +29,7 @@ public class IngredientChopper : MonoBehaviour {
     }
 
     protected virtual void OnTriggerExit(Collider collider) {
-        if (collider.gameObject.layer != Layers.Ingredients) {
+        if (!IngredientLayers.Contains(collider.gameObject.layer)) {
             return;
         }
 

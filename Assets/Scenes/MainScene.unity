@@ -1671,8 +1671,8 @@ Transform:
   - {fileID: 1128685088}
   - {fileID: 1051958765}
   - {fileID: 1636932660}
-  - {fileID: 1396714097}
   - {fileID: 1329327188}
+  - {fileID: 1396714097}
   - {fileID: 1505307166}
   m_Father: {fileID: 1368641780}
   m_RootOrder: 2
@@ -5123,7 +5123,7 @@ PrefabInstance:
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
@@ -5138,7 +5138,7 @@ PrefabInstance:
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.481
+      value: -0.242
       objectReference: {fileID: 0}
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}

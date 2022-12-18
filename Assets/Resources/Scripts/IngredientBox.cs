@@ -15,18 +15,14 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
         set {
             _CurrentIngredient = value;
             if (value) {
-                CurrentIngredientRigidbody = CurrentIngredient.GetComponent<Rigidbody>();
                 CurrentIngredientInteractable = CurrentIngredient.GetComponent<XRBaseInteractable>();
             } else {
-                CurrentIngredientRigidbody = null;
                 CurrentIngredientInteractable = null;
             }
         }
     }
-    private Rigidbody CurrentIngredientRigidbody;
     private XRBaseInteractable CurrentIngredientInteractable;
     private int CurrentIngredientColliders;
-    private ICollection<Collider> StartingColliders = new HashSet<Collider>();
     private ICollection<Collider> BlockingColliders = new HashSet<Collider>();
 
     protected virtual void Awake() {
@@ -34,17 +30,9 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
     }
 
     protected virtual void Start() {
-        Debug.Assert(IngredientPrefab.GetComponent<TransformParentSync>());
         Debug.Assert(IngredientPrefab.GetComponent<XRBaseInteractable>());
         Debug.Assert(IngredientPrefab.GetComponent<Rigidbody>());
         Debug.Assert(IngredientPrefab.GetComponent<TemporaryObject>());
-
-        if (Socket.childCount != 0) {
-            Debug.LogError($"Children in {nameof(IngredientBox)} socket are invalid and will be removed.", Socket);
-            foreach (var child in Socket.GetChildren()) {
-                Destroy(child);
-            }
-        }
 
         if (CurrentIngredient) {
             Destroy(CurrentIngredient);
@@ -121,7 +109,6 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
         // Debug.Log("GenerateItem() " + Socket.transform.position);
         var ingredientInfoPrefabPath = ResourcePathUtils.GetPrefabPath(IngredientInfoPrefab.gameObject);
         CurrentIngredient = PhotonNetwork.InstantiateRoomObject(ResourcePathUtils.GetPrefabPath(IngredientPrefab), Socket.position, Socket.rotation, 0, new object[] { ingredientInfoPrefabPath });
-        CurrentIngredient.transform.SetParent(Socket.transform, true);
 
         CurrentIngredientInteractable.selectEntered.AddListener(OnCurrentSelectEntered);
     }
@@ -140,13 +127,11 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
         var obj = interactable.transform.gameObject;
 
         interactable.selectExited.RemoveListener(OnTakenItemReleased);
-        obj.transform.SetParent(transform.parent, true);
     }
 
     private void OnItemMovedAway() {
         // Debug.Log("OnItemMovedAway()");
 
-        CurrentIngredient.transform.SetParent(transform.parent, true);
         CurrentIngredient = null;
         GenerateIngredient();
     }
