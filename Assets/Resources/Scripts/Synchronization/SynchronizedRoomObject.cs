@@ -21,7 +21,8 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     }
 
     protected virtual void Start() {
-        ScenePath = gameObject.GetScenePathString(null, true, true, KeySeparator);
+        var parentView = photonView ? photonView.gameObject : null;
+        ScenePath = gameObject.GetScenePathString(parentView, true, true, KeySeparator);
         BehaviourName = GetType().FullName;
 
         Started = true;
@@ -69,10 +70,18 @@ public class SynchronizedRoomObject : MonoBehaviourPunCallbacks {
     }
 
     private string GetKeyForName(string name) {
-        var key = ScenePath + KeySeparator + name;
+        string key = "";
+
+        if (photonView) {
+            key += photonView.ViewID + KeySeparator + KeySeparator;
+        }
+
+        key += ScenePath + KeySeparator + name;
+
         if (!ShareAcrossBehavioursOnSameObject) {
             key += KeySeparator + BehaviourName;
         }
+
         return key;
     }
 

@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Filtering;
@@ -8,7 +9,8 @@ using UnityEngine.XR.Interaction.Toolkit.Filtering;
 [RequireComponent(typeof(XRSocketInteractor))]
 public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFilter {
     private XRSocketInteractor Socket;
-    private SynchronizedRoomProperty<int?> CurrentInteractable;
+    private SynchronizedRoomProperty<int[]> CurrentInteractables;
+    private int[] OldInteractables = new int[0];
 
     public bool canProcess => true;
 
@@ -21,7 +23,6 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
             Socket.selectEntered.RemoveListener(OnSelectEnter);
             Socket.selectExited.RemoveListener(OnSelectExit);
 
-            // Socket.hoverFilters.Remove(this);
             Socket.selectFilters.Remove(this);
         }
     }
@@ -31,28 +32,36 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
 
         FindSocket();
 
-        CurrentInteractable = RegisterProperty<int?>(nameof(CurrentInteractable), null);
-        CurrentInteractable.ValueChanged += OnCurrentInteractableRoomPropertyChanged;
+        CurrentInteractables = RegisterProperty<int[]>(nameof(CurrentInteractables), null);
+        CurrentInteractables.ValueChanged += OnCurrentInteractablesRoomPropertyChanged;
 
         Socket.selectEntered.AddListener(OnSelectEnter);
         Socket.selectExited.AddListener(OnSelectExit);
 
-        // Socket.hoverFilters.Add(this);
         Socket.selectFilters.Add(this);
 
-        if (Socket.firstInteractableSelected != null) {
-            OnLocalInteractableEntered(Socket.firstInteractableSelected);
+        foreach (var interactable in Socket.interactablesSelected) {
+            OnLocalInteractableEntered(interactable);
         }
     }
 
-    private void OnCurrentInteractableRoomPropertyChanged(object sender, int? sceneViewId) {
-        if (sceneViewId.HasValue) {
-            var photonView = PhotonView.Find(sceneViewId.Value);
+    private void OnCurrentInteractablesRoomPropertyChanged(object sender, int[] sceneViewIds) {
+        var toRemove = OldInteractables.Except(sceneViewIds);
+        var toAdd = sceneViewIds.Except(OldInteractables);
+
+        foreach (var viewId in toRemove) {
+            var photonView = PhotonView.Find(viewId);
+            var interactable = photonView.GetComponent<XRGrabInteractable>();
+            OnRemoteInteractableExited(interactable);
+        }
+
+        foreach (var viewId in toAdd) {
+            var photonView = PhotonView.Find(viewId);
             var interactable = photonView.GetComponent<XRGrabInteractable>();
             OnRemoteInteractableEntered(interactable);
-        } else {
-            OnRemoteInteractableExited();
         }
+
+        OldInteractables = sceneViewIds;
     }
 
     private void FindSocket() {
@@ -77,28 +86,12 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
         // interactable.transform.parent = Socket.attachTransform;
     }
 
-    private void OnRemoteInteractableExited() {
+    private void OnRemoteInteractableExited(IXRSelectInteractable interactable) {
         if (!Socket.hasSelection) {
             return;
         }
 
-        var interactable = Socket.firstInteractableSelected;
-        // TODO: what of this madness is actually required
         Socket.interactionManager.SelectExit(Socket, interactable);
-        /*Socket.socketActive = false;
-        Socket.allowHover = false;
-        Socket.allowSelect = false;
-        var layers = Socket.interactionLayers;
-        Socket.interactionLayers = 0;
-        Socket.interactionManager.CancelInteractorSelection((IXRSelectInteractor) Socket);
-        Socket.interactionManager.CancelInteractableSelection(interactable);
-        Socket.interactionManager.CancelInteractorHover((IXRHoverInteractor) Socket);
-        Socket.interactionManager.CancelInteractableHover((IXRHoverInteractable) interactable);
-        Socket.socketActive = true;
-        Socket.allowHover = true;
-        Socket.allowSelect = true;
-        Socket.interactionLayers = layers;*/
-        // interactable.transform.parent = null;
     }
 
     private void OnLocalInteractableEntered(IXRSelectInteractable interactable) {
@@ -116,19 +109,12 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
     private IEnumerator UpdateSynchronizedProperty() {
         yield return null;
 
-        switch (Socket.firstInteractableSelected) {
-            case IXRSelectInteractable interactable:
-                var photonView = PhotonView.Get(interactable.transform);
-                CurrentInteractable.SetValue(photonView.ViewID);
-                break;
-            case null:
-                CurrentInteractable.SetValue(null);
-                break;
-        }
+        var viewIds = Socket.interactablesSelected.Select(interactable => PhotonView.Get(interactable.transform).sceneViewId).ToArray();
+        CurrentInteractables.SetValue(viewIds);
     }
 
     public bool Process(IXRSelectInteractor interactor, IXRSelectInteractable interactable) {
         var photonView = PhotonView.Get(interactable.transform);
-        return photonView.IsMine || photonView.ViewID == CurrentInteractable.Value;
+        return photonView.IsMine || CurrentInteractables.Value.Contains(photonView.ViewID);
     }
 }

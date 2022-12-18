@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 518205681945652252}
   - component: {fileID: 617357935547911097}
   - component: {fileID: 6970388612055319832}
+  - component: {fileID: 2161242527554592468}
   - component: {fileID: 3632029744936309114}
   - component: {fileID: 4465974193655707771}
   - component: {fileID: 62990053196127293}
@@ -181,6 +182,22 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &2161242527554592468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5345153972189096749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!114 &3632029744936309114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +235,7 @@ MonoBehaviour:
   OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 2161242527554592468}
   - {fileID: 3632029744936309114}
   - {fileID: 62990053196127293}
   - {fileID: 5551435737435507894}
@@ -231,7 +249,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5345153972189096749}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
   m_Name: 
