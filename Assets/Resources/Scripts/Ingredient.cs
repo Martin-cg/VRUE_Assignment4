@@ -144,7 +144,6 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     public void OnChopEnd() {
         if (!ChopFlag && IngredientInfo.CanBeChooped) {
-            Debug.Log("CHOP");
             photonView.RequestOwnership();
             RemainingChops = Math.Max(0, RemainingChops - 1);
             if (RemainingChops == 0) {
