@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
 
@@ -26,6 +27,10 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
 
     public long OrderExpiryBase = 10000;
     public long OrderExpiryIngredientScale = 20000;
+
+    public float PointsMultiplier = 10.0f;
+
+    public UnityEvent<float> PointsAwarded;
 
     public override void OnGameStarted() {
         base.OnGameStarted();
@@ -85,6 +90,67 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
 
     public void HandleNewDish(Recipe NewDish) {
         Debug.Log("NEW DISH!!!");
+
+        bool matched = false;
+        float points = 0.0F;
+        for (int i = 0; i < Orders.Count; i++) {
+            Recipe OrderRecipe = Orders[i].Recipe;
+            points = (1.0F - Orders[i].ExpirationProgress) * PointsMultiplier;
+
+            if (CheckDishEquality(OrderRecipe, NewDish)) {
+                matched = true;
+                Orders.Remove(Orders[i]);
+                break;
+            }
+        }
+
+        if (matched) {
+            Debug.Log("AWARDING POINTS");
+            PointsAwarded.Invoke(points);
+
+        } else {
+            Debug.Log("DISH NOT FOUND");
+        }
+    }
+
+    private bool CheckDishEquality(Recipe r1, Recipe r2) {
+        r1.Ingredients.Sort((a, b) => {
+            return a.IngredientName.CompareTo(b.IngredientName);
+        });
+
+        r2.Ingredients.Sort((a, b) => {
+            return a.IngredientName.CompareTo(b.IngredientName);
+        });
+
+        Debug.Log("CHECKING DISH 1: " + r1.ToString());
+        Debug.Log("AGAINST");
+        Debug.Log("CHECKING DISH 2: " + r2.ToString());
+
+        bool matches = true;
+
+        if (r1.Ingredients.Count == r2.Ingredients.Count) {
+            for (int i = 0; i < r1.Ingredients.Count; i++) {
+                Recipe.Ingredient r1Ingredient = r1.Ingredients[i];
+                Recipe.Ingredient r2Ingredient = r2.Ingredients[i];
+
+                if (!r1Ingredient.IngredientName.Equals(r2Ingredient.IngredientName)) {
+                    Debug.Log("DISHCHECKER SAYS NO! MISMATCHING INGREDIENT NAME: " + r1Ingredient.IngredientName + " != " + r2Ingredient.IngredientName);
+                    matches = false;
+                } else if (r1Ingredient.IsChopped != r2Ingredient.IsChopped) {
+                    Debug.Log("DISHCHECKER SAYS NO! MISMATCHING INGREDIENT CHOP: " + r1Ingredient.IsChopped + " != " + r2Ingredient.IsChopped);
+                    matches = false;
+                } else if (r1Ingredient.CookingState != r2Ingredient.CookingState) {
+                    Debug.Log("DISHCHECKER SAYS NO! MISMATCHING INGREDIENT COOKINGSTATE: " + r1Ingredient.CookingState + " != " + r2Ingredient.CookingState);
+                    matches = false;
+                }
+            }
+
+        } else {
+            Debug.Log("DISHCHECKER SAYS NO! MISMATCHING INGREDIENT COUNT: " + r1.Ingredients.Count + " != " + r2.Ingredients.Count);
+            matches = false;
+        }
+
+        return matches;
     }
 
     private void PrintDebugOutput() {
@@ -137,19 +203,6 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
 
             return r;
         });
-
-        //string presets = string.Join("\n", Presets.ConvertAll(p => {
-        //    string s = "PRESET: " + p.Root.name + "\n";
-        //    s += string.Join("\n", p.Ingredients.ToList().ConvertAll(entry => {
-        //        string s = "\tIngredient: " + entry.Key + "\n";
-        //        s += "\tInfo:" + "\n";
-        //        s += "\t\tIsChopped: " + entry.Value.Requirement.IsChopped + "\n";
-        //        s += "\t\tCookingState: " + entry.Value.Requirement.CookingState + "\n";
-        //        return s;
-        //    }));
-        //    return s;
-        //}));
-        //Debug.Log(presets);
 
         Initialized = true;
     }
