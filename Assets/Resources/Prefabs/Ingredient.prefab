@@ -195,6 +195,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IngredientInfo: {fileID: 0}
   Interactable: {fileID: 6970388612055319832}
+  ProgressCapsuleOffset: {x: 0, y: 0.25, z: 0}
+  RemainingChops: 0
 --- !u!114 &4465974193655707771
 MonoBehaviour:
   m_ObjectHideFlags: 0

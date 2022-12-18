@@ -11,6 +11,11 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     public IngredientInfo IngredientInfo;
     public XRBaseInteractable Interactable;
 
+    public Vector3 ProgressCapsuleOffset = new Vector3(0.0F, 0.25F, 0.0F);
+    private GameObject ProgressCapsule;
+    private ProgressCapsuleManager ProgressCapsuleManager;
+    
+    [SerializeField]
     private int RemainingChops;
 
     protected virtual void Awake() {
@@ -21,6 +26,9 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         if (IngredientInfo != null && !IngredientInfo.transform.IsChildOf(transform)) {
             Initialize(IngredientInfo.gameObject);
         }
+        ProgressCapsule = Instantiate(Resources.Load<GameObject>("Prefabs/3D ProgressCapsule"));
+        ProgressCapsule.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        ProgressCapsuleManager = ProgressCapsule.GetComponent<ProgressCapsuleManager>();
     }
 
     public IngredientState _CurrentState = IngredientState.RawUnchopped;
@@ -33,6 +41,14 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
             _CurrentState = value;
             UpdateModelState();
+        }
+    }
+
+    void Update() {
+        ProgressCapsule.transform.position = transform.position + ProgressCapsuleOffset;
+
+        if (IngredientInfo.NumberOfCuts > 0) {
+            ProgressCapsuleManager.Progress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
         }
     }
 
