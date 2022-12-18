@@ -47,7 +47,7 @@ public class Character : MonoBehaviour, IPunInstantiateMagicCallback {
         _Role = newRole;
 
         Debug.Log($"{name} switched to role {newRole}");
-        if (Player != null) {
+        if (Player != null && Player.IsLocal) {
             Player.SetCustomProperties(new Hashtable() { [nameof(Role)] = newRole });
         }
         RoleChanged.Invoke(newRole);

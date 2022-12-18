@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
-using System;
 
 [DisallowMultipleComponent]
 public class ChefHatOnCharacterSocket : XRSocketInteractor {
@@ -48,10 +47,6 @@ public class ChefHatOnCharacterSocket : XRSocketInteractor {
     protected override void OnSelectExited(SelectExitEventArgs args) {
         base.OnSelectExited(args);
 
-        UpdateRole();
-    }
-
-    protected virtual void Update() {
         UpdateRole();
     }
 

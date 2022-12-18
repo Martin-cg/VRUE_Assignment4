@@ -32,7 +32,7 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
 
         FindSocket();
 
-        CurrentInteractables = RegisterProperty<int[]>(nameof(CurrentInteractables), new int[0]);
+        CurrentInteractables = RegisterProperty(nameof(CurrentInteractables), new int[0]);
         CurrentInteractables.ValueChanged += OnCurrentInteractablesRoomPropertyChanged;
 
         Socket.selectEntered.AddListener(OnSelectEnter);
