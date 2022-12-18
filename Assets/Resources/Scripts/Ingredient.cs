@@ -48,7 +48,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     }
 
     void Update() {
-        ProgressCapsule.transform.position = transform.position + ChoppingProgressCapsuleOffset;
+        ProgressCapsule.transform.position = transform.position + ProgressCapsuleOffset;
 
         if (IngredientInfo.NumberOfCuts > 0) {
             ProgressCapsuleManager.Progress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
