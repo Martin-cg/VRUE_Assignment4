@@ -14,6 +14,7 @@ public static class Utils {
         Transform current = root;
         if (root == null) {
             var rootName = scenePath.FirstOrDefault();
+            scenePath = scenePath.Skip(1);
             if (rootName == null) {
                 return null;
             }
