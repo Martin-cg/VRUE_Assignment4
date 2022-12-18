@@ -33,24 +33,23 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
         Debug.Assert(IngredientPrefab.GetComponent<XRBaseInteractable>());
         Debug.Assert(IngredientPrefab.GetComponent<Rigidbody>());
         Debug.Assert(IngredientPrefab.GetComponent<TemporaryObject>());
-
-        if (CurrentIngredient) {
-            Destroy(CurrentIngredient);
-            GenerateIngredient();
-        }
     }
 
     public override void OnGameStarted() {
         base.OnGameStarted();
 
-        GenerateIngredient();
+        if (PhotonNetwork.IsMasterClient) {
+            GenerateIngredient();
+        }
     }
 
     public override void OnGameStopped() {
         base.OnGameStarted();
 
-        if (CurrentIngredient) {
-            PhotonNetwork.Destroy(CurrentIngredient);
+        if (PhotonNetwork.IsMasterClient) {
+            if (CurrentIngredient) {
+                PhotonNetwork.Destroy(CurrentIngredient);
+            }
         }
     }
 
