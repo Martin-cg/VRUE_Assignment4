@@ -151,5 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f905945d75b04438630040f2a5d30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HideTimeoutMS: 2000
   _Progress: 0
   Capsule: {fileID: 5678237437763026830}
+  _ProgressColor: {r: 0, g: 0, b: 0, a: 0}
