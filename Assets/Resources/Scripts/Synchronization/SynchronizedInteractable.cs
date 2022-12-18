@@ -31,8 +31,18 @@ public class SynchronizedInteractable : MonoBehaviourPun {
         }
 
         photonView.RequestOwnership();
+        photonView.RPC(nameof(ForceDropInteractable), RpcTarget.Others);
         // RequestOwnership does not update IsMine immediatly, which confuses our other scripts for a few frames.
         typeof(PhotonView).GetProperty(nameof(photonView.IsMine)).SetValue(photonView, true);
         Debug.Assert(photonView.IsMine);
+    }
+
+    [PunRPC]
+    private void ForceDropInteractable() {
+        foreach (var interactor in Interactable.interactorsSelecting) {
+            if (LocalCharacter.Instance.Rig.transform.IsParentOf(interactor.transform)) {
+                Interactable.interactionManager.SelectExit(interactor, Interactable);
+            }
+        }
     }
 }

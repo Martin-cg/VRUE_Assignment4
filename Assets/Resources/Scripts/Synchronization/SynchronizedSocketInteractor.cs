@@ -101,7 +101,7 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
 
     private void OnLocalInteractableExited(IXRSelectInteractable interactable) {
         if (Socket && Socket.gameObject.activeInHierarchy) {
-            StartCoroutine(UpdateSynchronizedProperty(false));
+            StartCoroutine(UpdateSynchronizedProperty(PhotonView.Get(interactable.transform).IsMine));
         }
     }
 
