@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent]
 public class ChefHatOnCharacterSocket : XRSocketInteractor {
@@ -41,12 +42,17 @@ public class ChefHatOnCharacterSocket : XRSocketInteractor {
     protected override void OnSelectEntered(SelectEnterEventArgs args) {
         base.OnSelectEntered(args);
 
-        Character.Character.SetRole(CharacterRole.Player);
+        UpdateRole();
     }
 
     protected override void OnSelectExited(SelectExitEventArgs args) {
         base.OnSelectExited(args);
 
-        Character.Character.SetRole(CharacterRole.Spectator);
+        UpdateRole();
+    }
+
+    private void UpdateRole() {
+        var role = hasSelection ? CharacterRole.Player : CharacterRole.Spectator;
+        Character.Character.SetRole(role);
     }
 }
