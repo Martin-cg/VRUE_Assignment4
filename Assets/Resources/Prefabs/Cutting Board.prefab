@@ -101,6 +101,8 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+  RestickDelay: 1
+  Rigidbody: {fileID: 0}
 --- !u!54 &8614822287463070758
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -423,12 +425,14 @@ MonoBehaviour:
   m_OnSelectExited:
     m_PersistentCalls:
       m_Calls: []
-  m_ShowInteractableHoverMeshes: 1
+  m_ShowInteractableHoverMeshes: 0
   m_InteractableHoverMeshMaterial: {fileID: 0}
   m_InteractableCantHoverMeshMaterial: {fileID: 0}
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+  RestickDelay: 1
+  Rigidbody: {fileID: 0}
 --- !u!114 &4535481757909833590
 MonoBehaviour:
   m_ObjectHideFlags: 0

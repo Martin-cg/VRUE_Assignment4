@@ -198,7 +198,7 @@ MonoBehaviour:
   - {fileID: 7383484882742558951}
   - {fileID: 8702118605057803519}
   - {fileID: 325685429778274622}
-  Opacity: 0.6
+  GhostMaterial: {fileID: 2100000, guid: 1dc0d8ec609611c47ad0e18783483cd4, type: 2}
 --- !u!1 &6976191868216172523
 GameObject:
   m_ObjectHideFlags: 0

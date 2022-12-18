@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 public static class Utils {
     public static int RandomSeed() => Random.Range(int.MinValue, int.MaxValue);
 
-    public static GameObject ResolveScenePath(IEnumerable<string> scenePath, GameObject root=null) {
+    public static Transform ResolveScenePath(IEnumerable<string> scenePath, Transform root = null) {
         if (scenePath == null) {
             return null;
         }
 
-        Transform current;
+        Transform current = root;
         if (root == null) {
             var rootName = scenePath.FirstOrDefault();
             if (rootName == null) {
@@ -20,9 +20,8 @@ public static class Utils {
 
             var rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
             current = rootObjects.First(obj => obj.name == rootName).transform;
-        } else {
-            current = root.transform;
         }
+
         foreach (var name in scenePath) {
             current = current.Find(name);
             if (current == null) {
@@ -30,6 +29,11 @@ public static class Utils {
             }
         }
 
-        return current.gameObject;
+        return current;
+    }
+    public static GameObject ResolveScenePathToObject(IEnumerable<string> scenePath, GameObject root=null) {
+        var rootTransform = root ? root.transform : null;
+        var resolved = ResolveScenePath(scenePath, rootTransform);
+        return resolved ? resolved.gameObject : null;
     }
 }

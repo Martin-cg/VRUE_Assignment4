@@ -20,7 +20,7 @@ public class TransformParentSync : SynchronizedRoomObject {
     }
 
     protected virtual void OnScenePathPropertyChanged(string[] scenePath) {
-        transform.parent = Utils.ResolveScenePath(scenePath)?.transform;
+        transform.parent = Utils.ResolveScenePath(scenePath);
     }
 
     protected virtual void OnTransformParentChanged() {
@@ -32,6 +32,10 @@ public class TransformParentSync : SynchronizedRoomObject {
             return;
         }
 
-        ScenePath.SetValue(gameObject.GetScenePath(null, false).ToArray(), notifyLocal: false, notifyRemote: true);
+        var newPath = gameObject.GetScenePath(null, false).ToArray();
+        if (name == "Chef Hat") {
+            Debug.LogWarning(string.Join("/", newPath));
+        }
+        ScenePath.SetValue(newPath, notifyLocal: false, notifyRemote: true);
     }
 }

@@ -11,5 +11,5 @@ public static class PhotonSerdeUtils {
     public static GameObject ResolvePhotonViewRelativeScenePath(int sceneViewId, IEnumerable<string> path) =>
         ResolvePhotonViewRelativeScenePath(PhotonView.Find(sceneViewId), path);
     public static GameObject ResolvePhotonViewRelativeScenePath(PhotonView view, IEnumerable<string> path) =>
-        Utils.ResolveScenePath(path, view.gameObject);
+        Utils.ResolveScenePathToObject(path, view.gameObject);
 }
