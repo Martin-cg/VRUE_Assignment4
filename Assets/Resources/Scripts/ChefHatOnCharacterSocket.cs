@@ -51,6 +51,10 @@ public class ChefHatOnCharacterSocket : XRSocketInteractor {
         UpdateRole();
     }
 
+    protected virtual void Update() {
+        UpdateRole();
+    }
+
     private void UpdateRole() {
         var role = hasSelection ? CharacterRole.Player : CharacterRole.Spectator;
         Character.Character.SetRole(role);

@@ -13,6 +13,7 @@ namespace Assets.Resources.Scripts {
         }
 
         protected override void SetupRigidbodyDrop(Rigidbody rigidbody) {
+            rigidbody.isKinematic = WasKinematicValue;
             base.SetupRigidbodyDrop(rigidbody);
             rigidbody.isKinematic = WasKinematicValue;
             if (forceGravityOnDetach) {
