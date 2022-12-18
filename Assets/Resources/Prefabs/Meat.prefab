@@ -51,7 +51,7 @@ MonoBehaviour:
   NumberOfCuts: 6
   RawModel: {fileID: 2600328257289405471}
   ChoppedModel: {fileID: 1373472096269849057}
-  CookedMaterial: {fileID: 0}
+  CookedMaterial: {fileID: 2100000, guid: cbbf25f7c914ae04abb3d7568eeea973, type: 2}
   BurntMaterial: {fileID: 2100000, guid: 0a27a5ea91ad9d74883ac61a8f1b4efc, type: 2}
   CanBeChooped: 1
   CanBeCooked: 1
