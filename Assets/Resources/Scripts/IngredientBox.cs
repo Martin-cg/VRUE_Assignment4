@@ -138,9 +138,11 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
-            stream.SendNext(PhotonView.Get(CurrentIngredient).ViewID);
+            int? viewId = CurrentIngredient ? PhotonView.Get(CurrentIngredient).ViewID : null;
+            stream.SendNext(viewId);
         } else {
-            CurrentIngredient = PhotonView.Find(stream.ReceiveNext<int>()).gameObject;
+            int? viewId = stream.ReceiveNext<int?>();
+            CurrentIngredient = viewId.HasValue ? PhotonView.Find(viewId.Value).gameObject : null;
         }
     }
 }
