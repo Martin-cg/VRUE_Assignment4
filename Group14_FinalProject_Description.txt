@@ -1,0 +1,24 @@
+Our game oVRcooked is a cooperative cooking simulator.
+Two players have to work together to complete as many of the randomly generated orders before the time runs out.
+To achieve this one has to first gather ingredients from the ingredient spawners. A chopping board allows the user
+to easily carry multiple ingredients at the same time. The vegetables have to be chopped using a knife, 
+while the meat has to be chopped and then cooked. But be careful not to burn it! The prepared ingredients finally need to
+be combined on a plate according to the orders and submitted at the counter to score. Locomotion is provided using
+a traditional teleportation method and a dash movement gesture. Our interactions techniques are focussed on grabbing and throwing like
+in the inspirational game overcooked. Noteworthy is also the menu which uses post processing to blue the background and renders
+the menu and hands on top of everything else using a secondary camera.
+
+We implemented the following choice features:
+Particle systems
+	2 particle systems are used on the teleportation recticle
+	3 particle systems are used to form the fire that heats the pans
+Custom shaders
+	A custom shader is used for the teleportation recticle from a cylinder
+	Another one is used to show the progress of preparing ingredients
+Teleportation
+	A XRRayInteractor with a curved ray and a custom recticle was used
+Networked object passed from hand to hand
+	This was implemented using XRGrabInteractables
+
+We generally used the components from the XR Interaction Toolkit and extended them.
+The models were mostly made ourselves with a few exceptions (see folder structure)

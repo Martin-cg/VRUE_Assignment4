@@ -1,0 +1,14 @@
+We implemented the following bonus features:
+
+Group operations with objects:
+It is possible to put multiple objects onto a chopping board and carry them around as a group.
+This is implemented by using an XRSocketInteractor and a Trigger on each side of the board. Once an interactable enters
+one of them its current position is used as an attach point that holds until taken off again.
+The board can be moved around as one wishes while holding ingredients.
+The user can also combine prepared ingredients on a plate to submit an order. This is done similar to the chopping board
+but also uses presets made up of a hidden hierachy, which defines what ingredients in what state and how the objects should be arranged.
+Additionally, meat can be put into a pan, which in turn can be put onto a stove to cook the meat (once prepared).
+
+Locomotion metaphor:
+Like in the original Overcooked it is possible to perform a dash by swinging both arms backwards at the same time.
+The distance and time travelled is dependent on the velocity of the performed gesture.
