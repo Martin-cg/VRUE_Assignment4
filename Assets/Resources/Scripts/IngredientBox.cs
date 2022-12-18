@@ -26,7 +26,6 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
     private Rigidbody CurrentIngredientRigidbody;
     private XRBaseInteractable CurrentIngredientInteractable;
     private int CurrentIngredientColliders;
-    private bool CurrentItemReentered;
     private ICollection<Collider> StartingColliders = new HashSet<Collider>();
     private ICollection<Collider> BlockingColliders = new HashSet<Collider>();
 
@@ -70,7 +69,6 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
     public void OnTriggerEnter(Collider other) {
         if (CurrentIngredient && other.attachedRigidbody?.gameObject == CurrentIngredient) {
             CurrentIngredientColliders++;
-            CurrentItemReentered = true;
         } else if (!IsOwnCollider(other) && !other.isTrigger) {
             BlockingColliders.Add(other);
         }
@@ -78,7 +76,6 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
     public void OnTriggerExit(Collider other) {
         if (CurrentIngredient && other.attachedRigidbody?.gameObject == CurrentIngredient) {
             CurrentIngredientColliders--;
-            CurrentItemReentered = false;
 
             if (CurrentIngredientColliders == 0) {
                 // for some reason the item exits once when grabbed and then immediatly reenters for a few frames before exiting again...

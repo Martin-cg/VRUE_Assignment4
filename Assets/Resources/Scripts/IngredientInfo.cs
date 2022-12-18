@@ -10,4 +10,7 @@ public class IngredientInfo : MonoBehaviour {
     public bool CanBeChooped;
     public bool CanBeCooked;
     public bool CanBeBurnt;
+    public float TimeToCook;
+    public float TimeToBurn;
+    public bool NeedsChoppedToCook;
 }

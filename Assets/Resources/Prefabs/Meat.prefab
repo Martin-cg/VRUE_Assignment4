@@ -56,6 +56,8 @@ MonoBehaviour:
   CanBeChooped: 1
   CanBeCooked: 1
   CanBeBurnt: 1
+  TimeToCook: 20
+  TimeToBurn: 20
 --- !u!135 &360566230954483372
 SphereCollider:
   m_ObjectHideFlags: 0
