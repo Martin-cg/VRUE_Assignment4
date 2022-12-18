@@ -17,6 +17,8 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     
     [SerializeField]
     private int RemainingChops;
+    public float CookingProgess = 0;
+    public float BurningProgess = 0;
 
     protected virtual void Awake() {
         Interactable.enabled = false;
@@ -93,9 +95,11 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         if (stream.IsWriting) {
             stream.SendNext(CurrentState);
             stream.SendNext(RemainingChops);
+            stream.SendNext(CookingProgess);
         } else {
             CurrentState = stream.ReceiveNext<IngredientState>();
             RemainingChops = stream.ReceiveNext<int>();
+            CookingProgess = stream.ReceiveNext<float>();
         }
     }
 

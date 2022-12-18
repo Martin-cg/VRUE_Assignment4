@@ -179,8 +179,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
                 var interactable = PhotonView.Find(interactableViewId).gameObject;
                 currentObjects.Remove(interactable);
 
-                ContainedObject obj;
-                if (!Contents.TryGetValue(interactable, out obj)) {
+                if (!Contents.TryGetValue(interactable, out var obj)) {
                     StickObject(interactable, out obj);
                 }
                 obj.AttachTransform.localPosition = attachPosition;
