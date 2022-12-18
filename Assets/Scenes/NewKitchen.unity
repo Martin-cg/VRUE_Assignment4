@@ -39113,6 +39113,10 @@ MonoBehaviour:
   MaxConcurrentOrders: 4
   OrderExpiryBase: 40000
   OrderExpiryIngredientScale: 20000
+  PointsMultiplier: 10
+  PointsAwarded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2053614195
 MonoBehaviour:
   m_ObjectHideFlags: 0

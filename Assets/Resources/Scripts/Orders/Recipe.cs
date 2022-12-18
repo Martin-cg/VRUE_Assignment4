@@ -36,6 +36,13 @@ public class Recipe {
         return r;
     }
 
+    public override String ToString() {
+        return "Recipe {\n" +
+            "\tRecipename = " + RecipeName + "\n" +
+            "\tIngredients = " + string.Join("\n\t\t", Ingredients) + "\n" +
+            "}";
+    }
+
     public class Ingredient {
         public string IngredientName;
         public bool IsChopped;
@@ -59,6 +66,24 @@ public class Recipe {
                 i.CookingState = stream.ReceiveNext<CookingState>();
             }
             return i;
+        }
+
+        public override String ToString() {
+            return "Ingredient {\n" +
+                "\tIngredientName = " + IngredientName + "\n" +
+                "\tIsChopped = " + IsChopped + "\n" +
+                "\tCookingState = " + CookingState + "\n" +
+                "}";
+        }
+
+        public override bool Equals(object obj) {
+            if (obj == null || !(obj is Recipe.Ingredient)) {
+                return false;
+            }
+
+            Recipe.Ingredient r = (Recipe.Ingredient)obj;
+
+            return this.IngredientName.Equals(r) && this.IsChopped == r.IsChopped && this.CookingState == r.CookingState;
         }
     }
 }

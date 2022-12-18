@@ -63,6 +63,8 @@ public class DeliveryArea : MonoBehaviour {
             ri.IngredientName = i.IngredientInfo.DisplayName;
             ri.IsChopped = i.CurrentState.IsChopped;
 
+            r.Ingredients.Add(ri);
+
             s += "\tIngredient: " + ri.IngredientName + "\n\t\tCookingState: " + ri.CookingState + "\n\t\tIsChopped: " + ri.IsChopped + "\n";
 
             PhotonNetwork.Destroy(i.gameObject);
