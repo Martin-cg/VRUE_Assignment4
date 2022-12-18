@@ -41,6 +41,10 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
         
     }
 
+    private void Start() {
+        InvokeRepeating("PrintDebugOutput", 1f, 1f);
+    }
+
     private void Update() {
         if (!Initialized) {
             Initialize();
@@ -58,6 +62,11 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
                 Orders.Sort((a, b) => b.ExpirationProgress.CompareTo(a.ExpirationProgress));
             }
 
+        }
+    }
+
+    private void PrintDebugOutput() {
+        if (Orders.Count > 0) {
             Debug.Log("IsMaster? " + PhotonNetwork.IsMasterClient);
             Orders.ForEach(o => {
                 Debug.Log(string.Format("{0}: Expired? {1} ExpirationProgress: {2}", o.Recipe.RecipeName, o.HasExpired, o.ExpirationProgress));
