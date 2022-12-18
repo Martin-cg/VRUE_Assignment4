@@ -61,7 +61,7 @@ MonoBehaviour:
   CanBeBurnt: 1
   TimeToCook: 20
   TimeToBurn: 20
-  NeedsChoppedToCook: 0
+  NeedsChoppedToCook: 1
 --- !u!135 &360566230954483372
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6162267544558775341}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chopped
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -770,6 +770,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: meatMinced_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e4dc237901f3c5d4995a785e4590c77b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4dc237901f3c5d4995a785e4590c77b, type: 3}
