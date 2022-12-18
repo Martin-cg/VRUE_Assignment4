@@ -769,8 +769,8 @@ MonoBehaviour:
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
   RestickDelay: 1
-  Rigidbody: {fileID: 0}
-  PhotonView: {fileID: 0}
+  Rigidbody: {fileID: 1654802805603254489}
+  PhotonView: {fileID: 1760525622569746457}
   PresetRoot: {fileID: 5870391712047753458}
 --- !u!114 &1627374423769163006
 MonoBehaviour:
