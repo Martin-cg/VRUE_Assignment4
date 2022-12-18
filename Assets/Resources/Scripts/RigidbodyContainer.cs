@@ -58,8 +58,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             Rigidbody = gameObject.GetComponent<Rigidbody>(),
             PhotonView = gameObject.GetComponent<PhotonView>(), // We use this istead of PhotonView.Get(gameObject) because we want to assert that the view is present in the object itself.
             Interactable = gameObject.GetComponent<XRGrabInteractable>(),
-            AttachTransform = new GameObject($"[Attach] {gameObject.name}").transform,
-            Joint = null
+            AttachTransform = new GameObject($"[Attach] {gameObject.name}").transform
         };
         obj.AttachTransform.parent = transform;
 
@@ -119,12 +118,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         OnUnstickObject(obj);
     }
     protected virtual void OnUnstickObject(ContainedObject obj) {
-        Debug.LogWarning("OnUnstickObject() " + obj.GameObject.name);
-
-        if (obj.Joint) {
-            obj.Joint.connectedBody = null;
-            Destroy(obj.Joint);
-        }
         Destroy(obj.AttachTransform.gameObject);
 
         obj.Rigidbody.isKinematic = false;
@@ -194,7 +187,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         public PhotonView PhotonView;
         public XRGrabInteractable Interactable;
         public Transform AttachTransform;
-        public FixedJoint Joint;
 
         public ContainedObject(GameObject gameObject) {
             GameObject = gameObject;
