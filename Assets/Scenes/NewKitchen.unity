@@ -4022,12 +4022,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 2079427827}
+    m_TransformParent: {fileID: 1892605941}
     m_Modifications:
     - target: {fileID: 1004060751218339508, guid: efe8f6caaa7e2e3498f50aed6a035714,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1004060751218339508, guid: efe8f6caaa7e2e3498f50aed6a035714,
         type: 3}
@@ -4091,6 +4091,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efe8f6caaa7e2e3498f50aed6a035714, type: 3}
+--- !u!4 &172050909 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1004060751218339508, guid: efe8f6caaa7e2e3498f50aed6a035714,
+    type: 3}
+  m_PrefabInstance: {fileID: 172050908}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &174458316
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11542,12 +11548,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 2079427827}
+    m_TransformParent: {fileID: 1892605941}
     m_Modifications:
     - target: {fileID: 1004060751218339508, guid: efe8f6caaa7e2e3498f50aed6a035714,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1004060751218339508, guid: efe8f6caaa7e2e3498f50aed6a035714,
         type: 3}
@@ -11611,6 +11617,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efe8f6caaa7e2e3498f50aed6a035714, type: 3}
+--- !u!4 &583765680 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1004060751218339508, guid: efe8f6caaa7e2e3498f50aed6a035714,
+    type: 3}
+  m_PrefabInstance: {fileID: 583765679}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &585917159 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6245818785229302302, guid: 41429a38d2ebe2d43b04edf0bdd6ee47,
@@ -37614,6 +37626,8 @@ Transform:
   - {fileID: 392249487}
   - {fileID: 1396296038}
   - {fileID: 1483152444}
+  - {fileID: 172050909}
+  - {fileID: 583765680}
   m_Father: {fileID: 1814148224}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

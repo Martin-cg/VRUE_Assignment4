@@ -70,7 +70,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         var added = Contents.TryAdd(gameObject, obj);
         if (!added) {
             Debug.LogWarning("Tried to add object to container while already contained.", gameObject);
-            Destroy(obj.AttachTransform);
+            Destroy(obj.AttachTransform.gameObject);
             containedObject = Contents[gameObject];
             return;
         }
@@ -165,8 +165,8 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             stream.SendNext(Contents.Count);
             foreach (var (_, obj) in Contents) {
                 stream.SendNext(obj.PhotonView.ViewID);
-                stream.SendNext(obj.AttachTransform.position);
-                stream.SendNext(obj.AttachTransform.rotation);
+                stream.SendNext(obj.AttachTransform.localPosition);
+                stream.SendNext(obj.AttachTransform.localRotation);
             }
         } else {
             var currentObjects = Contents.Keys.ToHashSet();

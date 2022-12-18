@@ -74,7 +74,7 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
     }
 
     private void OnSelectExit(SelectExitEventArgs args) {
-        OnLocalInteractableExited();
+        OnLocalInteractableExited(args.interactableObject);
     }
 
     private void OnRemoteInteractableEntered(IXRSelectInteractable interactable) {
@@ -83,7 +83,6 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
         }
 
         Socket.interactionManager.SelectEnter(Socket, interactable);
-        // interactable.transform.parent = Socket.attachTransform;
     }
 
     private void OnRemoteInteractableExited(IXRSelectInteractable interactable) {
@@ -96,20 +95,30 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
 
     private void OnLocalInteractableEntered(IXRSelectInteractable interactable) {
         if (Socket && Socket.gameObject.activeInHierarchy) {
-            StartCoroutine(UpdateSynchronizedProperty());
+            StartCoroutine(UpdateSynchronizedProperty(PhotonView.Get(interactable.transform).IsMine));
         }
     }
 
-    private void OnLocalInteractableExited() {
+    private void OnLocalInteractableExited(IXRSelectInteractable interactable) {
         if (Socket && Socket.gameObject.activeInHierarchy) {
-            StartCoroutine(UpdateSynchronizedProperty());
+            StartCoroutine(UpdateSynchronizedProperty(false));
         }
     }
 
-    private IEnumerator UpdateSynchronizedProperty() {
+    private IEnumerator UpdateSynchronizedProperty(bool takeOwnership) {
         yield return null;
 
-        var viewIds = Socket.interactablesSelected.Select(interactable => PhotonView.Get(interactable.transform).sceneViewId).ToArray();
+        var views = Socket.interactablesSelected.Select(interactable => PhotonView.Get(interactable.transform)).ToArray();
+
+        if (takeOwnership) {
+            photonView.RequestOwnership();
+
+            foreach (var view in views) {
+                view.RequestOwnership();
+            }
+        }
+
+        var viewIds = views.Select(view => view.ViewID).ToArray();
         CurrentInteractables.SetValue(viewIds);
     }
 
