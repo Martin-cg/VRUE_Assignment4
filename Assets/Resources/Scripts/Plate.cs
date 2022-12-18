@@ -8,6 +8,7 @@ public class Plate : RigidbodyContainer, IPunObservable {
     public List<Preset> Presets = new();
     private HashSet<string> CurrentIngredients = new();
     private Dictionary<GameObject, Pose> AttachPose = new();
+    private bool Initialized = false;
 
     protected override void Awake() {
         base.Awake();
@@ -160,22 +161,32 @@ public class Plate : RigidbodyContainer, IPunObservable {
                 stream.SendNext(pose.rotation);
             }
         } else {
-            CurrentIngredients.Clear();
+            if (!Initialized) {
+                CurrentIngredients.Clear();
+            }
             var count = stream.ReceiveNext<int>();
             for (var i = 0; i < count; i++) {
-                 CurrentIngredients.Add(stream.ReceiveNext<string>());
+                var ingredientName = stream.ReceiveNext<string>();
+                if (!Initialized) {
+                    CurrentIngredients.Add(ingredientName);
+                }
             }
 
-            AttachPose.Clear();
+            if (!Initialized) {
+                AttachPose.Clear();
+            }
             count = stream.ReceiveNext<int>();
             for (var i = 0; i < count; i++) {
                 var sceneViewId = stream.ReceiveNext<int?>();
                 var path = stream.ReceiveNext<string[]>();
                 var position = stream.ReceiveNext<Vector3>();
                 var rotation = stream.ReceiveNext<Quaternion>();
-                var pose = new Pose(position, rotation);
-                var target = PhotonSerdeUtils.ResolvePhotonViewRelativeScenePath(sceneViewId, path);
-                AttachPose.Add(target, pose);
+
+                if (!Initialized) {
+                    var pose = new Pose(position, rotation);
+                    var target = PhotonSerdeUtils.ResolvePhotonViewRelativeScenePath(sceneViewId, path);
+                    AttachPose.Add(target, pose);
+                }
             }
         }
     }
