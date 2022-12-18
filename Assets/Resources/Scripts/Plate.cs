@@ -153,7 +153,7 @@ public class Plate : RigidbodyContainer, IPunObservable {
             stream.SendNext(AttachPose.Count);
             foreach (var (obj, pose) in AttachPose) {
                 var (path, view) = PhotonSerdeUtils.GetPhotonViewRelativeScenePath(obj);
-                stream.SendNext(view.sceneViewId);
+                stream.SendNext(view ? view.ViewID : null);
                 stream.SendNext(path.ToArray());
                 stream.SendNext(pose.position);
                 stream.SendNext(pose.rotation);
@@ -168,7 +168,7 @@ public class Plate : RigidbodyContainer, IPunObservable {
             AttachPose.Clear();
             count = stream.ReceiveNext<int>();
             for (var i = 0; i < count; i++) {
-                var sceneViewId = stream.ReceiveNext<int>();
+                var sceneViewId = stream.ReceiveNext<int?>();
                 var path = stream.ReceiveNext<string[]>();
                 var position = stream.ReceiveNext<Vector3>();
                 var rotation = stream.ReceiveNext<Quaternion>();

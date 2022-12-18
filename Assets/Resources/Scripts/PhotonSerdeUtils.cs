@@ -8,8 +8,10 @@ public static class PhotonSerdeUtils {
         var path = target.GetScenePath(photonView.gameObject, true, true);
         return (path, photonView);
     }
+    public static GameObject ResolvePhotonViewRelativeScenePath(int? sceneViewId, IEnumerable<string> path) =>
+        ResolvePhotonViewRelativeScenePath(sceneViewId.HasValue ? PhotonView.Find(sceneViewId.Value) : null, path);
     public static GameObject ResolvePhotonViewRelativeScenePath(int sceneViewId, IEnumerable<string> path) =>
         ResolvePhotonViewRelativeScenePath(PhotonView.Find(sceneViewId), path);
     public static GameObject ResolvePhotonViewRelativeScenePath(PhotonView view, IEnumerable<string> path) =>
-        Utils.ResolveScenePathToObject(path, view.gameObject);
+        Utils.ResolveScenePathToObject(path, view ? view.gameObject: null);
 }
