@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Assets.Resources.Scripts;
+using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class PanGrip : XRGrabInteractable {
+public class PanGrip : CustomXRGrabInteractable {
     public Transform StoveAttachTransform;
 
     public override Transform GetAttachTransform(IXRInteractor interactor) {

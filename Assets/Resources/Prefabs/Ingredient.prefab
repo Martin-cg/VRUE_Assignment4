@@ -65,7 +65,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5345153972189096749}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 05f6de933df60564ca475ce69a90e82d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
@@ -181,6 +181,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+  WasKinematicValue: 0
 --- !u!114 &2161242527554592468
 MonoBehaviour:
   m_ObjectHideFlags: 0
