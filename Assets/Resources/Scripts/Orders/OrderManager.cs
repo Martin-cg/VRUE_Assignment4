@@ -19,6 +19,8 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
 
     public List<Order> Orders = new List<Order>();
 
+    public List<RecipeUIController> RecipeUISlots;
+
     public long OrderAddInterval = 15000;
     public int MaxConcurrentOrders = 5;
 
@@ -60,6 +62,22 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
                 Orders.RemoveAll(o => o.HasExpired);
 
                 Orders.Sort((a, b) => b.ExpirationProgress.CompareTo(a.ExpirationProgress));
+            }
+
+            for (int i = 0; i < RecipeUISlots.Count; i++) {
+                RecipeUIController r = RecipeUISlots[i];
+                Order o = null;
+
+                if (i < Orders.Count) {
+                    o = Orders[i];
+                }
+
+                if (o != null) {
+                    r.RecipeName = o.Recipe.RecipeName;
+                    r.Progress = 1.0f - o.ExpirationProgress;
+                } else {
+                    r.Progress = 1.0f;
+                }
             }
 
         }
