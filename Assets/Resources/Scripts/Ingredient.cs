@@ -138,18 +138,14 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
     }
 
-    public void OnChopBegin() {
-        ChopFlag = false;
-    }
-
-    public void OnChopEnd() {
-        if (!ChopFlag && IngredientInfo.CanBeChooped) {
+    public void OnChop() {
+        if (IngredientInfo.CanBeChooped) {
+            Debug.LogError("CHOP TRUE");
             photonView.RequestOwnership();
             RemainingChops = Math.Max(0, RemainingChops - 1);
             if (RemainingChops == 0) {
                 CurrentState = CurrentState.GetAsChopped();
             }
-            ChopFlag = true;
         }
     }
 

@@ -6,10 +6,12 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(PhotonView))]
 public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     public float RestickDelay = 1;
 
     public Rigidbody Rigidbody;
+    public PhotonView PhotonView;
     protected readonly IDictionary<GameObject, ContainedObject> Contents = new Dictionary<GameObject, ContainedObject>();
     protected readonly IDictionary<GameObject, ContainedObject> HoveredContents = new Dictionary<GameObject, ContainedObject>();
     private readonly ISet<IXRInteractable> BlockedInteractables = new HashSet<IXRInteractable>();
@@ -18,6 +20,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         base.Awake();
 
         Rigidbody = GetComponent<Rigidbody>();
+        PhotonView = GetComponent<PhotonView>();
 
         if (GetComponent<XRBaseInteractable>()) {
             gameObject.GetOrAddComponent<SynchronizedMoveableSocketInteractor>();
@@ -86,6 +89,11 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         var attachPose = CaptureAttachPose(obj);
         obj.AttachTransform.SetLocalPose(attachPose);
 
+        if (!PhotonView.IsMine) {
+            PhotonView.RPC(nameof(AskStickObject), RpcTarget.Others, gameObject.GetComponent<PhotonView>().ViewID, obj.AttachTransform.localPosition, obj.AttachTransform.localRotation);
+        }
+
+        /*
         StartCoroutine(DelayAttachJoint());
 
         IEnumerator DelayAttachJoint() {
@@ -97,6 +105,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
 
             obj.Rigidbody.isKinematic = false;
         }
+        */
     }
 
     protected virtual Pose CaptureAttachPose(ContainedObject obj) {
@@ -129,6 +138,10 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             yield return new WaitForSeconds(1f);
             ResetInteractable(obj.Interactable);
         }
+
+        if (!PhotonView.IsMine) {
+            PhotonView.RPC(nameof(AskUnstickObject), RpcTarget.Others, gameObject.GetComponent<PhotonView>().ViewID);
+        }
     }
 
     protected override void OnHoverExited(HoverExitEventArgs args) {
@@ -146,6 +159,19 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
 
             obj.Rigidbody.gameObject.SetLayerRecursively(Layers.Ingredients);
         }
+    }
+
+    [PunRPC]
+    public void AskStickObject(int viewId, Vector3 position, Quaternion rotation) {
+        var interactable = PhotonView.Find(viewId).gameObject;
+        StickObject(interactable, out var obj);
+        obj.AttachTransform.SetLocalPose(new Pose(position, rotation));
+    }
+
+    [PunRPC]
+    public void AskUnstickObject(int viewId) {
+        var interactable = PhotonView.Find(viewId).gameObject;
+        UnstickObject(interactable);
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {

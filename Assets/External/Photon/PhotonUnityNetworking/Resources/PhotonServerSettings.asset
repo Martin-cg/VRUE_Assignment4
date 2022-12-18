@@ -45,6 +45,8 @@ MonoBehaviour:
   - UpdateGameStateRPC
   - ResetPlayer
   - ForceDropInteractable
+  - AskStickObject
+  - AskUnstickObject
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

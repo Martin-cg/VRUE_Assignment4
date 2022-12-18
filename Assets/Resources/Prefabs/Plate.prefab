@@ -775,6 +775,7 @@ MonoBehaviour:
   m_RecycleDelayTime: 1
   RestickDelay: 1
   Rigidbody: {fileID: 0}
+  PhotonView: {fileID: 0}
   PresetRoot: {fileID: 5870391712047753458}
 --- !u!1 &9153323658108991550
 GameObject:

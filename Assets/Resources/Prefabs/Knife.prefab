@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 4555950710830423545}
   - component: {fileID: 5001376162373505546}
   - component: {fileID: 553613821354570897}
+  - component: {fileID: 1156054675372892223}
   m_Layer: 0
   m_Name: Blade
   m_TagString: Untagged
@@ -73,7 +74,7 @@ MeshCollider:
   m_GameObject: {fileID: 5364435637398784809}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -90,6 +91,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5482335f950b23b4b9f05fb41c26c030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  I: []
+  C: 
+--- !u!65 &1156054675372892223
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5364435637398784809}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.058521006, y: 0.009851275, z: 0.21319145}
+  m_Center: {x: -0.025837222, y: 0, z: -0.0989034}
 --- !u!1 &7046855027255043870
 GameObject:
   m_ObjectHideFlags: 0
