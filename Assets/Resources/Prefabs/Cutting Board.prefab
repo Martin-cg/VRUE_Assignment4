@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9048548520337527143}
   - component: {fileID: 7757858609655080942}
-  - component: {fileID: 680304738979166762}
-  - component: {fileID: 8614822287463070758}
-  m_Layer: 0
-  m_Name: Top
+  - component: {fileID: 7431559443320862855}
+  m_Layer: 9
+  m_Name: Socket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5717948693890123789}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.01, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,79 +45,20 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.001, z: 0.325}
-  m_Center: {x: 0, y: 0.0085, z: 0}
---- !u!114 &680304738979166762
-MonoBehaviour:
+  m_Center: {x: 0, y: 0.0185, z: 0}
+--- !u!65 &7431559443320862855
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5717948693890123789}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c93b0ae6678a6d449d737bf9c7832d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 0}
-  m_InteractionLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_InteractionLayers:
-    m_Bits: 64
-  m_AttachTransform: {fileID: 0}
-  m_KeepSelectedTargetValid: 1
-  m_StartingSelectedInteractable: {fileID: 0}
-  m_StartingTargetFilter: {fileID: 0}
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_OnHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ShowInteractableHoverMeshes: 0
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
-  m_SocketActive: 1
-  m_InteractableHoverScale: 1
-  m_RecycleDelayTime: 1
-  RestickDelay: 1
-  Rigidbody: {fileID: 0}
---- !u!54 &8614822287463070758
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5717948693890123789}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Size: {x: 0.2, y: 0.001, z: 0.325}
+  m_Center: {x: 0, y: 0.0015, z: 0}
 --- !u!1 &7155903414203766076
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +78,7 @@ GameObject:
   - component: {fileID: 6128124539472651343}
   - component: {fileID: 4535481757909833590}
   - component: {fileID: 7492005742754042406}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cutting Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -327,7 +267,6 @@ MonoBehaviour:
   - {fileID: 9210218500041014239}
   - {fileID: 3344053306566312809}
   - {fileID: 6128124539472651343}
-  - {fileID: 680304738979166762}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -554,10 +493,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4730651366832239648, guid: 6fea05d8c953b054a90b66d2052ed48d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6fea05d8c953b054a90b66d2052ed48d,
         type: 3}
       propertyPath: m_Name
       value: cuttingBoard_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6fea05d8c953b054a90b66d2052ed48d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2684888157319615001, guid: 6fea05d8c953b054a90b66d2052ed48d,
         type: 3}
