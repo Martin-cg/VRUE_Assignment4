@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6409256992713560605}
   - component: {fileID: 3624259882222329125}
-  - component: {fileID: 1928417198759941106}
   m_Layer: 7
   m_Name: Buns
   m_TagString: Untagged
@@ -51,23 +50,14 @@ MonoBehaviour:
   RawModel: {fileID: 5516776407191879998}
   ChoppedModel: {fileID: 0}
   CookedMaterial: {fileID: 0}
+  ChoppedCookedMaterial: {fileID: 0}
   BurntMaterial: {fileID: 0}
   CanBeChooped: 0
   CanBeCooked: 0
   CanBeBurnt: 0
---- !u!135 &1928417198759941106
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551896793906545307}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.12
-  m_Center: {x: 0, y: 0.06, z: 0}
+  TimeToCook: 0
+  TimeToBurn: 0
+  NeedsChoppedToCook: 0
 --- !u!1 &5516776407191879998
 GameObject:
   m_ObjectHideFlags: 0

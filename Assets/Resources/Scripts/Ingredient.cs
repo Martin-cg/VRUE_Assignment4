@@ -17,6 +17,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     public Vector3 ProgressCapsuleOffset;
 
+    public GameObject ProgressCapsulePrefab;
     private GameObject ProgressCapsule;
     private ProgressCapsuleManager ProgressCapsuleManager;
     
@@ -33,7 +34,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         if (IngredientInfo != null && !IngredientInfo.transform.IsChildOf(transform)) {
             Initialize(IngredientInfo.gameObject);
         }
-        ProgressCapsule = Instantiate(Resources.Load<GameObject>("Prefabs/3D ProgressCapsule"));
+        ProgressCapsule = Instantiate(ProgressCapsulePrefab);
         ProgressCapsule.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         ProgressCapsuleManager = ProgressCapsule.GetComponent<ProgressCapsuleManager>();
     }
@@ -51,27 +52,27 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
     }
 
-    void Update() {
+    protected virtual void Update() {
         ProgressCapsule.transform.position = transform.position + ProgressCapsuleOffset;
 
-        float NewProgress = 0.0F;
-        Color NewColor = ChopProgressColor;
+        float newProgress = 0.0F;
+        Color newColor = ChopProgressColor;
 
         if (IngredientInfo.NumberOfCuts > 0) {
-            NewProgress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
-            NewColor = ChopProgressColor;
+            newProgress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
+            newColor = ChopProgressColor;
         }
         if (RemainingChops == 0 && CookingProgess > 0) {
-            NewProgress = CookingProgess;
-            NewColor = CookProgressColor;
+            newProgress = CookingProgess;
+            newColor = CookProgressColor;
         }
         if (CookingProgess == 1 && BurningProgess > 0) {
-            NewProgress = BurningProgess;
-            NewColor = BurnProgressColor;
+            newProgress = BurningProgess;
+            newColor = BurnProgressColor;
         }
 
-        ProgressCapsuleManager.Progress = NewProgress;
-        ProgressCapsuleManager.ProgressColor = NewColor;
+        ProgressCapsuleManager.Progress = newProgress;
+        ProgressCapsuleManager.ProgressColor = newColor;
     }
 
     // Prevent multiple choppings due to multiple collisions.
@@ -87,6 +88,13 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
         if (activeModel) {
             activeModel.SetActive(true);
+
+            /*
+            Interactable.colliders.Clear();
+            Interactable.colliders.AddRange(activeModel.GetComponentsInChildren<Collider>());
+            Interactable.enabled = false;
+            Interactable.enabled = true;
+            */
 
             var renderers = activeModel.GetComponentsInChildren<Renderer>();
             switch (CurrentState.CookingState) {
@@ -152,7 +160,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     private void Initialize(GameObject prefab) {
         IngredientInfo = Instantiate(prefab, transform).GetComponent<IngredientInfo>();
         RemainingChops = IngredientInfo.NumberOfCuts;
-        Interactable.colliders.AddRange(IngredientInfo.GetComponents<Collider>().Where(collider => collider.isTrigger));
+        Interactable.colliders.AddRange(IngredientInfo.GetComponentsInChildren<Collider>().Where(collider => !collider.isTrigger));
         Interactable.enabled = true;
         UpdateModelState();
     }

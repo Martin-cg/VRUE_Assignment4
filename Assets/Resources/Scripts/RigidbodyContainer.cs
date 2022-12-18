@@ -70,7 +70,8 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         var added = Contents.TryAdd(gameObject, obj);
         if (!added) {
             Debug.LogWarning("Tried to add object to container while already contained.", gameObject);
-            containedObject = null;
+            Destroy(obj.AttachTransform);
+            containedObject = Contents[gameObject];
             return;
         }
 

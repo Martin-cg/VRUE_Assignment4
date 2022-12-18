@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 62990053196127293}
   - component: {fileID: 5551435737435507894}
   - component: {fileID: 9139046984705176880}
-  - component: {fileID: 4792072126119977376}
   - component: {fileID: 348884039580451083}
   m_Layer: 0
   m_Name: Ingredient
@@ -216,6 +215,8 @@ MonoBehaviour:
   CookProgressColor: {r: 1, g: 0.6398947, b: 0, a: 1}
   BurnProgressColor: {r: 1, g: 0, b: 0, a: 1}
   ProgressCapsuleOffset: {x: 0, y: 0.25, z: 0}
+  ProgressCapsulePrefab: {fileID: 8543311116092315678, guid: 55a465b84a7f0574990ca4f82c02032c,
+    type: 3}
   RemainingChops: 0
   CookingProgess: 0
   BurningProgess: 0
@@ -291,18 +292,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fa6bc347b8f5ea4d968fae11b666538, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4792072126119977376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5345153972189096749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7b759ce2f3dbcf46b755b9ce89e83a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &348884039580451083
