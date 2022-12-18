@@ -11,7 +11,8 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     public IngredientInfo IngredientInfo;
     public XRBaseInteractable Interactable;
 
-    public Vector3 ProgressCapsuleOffset = new Vector3(0.0F, 0.25F, 0.0F);
+    public Vector3 ProgressCapsuleOffset;
+
     private GameObject ProgressCapsule;
     private ProgressCapsuleManager ProgressCapsuleManager;
     
@@ -47,10 +48,16 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     }
 
     void Update() {
-        ProgressCapsule.transform.position = transform.position + ProgressCapsuleOffset;
+        ProgressCapsule.transform.position = transform.position + ChoppingProgressCapsuleOffset;
 
         if (IngredientInfo.NumberOfCuts > 0) {
             ProgressCapsuleManager.Progress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
+        }
+        if (RemainingChops == 0 && CookingProgess > 0) {
+            ProgressCapsuleManager.Progress = CookingProgess;
+        }
+        if (CookingProgess == 1 && BurningProgess > 0) {
+            ProgressCapsuleManager.Progress = BurningProgess;
         }
     }
 
