@@ -4,7 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class TransformParentSync : SynchronizedRoomObject {
     private SynchronizedRoomProperty<string[]> ScenePath;
-    private Transform LastParent;
 
     protected override void Awake() {
         base.Awake();
@@ -21,24 +20,13 @@ public class TransformParentSync : SynchronizedRoomObject {
     }
 
     protected virtual void OnScenePathPropertyChanged(string[] scenePath) {
-        Debug.LogWarning("OnScenePathPropertyChanged(): " + name + " " + string.Join(" /", scenePath));
         transform.parent = Utils.ResolveScenePath(scenePath);
-        LastParent = transform.parent;
+        Debug.Assert((scenePath.Length == 0) == (transform.parent == null));
     }
 
-
-    protected virtual void Update() {
-        // OnTransformParentChanged() is not triggered consitently, so we do this instead.
-        if (photonView.IsMine && LastParent != transform.parent) {
-            LastParent = transform.parent;
-            UpdateScenePathProperty();
-        }
-    }
-    /*
     protected virtual void OnTransformParentChanged() {
         UpdateScenePathProperty();
     }
-    */
 
     private void UpdateScenePathProperty() {
         if (!PhotonNetwork.InRoom || !photonView.IsMine) {
@@ -46,7 +34,7 @@ public class TransformParentSync : SynchronizedRoomObject {
         }
 
         var newPath = gameObject.GetScenePath(null, false).ToArray();
-        Debug.LogWarning("UpdateScenePathProperty(): " + name + " " + string.Join(" /", newPath));
-        ScenePath.SetValue(newPath, notifyLocal: false, notifyRemote: true);
+        Debug.LogWarning(string.Join("/", newPath));
+        ScenePath.SetValue(newPath, notifyLocal: true, notifyRemote: true);
     }
 }
