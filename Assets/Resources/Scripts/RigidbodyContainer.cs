@@ -80,8 +80,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     protected virtual void OnStickObject(ContainedObject obj) {
-        Debug.LogWarning("OnStickObject() " + obj.GameObject.name);
-
         obj.PhotonView.RequestOwnership();
 
         obj.Rigidbody.gameObject.SetLayerRecursively(Layers.IngredientsOnPlate);
