@@ -83,6 +83,10 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
         }
     }
 
+    public void HandleNewDish(Recipe NewDish) {
+        Debug.Log("NEW DISH!!!");
+    }
+
     private void PrintDebugOutput() {
         if (Orders.Count > 0) {
             Debug.Log("IsMaster? " + PhotonNetwork.IsMasterClient);
