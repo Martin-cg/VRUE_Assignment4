@@ -17,6 +17,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     public Vector3 ProgressCapsuleOffset;
 
+    public GameObject ProgressCapsulePrefab;
     private GameObject ProgressCapsule;
     private ProgressCapsuleManager ProgressCapsuleManager;
     
@@ -33,7 +34,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         if (IngredientInfo != null && !IngredientInfo.transform.IsChildOf(transform)) {
             Initialize(IngredientInfo.gameObject);
         }
-        ProgressCapsule = Instantiate(Resources.Load<GameObject>("Prefabs/3D ProgressCapsule"));
+        ProgressCapsule = Instantiate(ProgressCapsulePrefab);
         ProgressCapsule.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         ProgressCapsuleManager = ProgressCapsule.GetComponent<ProgressCapsuleManager>();
     }
@@ -51,7 +52,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
     }
 
-    void Update() {
+    protected virtual void Update() {
         ProgressCapsule.transform.position = transform.position + ProgressCapsuleOffset;
 
         if (IngredientInfo.NumberOfCuts > 0) {
@@ -81,6 +82,13 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
         if (activeModel) {
             activeModel.SetActive(true);
+
+            /*
+            Interactable.colliders.Clear();
+            Interactable.colliders.AddRange(activeModel.GetComponentsInChildren<Collider>());
+            Interactable.enabled = false;
+            Interactable.enabled = true;
+            */
 
             var renderers = activeModel.GetComponentsInChildren<Renderer>();
             switch (CurrentState.CookingState) {
@@ -146,7 +154,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     private void Initialize(GameObject prefab) {
         IngredientInfo = Instantiate(prefab, transform).GetComponent<IngredientInfo>();
         RemainingChops = IngredientInfo.NumberOfCuts;
-        Interactable.colliders.AddRange(IngredientInfo.GetComponents<Collider>().Where(collider => collider.isTrigger));
+        Interactable.colliders.AddRange(IngredientInfo.GetComponentsInChildren<Collider>().Where(collider => !collider.isTrigger));
         Interactable.enabled = true;
         UpdateModelState();
     }

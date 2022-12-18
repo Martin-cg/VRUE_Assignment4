@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1000639198230442464}
   - component: {fileID: 8406728523896832728}
-  - component: {fileID: 360566230954483372}
   m_Layer: 7
   m_Name: Meat
   m_TagString: Untagged
@@ -62,19 +61,6 @@ MonoBehaviour:
   TimeToCook: 20
   TimeToBurn: 20
   NeedsChoppedToCook: 1
---- !u!135 &360566230954483372
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000639198230442465}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.12430501
-  m_Center: {x: 0.00032368302, y: 0.039873987, z: 0.000967592}
 --- !u!1 &1373472096269849057
 GameObject:
   m_ObjectHideFlags: 0
