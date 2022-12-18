@@ -2,6 +2,7 @@ using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,6 +32,9 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
     public float PointsMultiplier = 10.0f;
 
     public UnityEvent<float> PointsAwarded;
+
+    public TMP_Text ScoreText;
+    private float Score = 0.0F;
 
     public override void OnGameStarted() {
         base.OnGameStarted();
@@ -105,9 +109,10 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
         }
 
         if (matched) {
-            Debug.Log("AWARDING POINTS");
             PointsAwarded.Invoke(points);
-
+            Score += points;
+            Debug.Log("AWARDING POINTS" + Score);
+            ScoreText.text = "Score\n" + Score.ToString("0.0");
         } else {
             Debug.Log("DISH NOT FOUND");
         }
@@ -211,6 +216,7 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
         if (stream.IsWriting) {
             Orders.Sort((a, b) => b.ExpirationProgress.CompareTo(a.ExpirationProgress));
 
+            stream.SendNext(Score);
             stream.SendNext(Initialized);
             stream.SendNext(LastOrderGenerationTimestamp);
             stream.SendNext(IsGeneratingOrders);
@@ -227,6 +233,8 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
                 Orders[i].Serialize(stream);
             }
         } else {
+            Score = stream.ReceiveNext<float>();
+            ScoreText.text = "Score\n" + Score.ToString("0.0");
             Initialized = stream.ReceiveNext<bool>();
             LastOrderGenerationTimestamp = stream.ReceiveNext<long>();
             IsGeneratingOrders = stream.ReceiveNext<bool>();
