@@ -11,6 +11,10 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     public IngredientInfo IngredientInfo;
     public XRBaseInteractable Interactable;
 
+    public Color ChopProgressColor;
+    public Color CookProgressColor;
+    public Color BurnProgressColor;
+
     public Vector3 ProgressCapsuleOffset;
 
     private GameObject ProgressCapsule;
@@ -52,12 +56,15 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
         if (IngredientInfo.NumberOfCuts > 0) {
             ProgressCapsuleManager.Progress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
+            ProgressCapsuleManager.ProgressColor = ChopProgressColor;
         }
         if (RemainingChops == 0 && CookingProgess > 0) {
             ProgressCapsuleManager.Progress = CookingProgess;
+            ProgressCapsuleManager.ProgressColor = CookProgressColor;
         }
         if (CookingProgess == 1 && BurningProgess > 0) {
             ProgressCapsuleManager.Progress = BurningProgess;
+            ProgressCapsuleManager.ProgressColor = BurnProgressColor;
         }
     }
 

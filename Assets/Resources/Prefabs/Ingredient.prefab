@@ -212,6 +212,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IngredientInfo: {fileID: 0}
   Interactable: {fileID: 6970388612055319832}
+  ChopProgressColor: {r: 0.29800892, g: 1, b: 0, a: 1}
+  CookProgressColor: {r: 1, g: 0.6398947, b: 0, a: 1}
+  BurnProgressColor: {r: 1, g: 0, b: 0, a: 1}
   ProgressCapsuleOffset: {x: 0, y: 0.25, z: 0}
   RemainingChops: 0
   CookingProgess: 0

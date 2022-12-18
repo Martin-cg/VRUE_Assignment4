@@ -22,15 +22,20 @@ public class ProgressCapsuleManager : MonoBehaviour
     [SerializeField]
     private GameObject Capsule;
 
+    public Color ProgressColor;
+
+    private Material ThisMaterial;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        ThisMaterial = Capsule.GetComponent<Renderer>().material;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Capsule.GetComponent<Renderer>().material.SetFloat("_Progress", Progress);
+        ThisMaterial.SetFloat("_Progress", Progress);
+        ThisMaterial.SetColor("_Fill_Color", ProgressColor);
     }
 }
