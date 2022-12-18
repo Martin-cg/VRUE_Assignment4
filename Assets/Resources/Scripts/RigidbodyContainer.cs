@@ -85,7 +85,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         obj.PhotonView.RequestOwnership();
 
         obj.Rigidbody.gameObject.SetLayerRecursively(Layers.IngredientsOnPlate);
-        // TODO resolve existing collision
 
         var attachPose = CaptureAttachPose(obj);
         obj.AttachTransform.SetLocalPose(attachPose);

@@ -89,12 +89,15 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         if (activeModel) {
             activeModel.SetActive(true);
 
-            /*
             Interactable.colliders.Clear();
             Interactable.colliders.AddRange(activeModel.GetComponentsInChildren<Collider>());
-            Interactable.enabled = false;
-            Interactable.enabled = true;
-            */
+            var interactorsSelecting = Interactable.interactorsSelecting;
+            var interactionManager = Interactable.interactionManager;
+            interactionManager.UnregisterInteractable(Interactable as IXRSelectInteractable);
+            interactionManager.RegisterInteractable(Interactable as IXRSelectInteractable);
+            foreach (var interactor in interactorsSelecting) {
+                interactionManager.SelectEnter(interactor, Interactable);
+            }
 
             var renderers = activeModel.GetComponentsInChildren<Renderer>();
             switch (CurrentState.CookingState) {
