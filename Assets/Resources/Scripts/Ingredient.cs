@@ -142,6 +142,7 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         if (IngredientInfo.CanBeChooped) {
             photonView.RequestOwnership();
             RemainingChops = Math.Max(0, RemainingChops - 1);
+            print(RemainingChops);
             if (RemainingChops == 0) {
                 CurrentState = CurrentState.GetAsChopped();
             }

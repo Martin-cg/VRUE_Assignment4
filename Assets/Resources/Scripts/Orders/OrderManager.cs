@@ -42,7 +42,7 @@ public class OrderManager : MonoBehaviourGameStateCallbacks, IPunObservable {
     }
 
     private void Start() {
-        InvokeRepeating("PrintDebugOutput", 1f, 1f);
+        // InvokeRepeating("PrintDebugOutput", 1f, 1f);
     }
 
     private void Update() {

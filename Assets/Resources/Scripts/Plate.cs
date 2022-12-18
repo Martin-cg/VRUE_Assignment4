@@ -5,10 +5,10 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Plate : RigidbodyContainer, IPunObservable {
     public GameObject PresetRoot;
-    public List<Preset> Presets = new();
-    private HashSet<string> CurrentIngredients = new();
-    private Dictionary<GameObject, Pose> AttachPose = new();
-    private bool Initialized = false;
+    public readonly List<Preset> Presets = new();
+    private readonly HashSet<string> CurrentIngredients = new();
+    private readonly Dictionary<GameObject, Pose> AttachPose = new();
+    private bool IsInit = false;
 
     protected override void Awake() {
         base.Awake();
@@ -161,18 +161,18 @@ public class Plate : RigidbodyContainer, IPunObservable {
                 stream.SendNext(pose.rotation);
             }
         } else {
-            if (!Initialized) {
+            if (!IsInit) {
                 CurrentIngredients.Clear();
             }
             var count = stream.ReceiveNext<int>();
             for (var i = 0; i < count; i++) {
                 var ingredientName = stream.ReceiveNext<string>();
-                if (!Initialized) {
+                if (!IsInit) {
                     CurrentIngredients.Add(ingredientName);
                 }
             }
 
-            if (!Initialized) {
+            if (!IsInit) {
                 AttachPose.Clear();
             }
             count = stream.ReceiveNext<int>();
@@ -182,7 +182,7 @@ public class Plate : RigidbodyContainer, IPunObservable {
                 var position = stream.ReceiveNext<Vector3>();
                 var rotation = stream.ReceiveNext<Quaternion>();
 
-                if (!Initialized) {
+                if (!IsInit) {
                     var pose = new Pose(position, rotation);
                     var target = PhotonSerdeUtils.ResolvePhotonViewRelativeScenePath(sceneViewId, path);
                     AttachPose.Add(target, pose);

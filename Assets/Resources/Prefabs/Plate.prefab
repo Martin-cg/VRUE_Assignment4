@@ -635,7 +635,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  WasKinematicValue: 1
+  WasKinematicValue: 0
 --- !u!114 &1760525622569746457
 MonoBehaviour:
   m_ObjectHideFlags: 0

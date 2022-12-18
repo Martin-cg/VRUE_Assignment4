@@ -1,3 +1,4 @@
+using Assets.Resources.Scripts;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -41,6 +42,10 @@ public class SynchronizedInteractable : MonoBehaviourPun {
     private void ForceDropInteractable() {
         foreach (var interactor in Interactable.interactorsSelecting.ToArray()) {
             if (LocalCharacter.Instance.Rig.transform.IsParentOf(interactor.transform)) {
+                if (Interactable is CustomXRGrabInteractable custom) {
+                    custom.BlockInteractorFor(interactor, 1);
+                }
+
                 Interactable.interactionManager.SelectExit(interactor, Interactable);
             }
         }
