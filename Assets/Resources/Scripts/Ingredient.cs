@@ -75,10 +75,6 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         ProgressCapsuleManager.ProgressColor = newColor;
     }
 
-    // Prevent multiple choppings due to multiple collisions.
-    // This enforces Collision Enter => Chop => Collision Exit => Collision Enter => Chop => ...
-    private bool ChopFlag = false;
-
     private void UpdateModelState() {
         var activeModel = CurrentState.IsChopped ? IngredientInfo.ChoppedModel : IngredientInfo.RawModel;
         var unativeModel = activeModel == IngredientInfo.ChoppedModel ? IngredientInfo.RawModel : IngredientInfo.ChoppedModel;
@@ -140,7 +136,6 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     public void OnChop() {
         if (IngredientInfo.CanBeChooped) {
-            Debug.LogError("CHOP TRUE");
             photonView.RequestOwnership();
             RemainingChops = Math.Max(0, RemainingChops - 1);
             if (RemainingChops == 0) {

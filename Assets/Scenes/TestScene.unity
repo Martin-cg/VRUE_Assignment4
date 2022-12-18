@@ -532,7 +532,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1975
+    m_Bits: 4023
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1398,7 +1398,7 @@ PrefabInstance:
     - target: {fileID: 7155903414203766071, guid: c3d27df5b65816f4998e65f67196fe48,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.992
+      value: -0.685
       objectReference: {fileID: 0}
     - target: {fileID: 7155903414203766071, guid: c3d27df5b65816f4998e65f67196fe48,
         type: 3}
@@ -5141,7 +5141,7 @@ PrefabInstance:
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.635
+      value: -0.852
       objectReference: {fileID: 0}
     - target: {fileID: 6456262404405489759, guid: 4729a561ecd2c7345904ef9ac64d6d22,
         type: 3}
@@ -5192,6 +5192,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Knife
+      objectReference: {fileID: 0}
+    - target: {fileID: 9195795310679935229, guid: 4729a561ecd2c7345904ef9ac64d6d22,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.013
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4729a561ecd2c7345904ef9ac64d6d22, type: 3}
@@ -6815,7 +6820,7 @@ PrefabInstance:
     - target: {fileID: 1894398286, guid: 510399d190d37d04f8cfbe15ce2d3491, type: 3}
       propertyPath: IngredientInfoPrefab
       value: 
-      objectReference: {fileID: 8406728523896832728, guid: 88292dc251f19004ab7e2f66f8c12201,
+      objectReference: {fileID: 8406728523896832728, guid: 9f2a2c8f0db55994c9b5a651c3855685,
         type: 3}
     - target: {fileID: 2123663621994552122, guid: 510399d190d37d04f8cfbe15ce2d3491,
         type: 3}

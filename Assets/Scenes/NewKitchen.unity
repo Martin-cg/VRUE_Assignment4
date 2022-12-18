@@ -40209,6 +40209,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2159920406924180720, guid: 2ec42e54c3d2e7d4ab1a28f6b628fad5,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4023
+      objectReference: {fileID: 0}
     - target: {fileID: 2159920407137019924, guid: 2ec42e54c3d2e7d4ab1a28f6b628fad5,
         type: 3}
       propertyPath: m_InteractionManager

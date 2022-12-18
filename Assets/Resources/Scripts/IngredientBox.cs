@@ -68,7 +68,7 @@ public class IngredientBox : MonoBehaviourGameStateCallbacks, IPunObservable {
         yield return new WaitForSeconds(0.5F);
 
         if (BlockingColliders.Count == 0) {
-            Debug.Log("Debounce Complete. Generating new ingredient.");
+            // Debug.Log("Debounce Complete. Generating new ingredient.");
             GenerateIngredient();
         }
     }

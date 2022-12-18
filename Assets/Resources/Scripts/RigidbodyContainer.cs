@@ -54,9 +54,20 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     public void StickObject(GameObject gameObject) {
-        StickObject(gameObject, out var _);
+        if (Contents.ContainsKey(gameObject)) {
+            return;
+        }
+
+        if (PhotonView.IsMine) {
+            DoStickObject(gameObject);
+        } else {
+            PhotonView.RPC(nameof(AskStickObject), RpcTarget.Others, PhotonView.Get(gameObject).ViewID);
+        }
     }
-    protected void StickObject(GameObject gameObject, out ContainedObject containedObject) {
+    public void DoStickObject(GameObject gameObject) {
+        DoStickObject(gameObject, out var _);
+    }
+    protected void DoStickObject(GameObject gameObject, out ContainedObject containedObject) {
         var obj = new ContainedObject(gameObject) {
             Rigidbody = gameObject.GetComponent<Rigidbody>(),
             PhotonView = gameObject.GetComponent<PhotonView>(), // We use this istead of PhotonView.Get(gameObject) because we want to assert that the view is present in the object itself.
@@ -82,30 +93,14 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     protected virtual void OnStickObject(ContainedObject obj) {
-        obj.PhotonView.RequestOwnership();
+        if (!IsSelecting(obj.Interactable)) {
+            interactionManager.SelectEnter(this, obj.Interactable as IXRSelectInteractable);
+        }
 
         obj.Rigidbody.gameObject.SetLayerRecursively(Layers.IngredientsOnPlate);
 
         var attachPose = CaptureAttachPose(obj);
         obj.AttachTransform.SetLocalPose(attachPose);
-
-        if (!PhotonView.IsMine) {
-            PhotonView.RPC(nameof(AskStickObject), RpcTarget.Others, gameObject.GetComponent<PhotonView>().ViewID, obj.AttachTransform.localPosition, obj.AttachTransform.localRotation);
-        }
-
-        /*
-        StartCoroutine(DelayAttachJoint());
-
-        IEnumerator DelayAttachJoint() {
-            yield return new WaitForSeconds(obj.Interactable.attachEaseInTime + 0.1f);
-
-            if (!Contents.TryGetValue(obj.GameObject, out var contained) || contained != obj) {
-                yield break;
-            }
-
-            obj.Rigidbody.isKinematic = false;
-        }
-        */
     }
 
     protected virtual Pose CaptureAttachPose(ContainedObject obj) {
@@ -116,31 +111,46 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     public void UnstickObject(GameObject gameObject) {
+        if (!Contents.ContainsKey(gameObject)) {
+            return;
+        }
+
+        if (PhotonView.IsMine) {
+            DoUnstickObject(gameObject);
+        } else {
+            PhotonView.RPC(nameof(AskUnstickObject), RpcTarget.Others, PhotonView.Get(gameObject).ViewID);
+        }
+    }
+    public void DoUnstickObject(GameObject gameObject) {
         if (!Contents.Remove(gameObject, out var obj)) {
             Debug.LogWarning("Tried to remove object to container while already contained.", gameObject);
             return;
         }
 
-        UnstickObject(obj);
+        DoUnstickObject(obj);
     }
-    protected void UnstickObject(ContainedObject obj) {
+    protected void DoUnstickObject(ContainedObject obj) {
         OnUnstickObject(obj);
     }
     protected virtual void OnUnstickObject(ContainedObject obj) {
+        if (IsSelecting(obj.Interactable)) {
+            interactionManager.SelectExit(this, obj.Interactable as IXRSelectInteractable);
+        }
+
         Destroy(obj.AttachTransform.gameObject);
 
         obj.Rigidbody.isKinematic = false;
+        obj.Rigidbody.useGravity = true;
+
         BlockedInteractables.Add(obj.Interactable);
         HoveredContents.TryAdd(obj.GameObject, obj);
-        StartCoroutine(ResetInteractableDelayed());
+        if (gameObject && gameObject.activeInHierarchy) {
+            StartCoroutine(ResetInteractableDelayed());
+        }
 
         IEnumerator ResetInteractableDelayed() {
             yield return new WaitForSeconds(1f);
             ResetInteractable(obj.Interactable);
-        }
-
-        if (!PhotonView.IsMine) {
-            PhotonView.RPC(nameof(AskUnstickObject), RpcTarget.Others, gameObject.GetComponent<PhotonView>().ViewID);
         }
     }
 
@@ -162,16 +172,19 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     [PunRPC]
-    public void AskStickObject(int viewId, Vector3 position, Quaternion rotation) {
-        var interactable = PhotonView.Find(viewId).gameObject;
-        StickObject(interactable, out var obj);
-        obj.AttachTransform.SetLocalPose(new Pose(position, rotation));
+    public void AskStickObject(int viewId) {
+        if (PhotonView.IsMine) {
+            var interactable = PhotonView.Find(viewId).gameObject;
+            StickObject(interactable);
+        }
     }
 
     [PunRPC]
     public void AskUnstickObject(int viewId) {
-        var interactable = PhotonView.Find(viewId).gameObject;
-        UnstickObject(interactable);
+        if (PhotonView.IsMine) {
+            var interactable = PhotonView.Find(viewId).gameObject;
+            UnstickObject(interactable);
+        }
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -195,14 +208,14 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
                 currentObjects.Remove(interactable);
 
                 if (!Contents.TryGetValue(interactable, out var obj)) {
-                    StickObject(interactable, out obj);
+                    DoStickObject(interactable, out obj);
                 }
                 obj.AttachTransform.localPosition = attachPosition;
                 obj.AttachTransform.localRotation = attachRotation;
             }
 
             foreach (var obj in currentObjects) {
-                UnstickObject(obj);
+                DoUnstickObject(obj);
             }
         }
     }
