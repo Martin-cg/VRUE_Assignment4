@@ -50,13 +50,17 @@ public static class UnityExtensions {
         }
 
         var current = target;
-        while (current.parent != null && !ReferenceEquals(current, parent)) {
+        while (current.parent != null) {
             current = current.transform.parent;
-            path.Add(current.name);
-        }
 
-        if (parent && includeParent) {
-            path.Add(parent.name);
+            if (ReferenceEquals(current, parent)) {
+                if (includeParent) {
+                    path.Add(parent.name);
+                }
+                break;
+            } else {
+                path.Add(current.name);
+            }
         }
 
         path.Reverse();
