@@ -6,6 +6,7 @@ public class IngredientInfo : MonoBehaviour {
     public GameObject RawModel;
     public GameObject ChoppedModel;
     public Material CookedMaterial;
+    public Material ChoppedCookedMaterial;
     public Material BurntMaterial;
     public bool CanBeChooped;
     public bool CanBeCooked;

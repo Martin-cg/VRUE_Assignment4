@@ -74,7 +74,11 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     // raw material is default and state cannot change back
                     break;
                 case CookingState.Cooked:
-                    if (IngredientInfo.CookedMaterial) {
+                    if (CurrentState.IsChopped && IngredientInfo.ChoppedCookedMaterial) {
+                        foreach (var renderer in renderers) {
+                            renderer.material = IngredientInfo.ChoppedCookedMaterial;
+                        }
+                    } else if (IngredientInfo.CookedMaterial) {
                         foreach (var renderer in renderers) {
                             renderer.material = IngredientInfo.CookedMaterial;
                         }

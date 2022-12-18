@@ -51,11 +51,15 @@ MonoBehaviour:
   NumberOfCuts: 6
   RawModel: {fileID: 2600328257289405471}
   ChoppedModel: {fileID: 1373472096269849057}
-  CookedMaterial: {fileID: 0}
+  CookedMaterial: {fileID: 2100000, guid: 4fb069813479c624dac18380f389dfc3, type: 2}
+  ChoppedCookedMaterial: {fileID: 0}
   BurntMaterial: {fileID: 2100000, guid: 0a27a5ea91ad9d74883ac61a8f1b4efc, type: 2}
   CanBeChooped: 1
   CanBeCooked: 1
   CanBeBurnt: 1
+  TimeToCook: 0
+  TimeToBurn: 0
+  NeedsChoppedToCook: 0
 --- !u!135 &360566230954483372
 SphereCollider:
   m_ObjectHideFlags: 0
