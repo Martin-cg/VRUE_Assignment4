@@ -55,24 +55,24 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     protected virtual void Update() {
         ProgressCapsule.transform.position = transform.position + ProgressCapsuleOffset;
 
-        float NewProgress = 0.0F;
-        Color NewColor = ChopProgressColor;
+        float newProgress = 0.0F;
+        Color newColor = ChopProgressColor;
 
         if (IngredientInfo.NumberOfCuts > 0) {
-            NewProgress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
-            NewColor = ChopProgressColor;
+            newProgress = 1.0f - (RemainingChops / (float)IngredientInfo.NumberOfCuts);
+            newColor = ChopProgressColor;
         }
         if (RemainingChops == 0 && CookingProgess > 0) {
-            NewProgress = CookingProgess;
-            NewColor = CookProgressColor;
+            newProgress = CookingProgess;
+            newColor = CookProgressColor;
         }
         if (CookingProgess == 1 && BurningProgess > 0) {
-            NewProgress = BurningProgess;
-            NewColor = BurnProgressColor;
+            newProgress = BurningProgess;
+            newColor = BurnProgressColor;
         }
 
-        ProgressCapsuleManager.Progress = NewProgress;
-        ProgressCapsuleManager.ProgressColor = NewColor;
+        ProgressCapsuleManager.Progress = newProgress;
+        ProgressCapsuleManager.ProgressColor = newColor;
     }
 
     // Prevent multiple choppings due to multiple collisions.

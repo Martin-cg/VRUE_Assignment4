@@ -18,10 +18,12 @@ public abstract class RoleDependent : MonoBehaviour {
         }
     }
     protected virtual void OnDestroy() {
-        if (Character != null && Character.isActiveAndEnabled) {
+        if (Character) {
             Character.RoleChanged.RemoveListener(OnRoleChanged);
         }
-        CharacterManager.Instance.LocalCharacterSpawned.RemoveListener(OnLocalCharacterSpawned);
+        if (CharacterManager.Instance) {
+            CharacterManager.Instance.LocalCharacterSpawned.RemoveListener(OnLocalCharacterSpawned);
+        }
     }
 
     private void OnLocalCharacterSpawned(Character character) {

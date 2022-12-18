@@ -1,15 +1,9 @@
-using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
-public class ProgressCapsuleManager : MonoBehaviour
-{
-
+public class ProgressCapsuleManager : MonoBehaviour {
     public long HideTimeoutMS = 2000;
-
-    private Stopwatch TimeSinceLastPropertyChange;
+    private readonly Stopwatch TimeSinceLastPropertyChange = new();
 
     [Range(0.0f, 1.0f)]
     [SerializeField]
@@ -53,15 +47,14 @@ public class ProgressCapsuleManager : MonoBehaviour
     private Material ThisMaterial;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        TimeSinceLastPropertyChange = new Stopwatch();
-        ThisMaterial = Capsule.GetComponent<Renderer>().material;
+    void Awake() {
+        if (ThisMaterial == null) {
+            ThisMaterial = Capsule.GetComponent<Renderer>().material;
+        }
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if (TimeSinceLastPropertyChange.ElapsedMilliseconds >= HideTimeoutMS) {
             ThisMaterial.SetFloat("_Hide", 1.0F);
         } else {
