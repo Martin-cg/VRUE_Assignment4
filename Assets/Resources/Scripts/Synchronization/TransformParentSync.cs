@@ -12,8 +12,8 @@ public class TransformParentSync : MonoBehaviourPun, IPunObservable {
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        if (stream.IsReading) {
-            if (LastParent != transform.parent) {
+        if (stream.IsWriting) {
+            if (LastParent != transform.parent || LastPath == null) {
                 LastParent = transform.parent;
                 LastPath = gameObject.GetScenePath(null, false).ToArray();
             }
