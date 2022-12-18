@@ -118,8 +118,6 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         UnstickObject(obj);
     }
     protected void UnstickObject(ContainedObject obj) {
-        Debug.Assert(!IsSelecting(obj.Interactable));
-
         OnUnstickObject(obj);
     }
     protected virtual void OnUnstickObject(ContainedObject obj) {

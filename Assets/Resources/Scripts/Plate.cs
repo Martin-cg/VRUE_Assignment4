@@ -155,7 +155,8 @@ public class Plate : RigidbodyContainer, IPunObservable {
                 var (path, view) = PhotonSerdeUtils.GetPhotonViewRelativeScenePath(obj);
                 stream.SendNext(view.sceneViewId);
                 stream.SendNext(path.ToArray());
-                stream.SendNext(pose);
+                stream.SendNext(pose.position);
+                stream.SendNext(pose.rotation);
             }
         } else {
             CurrentIngredients.Clear();
@@ -169,7 +170,9 @@ public class Plate : RigidbodyContainer, IPunObservable {
             for (var i = 0; i < count; i++) {
                 var sceneViewId = stream.ReceiveNext<int>();
                 var path = stream.ReceiveNext<string[]>();
-                var pose = stream.ReceiveNext<Pose>();
+                var position = stream.ReceiveNext<Vector3>();
+                var rotation = stream.ReceiveNext<Quaternion>();
+                var pose = new Pose(position, rotation);
                 var target = PhotonSerdeUtils.ResolvePhotonViewRelativeScenePath(sceneViewId, path);
                 AttachPose.Add(target, pose);
             }
