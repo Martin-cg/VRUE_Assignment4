@@ -75,10 +75,6 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         ProgressCapsuleManager.ProgressColor = newColor;
     }
 
-    // Prevent multiple choppings due to multiple collisions.
-    // This enforces Collision Enter => Chop => Collision Exit => Collision Enter => Chop => ...
-    private bool ChopFlag = false;
-
     private void UpdateModelState() {
         var activeModel = CurrentState.IsChopped ? IngredientInfo.ChoppedModel : IngredientInfo.RawModel;
         var unativeModel = activeModel == IngredientInfo.ChoppedModel ? IngredientInfo.RawModel : IngredientInfo.ChoppedModel;
@@ -97,6 +93,10 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             interactionManager.RegisterInteractable(Interactable as IXRSelectInteractable);
             foreach (var interactor in interactorsSelecting) {
                 interactionManager.SelectEnter(interactor, Interactable);
+            }
+            var rigidbody = Interactable.GetComponent<Rigidbody>();
+            if (rigidbody) {
+                rigidbody.WakeUp();
             }
 
             var renderers = activeModel.GetComponentsInChildren<Renderer>();
@@ -138,18 +138,13 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
     }
 
-    public void OnChopBegin() {
-        ChopFlag = false;
-    }
-
-    public void OnChopEnd() {
-        if (!ChopFlag && IngredientInfo.CanBeChooped) {
+    public void OnChop() {
+        if (IngredientInfo.CanBeChooped) {
             photonView.RequestOwnership();
             RemainingChops = Math.Max(0, RemainingChops - 1);
             if (RemainingChops == 0) {
                 CurrentState = CurrentState.GetAsChopped();
             }
-            ChopFlag = true;
         }
     }
 

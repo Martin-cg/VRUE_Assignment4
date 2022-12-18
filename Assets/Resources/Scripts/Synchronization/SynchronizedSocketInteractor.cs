@@ -95,13 +95,17 @@ public class SynchronizedSocketInteractor : SynchronizedRoomObject, IXRSelectFil
 
     private void OnLocalInteractableEntered(IXRSelectInteractable interactable) {
         if (Socket && Socket.gameObject.activeInHierarchy) {
-            StartCoroutine(UpdateSynchronizedProperty(PhotonView.Get(interactable.transform).IsMine));
+            var changedId = PhotonView.Get(interactable.transform).ViewID;
+            var wasPresent = CurrentInteractables.Value.Contains(changedId);
+            StartCoroutine(UpdateSynchronizedProperty(!wasPresent));
         }
     }
 
     private void OnLocalInteractableExited(IXRSelectInteractable interactable) {
         if (Socket && Socket.gameObject.activeInHierarchy) {
-            StartCoroutine(UpdateSynchronizedProperty(PhotonView.Get(interactable.transform).IsMine));
+            var changedId = PhotonView.Get(interactable.transform).ViewID;
+            var wasPresent = CurrentInteractables.Value.Contains(changedId);
+            StartCoroutine(UpdateSynchronizedProperty(wasPresent));
         }
     }
 

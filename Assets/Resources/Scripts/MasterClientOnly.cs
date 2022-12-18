@@ -6,8 +6,11 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class MasterClientOnly : MonoBehaviourPunCallbacks {
     public static void AddTo(Behaviour behaviour) {
-        var instance = behaviour.gameObject.GetOrAddComponent<InOnlineRoomOnly>();
-        instance.TargetBehaviours.Add(behaviour);
+        var instance = behaviour.gameObject.GetOrAddComponent<MasterClientOnly>();
+        if (!instance.TargetBehaviours.Contains(behaviour)) {
+            instance.TargetBehaviours.Add(behaviour);
+        }
+        behaviour.enabled = PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient;
     }
 
     public List<Behaviour> TargetBehaviours = new();

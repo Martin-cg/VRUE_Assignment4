@@ -39,7 +39,7 @@ public class SynchronizedInteractable : MonoBehaviourPun {
 
     [PunRPC]
     private void ForceDropInteractable() {
-        foreach (var interactor in Interactable.interactorsSelecting) {
+        foreach (var interactor in Interactable.interactorsSelecting.ToArray()) {
             if (LocalCharacter.Instance.Rig.transform.IsParentOf(interactor.transform)) {
                 Interactable.interactionManager.SelectExit(interactor, Interactable);
             }

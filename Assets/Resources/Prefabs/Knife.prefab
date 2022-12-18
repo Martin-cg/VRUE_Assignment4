@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9154446852354812545}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Attach
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,8 @@ GameObject:
   - component: {fileID: 4555950710830423545}
   - component: {fileID: 5001376162373505546}
   - component: {fileID: 553613821354570897}
-  m_Layer: 0
+  - component: {fileID: 1156054675372892223}
+  m_Layer: 11
   m_Name: Blade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +74,7 @@ MeshCollider:
   m_GameObject: {fileID: 5364435637398784809}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -90,6 +91,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5482335f950b23b4b9f05fb41c26c030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CooldownTime: 0.2
+--- !u!65 &1156054675372892223
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5364435637398784809}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.058521006, y: 0.009851275, z: 0.21319145}
+  m_Center: {x: -0.025837222, y: 0, z: -0.0989034}
 --- !u!1 &7046855027255043870
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +122,7 @@ GameObject:
   - component: {fileID: 8709962793871654539}
   - component: {fileID: 5515897767528181525}
   - component: {fileID: -7074889887988111941}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Knife
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,7 +234,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 8471969982623930973}
+  - {fileID: 426838285660872746}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -454,10 +471,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5703412571369632200, guid: adc2e75494252394ba1d658273945b9b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: adc2e75494252394ba1d658273945b9b,
         type: 3}
       propertyPath: m_Name
       value: knife_low
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: adc2e75494252394ba1d658273945b9b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: adc2e75494252394ba1d658273945b9b,
         type: 3}
@@ -501,7 +528,7 @@ MeshCollider:
   m_GameObject: {fileID: 3325333997967044892}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -573,10 +600,20 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: -5703412571369632200, guid: 2edab0c344cc60744ae079eaa4422914,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2edab0c344cc60744ae079eaa4422914,
         type: 3}
       propertyPath: m_Name
       value: knife_low_split
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2edab0c344cc60744ae079eaa4422914,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1380269912622441649, guid: 2edab0c344cc60744ae079eaa4422914,
         type: 3}

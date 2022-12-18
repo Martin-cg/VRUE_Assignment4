@@ -390,6 +390,7 @@ MonoBehaviour:
   m_RecycleDelayTime: 1
   RestickDelay: 1
   Rigidbody: {fileID: 0}
+  PhotonView: {fileID: 0}
 --- !u!114 &4535481757909833590
 MonoBehaviour:
   m_ObjectHideFlags: 0

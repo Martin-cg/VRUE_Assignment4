@@ -92,12 +92,13 @@ public class Plate : RigidbodyContainer, IPunObservable {
         return null;
     }
 
-    protected override void OnStickObject(ContainedObject obj) {
+    protected override void OnStickObject(ContainedObject obj, ref Pose? attachPose) {
         var ingredient = IngredientFromInteractable(obj.Interactable);
         CurrentIngredients.Add(ingredient.IngredientInfo.DisplayName);
 
+        base.OnStickObject(obj, ref attachPose);
+
         ApplyCurrentPreset();
-        base.OnStickObject(obj);
     }
 
     private void ApplyCurrentPreset() {

@@ -6,7 +6,9 @@ using UnityEngine;
 public class InOnlineRoomOnly : MonoBehaviourPunCallbacks {
     public static void AddTo(Behaviour behaviour) {
         var instance = behaviour.gameObject.GetOrAddComponent<InOnlineRoomOnly>();
-        instance.TargetBehaviours.Add(behaviour);
+        if (!instance.TargetBehaviours.Contains(behaviour)) {
+            instance.TargetBehaviours.Add(behaviour);
+        }
         behaviour.enabled = PhotonNetwork.InRoom;
     }
 

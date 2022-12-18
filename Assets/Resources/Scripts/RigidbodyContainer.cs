@@ -6,18 +6,22 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(PhotonView))]
 public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     public float RestickDelay = 1;
 
     public Rigidbody Rigidbody;
+    public PhotonView PhotonView;
     protected readonly IDictionary<GameObject, ContainedObject> Contents = new Dictionary<GameObject, ContainedObject>();
     protected readonly IDictionary<GameObject, ContainedObject> HoveredContents = new Dictionary<GameObject, ContainedObject>();
     private readonly ISet<IXRInteractable> BlockedInteractables = new HashSet<IXRInteractable>();
+    private bool Initialized = false;
 
     protected override void Awake() {
         base.Awake();
 
         Rigidbody = GetComponent<Rigidbody>();
+        PhotonView = GetComponent<PhotonView>();
 
         if (GetComponent<XRBaseInteractable>()) {
             gameObject.GetOrAddComponent<SynchronizedMoveableSocketInteractor>();
@@ -51,9 +55,18 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     public void StickObject(GameObject gameObject) {
-        StickObject(gameObject, out var _);
+        if (Contents.ContainsKey(gameObject)) {
+            return;
+        }
+
+        Pose? attachPose = null;
+        DoStickObject(gameObject, ref attachPose);
+        PhotonView.RPC(nameof(AskStickObject), RpcTarget.Others, PhotonView.Get(gameObject).ViewID, attachPose.Value.position, attachPose.Value.rotation);
     }
-    protected void StickObject(GameObject gameObject, out ContainedObject containedObject) {
+    public void DoStickObject(GameObject gameObject, ref Pose? attachPose) {
+        DoStickObject(gameObject, out var _, ref attachPose);
+    }
+    protected void DoStickObject(GameObject gameObject, out ContainedObject containedObject, ref Pose? attachPose) {
         var obj = new ContainedObject(gameObject) {
             Rigidbody = gameObject.GetComponent<Rigidbody>(),
             PhotonView = gameObject.GetComponent<PhotonView>(), // We use this istead of PhotonView.Get(gameObject) because we want to assert that the view is present in the object itself.
@@ -71,32 +84,27 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
             Debug.LogWarning("Tried to add object to container while already contained.", gameObject);
             Destroy(obj.AttachTransform.gameObject);
             containedObject = Contents[gameObject];
+            attachPose = containedObject.AttachTransform.GetLocalPose();
             return;
         }
 
-        OnStickObject(obj);
+        OnStickObject(obj, ref attachPose);
         containedObject = obj;
     }
 
-    protected virtual void OnStickObject(ContainedObject obj) {
+    protected virtual void OnStickObject(ContainedObject obj, ref Pose? attachPose) {
         obj.PhotonView.RequestOwnership();
+
+        if (!IsSelecting(obj.Interactable)) {
+            interactionManager.SelectEnter(this, obj.Interactable as IXRSelectInteractable);
+        }
 
         obj.Rigidbody.gameObject.SetLayerRecursively(Layers.IngredientsOnPlate);
 
-        var attachPose = CaptureAttachPose(obj);
-        obj.AttachTransform.SetLocalPose(attachPose);
-
-        StartCoroutine(DelayAttachJoint());
-
-        IEnumerator DelayAttachJoint() {
-            yield return new WaitForSeconds(obj.Interactable.attachEaseInTime + 0.1f);
-
-            if (!Contents.TryGetValue(obj.GameObject, out var contained) || contained != obj) {
-                yield break;
-            }
-
-            obj.Rigidbody.isKinematic = false;
+        if (attachPose == null) {
+            attachPose = CaptureAttachPose(obj);
         }
+        obj.AttachTransform.SetLocalPose(attachPose.Value);
     }
 
     protected virtual Pose CaptureAttachPose(ContainedObject obj) {
@@ -107,23 +115,39 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
     }
 
     public void UnstickObject(GameObject gameObject) {
+        if (!Contents.ContainsKey(gameObject)) {
+            return;
+        }
+
+        DoUnstickObject(gameObject);
+        PhotonView.RPC(nameof(AskUnstickObject), RpcTarget.Others, PhotonView.Get(gameObject).ViewID);
+    }
+    public void DoUnstickObject(GameObject gameObject) {
         if (!Contents.Remove(gameObject, out var obj)) {
             Debug.LogWarning("Tried to remove object to container while already contained.", gameObject);
             return;
         }
 
-        UnstickObject(obj);
+        DoUnstickObject(obj);
     }
-    protected void UnstickObject(ContainedObject obj) {
+    protected void DoUnstickObject(ContainedObject obj) {
         OnUnstickObject(obj);
     }
     protected virtual void OnUnstickObject(ContainedObject obj) {
+        if (IsSelecting(obj.Interactable)) {
+            interactionManager.SelectExit(this, obj.Interactable as IXRSelectInteractable);
+        }
+
         Destroy(obj.AttachTransform.gameObject);
 
         obj.Rigidbody.isKinematic = false;
+        obj.Rigidbody.useGravity = true;
+
         BlockedInteractables.Add(obj.Interactable);
         HoveredContents.TryAdd(obj.GameObject, obj);
-        StartCoroutine(ResetInteractableDelayed());
+        if (gameObject && gameObject.activeInHierarchy) {
+            StartCoroutine(ResetInteractableDelayed());
+        }
 
         IEnumerator ResetInteractableDelayed() {
             yield return new WaitForSeconds(1f);
@@ -148,6 +172,19 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
         }
     }
 
+    [PunRPC]
+    public void AskStickObject(int viewId, Vector3 position, Quaternion rotation) {
+        var interactable = PhotonView.Find(viewId).gameObject;
+        Pose? attachPose = new Pose(position, rotation);
+        DoStickObject(interactable, ref attachPose);
+    }
+
+    [PunRPC]
+    public void AskUnstickObject(int viewId) {
+        var interactable = PhotonView.Find(viewId).gameObject;
+        DoUnstickObject(interactable);
+    }
+
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
             stream.SendNext(Contents.Count);
@@ -157,6 +194,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
                 stream.SendNext(obj.AttachTransform.localRotation);
             }
         } else {
+
             var currentObjects = Contents.Keys.ToHashSet();
 
             var count = stream.ReceiveNext<int>();
@@ -165,19 +203,31 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
                 var attachPosition = stream.ReceiveNext<Vector3>();
                 var attachRotation = stream.ReceiveNext<Quaternion>();
 
+                if (Initialized) {
+                    continue;
+                }
+
                 var interactable = PhotonView.Find(interactableViewId).gameObject;
                 currentObjects.Remove(interactable);
 
+                Pose? attachPose = new Pose(attachPosition, attachRotation);
                 if (!Contents.TryGetValue(interactable, out var obj)) {
-                    StickObject(interactable, out obj);
+                    DoStickObject(interactable, out _, ref attachPose);
+                } else {
+                    obj.AttachTransform.localPosition = attachPosition;
+                    obj.AttachTransform.localRotation = attachRotation;
                 }
-                obj.AttachTransform.localPosition = attachPosition;
-                obj.AttachTransform.localRotation = attachRotation;
+            }
+
+            if (Initialized) {
+                return;
             }
 
             foreach (var obj in currentObjects) {
-                UnstickObject(obj);
+                DoUnstickObject(obj);
             }
+
+            Initialized = true;
         }
     }
 
