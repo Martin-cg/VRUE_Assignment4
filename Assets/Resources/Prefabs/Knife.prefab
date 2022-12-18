@@ -104,7 +104,6 @@ GameObject:
   - component: {fileID: 381943854588454364}
   - component: {fileID: 695360957490289196}
   - component: {fileID: 5906281405255078967}
-  - component: {fileID: 7195233188712080640}
   - component: {fileID: 8709962793871654539}
   - component: {fileID: 5515897767528181525}
   - component: {fileID: -7074889887988111941}
@@ -327,23 +326,11 @@ MonoBehaviour:
   m_ThrowVelocityScale: 1.5
   m_ThrowAngularVelocityScale: 1
   m_ForceGravityOnDetach: 0
-  m_RetainTransformParent: 1
+  m_RetainTransformParent: 0
   m_AttachPointCompatibilityMode: 0
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &7195233188712080640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7046855027255043870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7b759ce2f3dbcf46b755b9ce89e83a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8709962793871654539
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -49,7 +49,6 @@ GameObject:
   - component: {fileID: 6634187506318279159}
   - component: {fileID: 3209877999048001346}
   - component: {fileID: 8279804178799948056}
-  - component: {fileID: 885313110207147761}
   - component: {fileID: 3074484265918979606}
   m_Layer: 10
   m_Name: Pan
@@ -271,7 +270,7 @@ MonoBehaviour:
   m_ThrowVelocityScale: 1.5
   m_ThrowAngularVelocityScale: 1
   m_ForceGravityOnDetach: 0
-  m_RetainTransformParent: 1
+  m_RetainTransformParent: 0
   m_AttachPointCompatibilityMode: 0
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
@@ -365,18 +364,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a11e18e326f0bcb4b8de3993da696c09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &885313110207147761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3862457861378311286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7b759ce2f3dbcf46b755b9ce89e83a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3074484265918979606

@@ -186,6 +186,7 @@ public class RigidbodyContainer : XRSocketInteractor, IPunObservable {
                 obj.AttachTransform.localPosition = attachPosition;
                 obj.AttachTransform.localRotation = attachRotation;
             }
+
             foreach (var obj in currentObjects) {
                 UnstickObject(obj);
             }
