@@ -22,8 +22,6 @@ public class ProgressCapsuleManager : MonoBehaviour {
         }
     }
 
-    //private PhotonView PhotonView;
-
     [SerializeField]
     private GameObject Capsule;
 
@@ -55,6 +53,8 @@ public class ProgressCapsuleManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        ThisMaterial.SetFloat("_Progress", _Progress);
+
         if (TimeSinceLastPropertyChange.ElapsedMilliseconds >= HideTimeoutMS) {
             ThisMaterial.SetFloat("_Hide", 1.0F);
         } else {
@@ -63,7 +63,6 @@ public class ProgressCapsuleManager : MonoBehaviour {
     }
 
     private void UpdateMaterial() {
-        ThisMaterial.SetFloat("_Progress", _Progress);
         ThisMaterial.SetColor("_Fill_Color", _ProgressColor);
     }
 }

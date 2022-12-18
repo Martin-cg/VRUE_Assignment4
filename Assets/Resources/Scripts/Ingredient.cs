@@ -94,6 +94,10 @@ public class Ingredient : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             foreach (var interactor in interactorsSelecting) {
                 interactionManager.SelectEnter(interactor, Interactable);
             }
+            var rigidbody = Interactable.GetComponent<Rigidbody>();
+            if (rigidbody) {
+                rigidbody.WakeUp();
+            }
 
             var renderers = activeModel.GetComponentsInChildren<Renderer>();
             switch (CurrentState.CookingState) {
