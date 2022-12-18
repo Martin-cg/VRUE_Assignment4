@@ -5,7 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Plate : RigidbodyContainer, IPunObservable {
     public GameObject PresetRoot;
-    private List<Preset> Presets = new();
+    public List<Preset> Presets = new();
     private HashSet<string> CurrentIngredients = new();
     private Dictionary<GameObject, Pose> AttachPose = new();
 
@@ -179,11 +179,11 @@ public class Plate : RigidbodyContainer, IPunObservable {
         }
     }
 
-    private class Preset {
+    public class Preset {
         public GameObject Root;
         public IDictionary<string, PresetIngredientiInfo> Ingredients = new Dictionary<string, PresetIngredientiInfo>();
     }
-    private class PresetIngredientiInfo {
+    public class PresetIngredientiInfo {
         public GameObject Object;
         public IngredientPresetRequirement Requirement;
     }

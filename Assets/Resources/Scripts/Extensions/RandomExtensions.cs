@@ -10,4 +10,8 @@ public static class RandomExtensions {
     public static float NextFloat(this Random random, float min, float max) {
         return (float)random.NextDouble(min, max);
     }
+
+    public static int NextInt(this Random random, int min, int max) {
+        return (int)Math.Round(random.NextDouble(min, max));
+    }
 }
