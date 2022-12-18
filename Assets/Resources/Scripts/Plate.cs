@@ -154,7 +154,7 @@ public class Plate : RigidbodyContainer, IPunObservable {
             foreach (var (obj, pose) in AttachPose) {
                 var (path, view) = PhotonSerdeUtils.GetPhotonViewRelativeScenePath(obj);
                 stream.SendNext(view.sceneViewId);
-                stream.SendNext(path);
+                stream.SendNext(path.ToArray());
                 stream.SendNext(pose);
             }
         } else {
